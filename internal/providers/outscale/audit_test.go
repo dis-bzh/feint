@@ -1089,6 +1089,51 @@ func TestReadAdminPasswordAnswersEmpty(t *testing.T) {
 	}
 }
 
+// Every catalogue image carries the fields the provider dereferences.
+//
+// Three of them, in one loop of the Terraform provider's
+// data_source_outscale_images.go, are read without a nil guard where every
+// neighbour goes through ptr.From. Their absence is therefore not a missing
+// attribute, it is a SIGSEGV surfacing as "Plugin did not respond" — a message
+// naming neither the field nor the call. Presence is the whole assertion: the
+// emulator has no image inventory, so an entry inside any of them would be
+// invented.
+func TestEveryImagePublishesWhatTheProviderDereferences(t *testing.T) {
+	ts := newServer(t)
+	_, out := post(t, ts, "ReadImages", `{}`)
+	served, _ := out["Images"].([]any)
+	if len(served) == 0 {
+		t.Fatal("ReadImages answered no image at all")
+	}
+	for _, entry := range served {
+		image, _ := entry.(map[string]any)
+		id, _ := image["ImageId"].(string)
+
+		if mappings, present := image["BlockDeviceMappings"]; !present {
+			t.Errorf("%s omits BlockDeviceMappings: the provider dereferences it and dies", id)
+		} else if _, isList := mappings.([]any); !isList {
+			t.Errorf("%s publishes BlockDeviceMappings as %T, not the array their api.yaml declares", id, mappings)
+		}
+
+		if comment, present := image["StateComment"]; !present {
+			t.Errorf("%s omits StateComment: omiOAPIStateReason reads StateCode straight off it", id)
+		} else if _, isObject := comment.(map[string]any); !isObject {
+			t.Errorf("%s publishes StateComment as %T, not the object their api.yaml declares", id, comment)
+		}
+
+		// Two dereferences deep: the provider ranges over *p.AccountIds, so the
+		// object being present is not enough — the list inside it must be too.
+		permissions, present := image["PermissionsToLaunch"].(map[string]any)
+		if !present {
+			t.Errorf("%s omits PermissionsToLaunch: omiOAPIPermissionToLuch dereferences it", id)
+			continue
+		}
+		if _, isList := permissions["AccountIds"].([]any); !isList {
+			t.Errorf("%s publishes PermissionsToLaunch without an AccountIds array: the provider ranges over it", id)
+		}
+	}
+}
+
 // Tags live on the resource they name.
 //
 // The provider calls CreateTags on almost every resource, and reads them back

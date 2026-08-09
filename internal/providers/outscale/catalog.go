@@ -51,10 +51,36 @@ var vmTypes = []map[string]any{
 // as "unknown". The Vm view publishes the same value for the same reason.
 const linuxProductCode = "0001"
 
+// Three fields the Terraform provider dereferences without a nil guard, so
+// their absence is not a missing attribute but a SIGSEGV. `data.outscale_images`
+// took the whole plugin down with "Plugin did not respond", a message naming
+// neither the field nor the call — the same class of defect as ProductCodes
+// above, and invisible to a unit test reading JSON.
+//
+// In their v1.7.0, all three in one loop of data_source_outscale_images.go:
+//
+//	*image.BlockDeviceMappings                     (:289)
+//	omiOAPIStateReason(image.StateComment)         (:291 → m.StateCode)
+//	omiOAPIPermissionToLuch(image.PermissionsToLaunch) (:292 → *p.AccountIds)
+//
+// Every neighbouring field goes through ptr.From and survives a nil; these do
+// not. Shapes are BlockDeviceMappingImage, StateComment and PermissionsOnResource
+// in their api.yaml.
+//
+// Served empty, not populated, and that is the honest part: the emulator has no
+// image inventory, so a DeviceName or a Bsu would be invented. An empty
+// StateComment is what an image in state "available" has to say — nothing — and
+// no account holds a launch grant on a catalogue every account already reads.
+var (
+	noBlockDeviceMappings = []any{}
+	noStateComment        = map[string]any{}
+	ownerOnlyLaunch       = map[string]any{"AccountIds": []any{}, "GlobalPermission": false}
+)
+
 var images = []map[string]any{
-	{"ImageId": "ami-00000001", "ImageName": "Ubuntu-24.04-2025.01", "Architecture": "x86_64", "State": "available", "RootDeviceType": "bsu", "SecureBoot": false, "AccountId": accountID, "ProductCodes": []any{linuxProductCode}},
-	{"ImageId": "ami-00000002", "ImageName": "Debian-12-2025.01", "Architecture": "x86_64", "State": "available", "RootDeviceType": "bsu", "SecureBoot": false, "AccountId": accountID, "ProductCodes": []any{linuxProductCode}},
-	{"ImageId": "ami-00000003", "ImageName": "Alpine-3.21-2025.01", "Architecture": "x86_64", "State": "available", "RootDeviceType": "bsu", "SecureBoot": false, "AccountId": accountID, "ProductCodes": []any{linuxProductCode}},
+	{"ImageId": "ami-00000001", "ImageName": "Ubuntu-24.04-2025.01", "Architecture": "x86_64", "State": "available", "RootDeviceType": "bsu", "SecureBoot": false, "AccountId": accountID, "ProductCodes": []any{linuxProductCode}, "BlockDeviceMappings": noBlockDeviceMappings, "StateComment": noStateComment, "PermissionsToLaunch": ownerOnlyLaunch},
+	{"ImageId": "ami-00000002", "ImageName": "Debian-12-2025.01", "Architecture": "x86_64", "State": "available", "RootDeviceType": "bsu", "SecureBoot": false, "AccountId": accountID, "ProductCodes": []any{linuxProductCode}, "BlockDeviceMappings": noBlockDeviceMappings, "StateComment": noStateComment, "PermissionsToLaunch": ownerOnlyLaunch},
+	{"ImageId": "ami-00000003", "ImageName": "Alpine-3.21-2025.01", "Architecture": "x86_64", "State": "available", "RootDeviceType": "bsu", "SecureBoot": false, "AccountId": accountID, "ProductCodes": []any{linuxProductCode}, "BlockDeviceMappings": noBlockDeviceMappings, "StateComment": noStateComment, "PermissionsToLaunch": ownerOnlyLaunch},
 }
 
 // runtimeImages maps an emulated OMI onto what the machine driver boots. Kept

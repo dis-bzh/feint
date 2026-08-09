@@ -70,6 +70,19 @@ resource "outscale_volume" "conformance" {
   size           = 10
 }
 
+# The catalogue read back through the provider's own data source, because a
+# response the provider accepts is not the same as one it can decode. This block
+# is here for the reason the volume above is: its absence hid a crash. ReadImages
+# answered without BlockDeviceMappings, the provider dereferenced the nil, and
+# the plugin died with "Plugin did not respond" — a message naming neither the
+# field nor the call, and one no unit test reading JSON can produce.
+data "outscale_images" "conformance" {
+  filter {
+    name   = "image_ids"
+    values = ["ami-00000001"]
+  }
+}
+
 resource "outscale_vm" "conformance" {
   image_id     = "ami-12345678"
   vm_type      = "tinav6.c1r1p2"
@@ -96,4 +109,10 @@ output "volume_id" {
 
 output "keypair_id" {
   value = outscale_keypair.conformance.keypair_id
+}
+
+# Read from the data source rather than from the catalogue constant: an output
+# that never touches it would let the block be dropped from the graph.
+output "image_id" {
+  value = data.outscale_images.conformance.images[0].image_id
 }
