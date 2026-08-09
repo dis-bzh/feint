@@ -70,6 +70,22 @@ resource "outscale_volume" "conformance" {
   size           = 10
 }
 
+# The fixed catalogue, read back through the provider's own data source.
+#
+# storage.tf drives an image too, but a registered one, and that path was never
+# going to show this: createImage already publishes BlockDeviceMappings,
+# StateComment and PermissionsToLaunch. The three catalogue entries publish none
+# of them, the provider reads all three without a nil guard, so ReadImages
+# answered 200 and the plugin died on "Plugin did not respond" — a message
+# naming neither the field nor the call. Nothing here read the catalogue back,
+# which is what kept it invisible.
+data "outscale_images" "catalogue" {
+  filter {
+    name   = "image_ids"
+    values = ["ami-00000001"]
+  }
+}
+
 resource "outscale_vm" "conformance" {
   image_id     = "ami-12345678"
   vm_type      = "tinav6.c1r1p2"
@@ -102,4 +118,12 @@ output "volume_id" {
 
 output "keypair_id" {
   value = outscale_keypair.conformance.keypair_id
+}
+
+# Read from the data source rather than from the catalogue constant: an output
+# that never touches it would let the block be dropped from the graph. Named for
+# the catalogue, since storage.tf already publishes the registered image as
+# image_id.
+output "catalogue_image_id" {
+  value = data.outscale_images.catalogue.images[0].image_id
 }
