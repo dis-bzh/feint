@@ -160,10 +160,25 @@ const rootVolumeSize = 20_000_000_000
 // volumes endpoint, so the volume has to be a stored resource, not an inline
 // object.
 //
-// The type stays block (b_ssd), never local: the catalogue declares
-// volumes_constraint.min_size at 0 and the CLI sums local volumes against it, so
-// attaching a local volume here would make the CLI refuse the very creation it
-// just asked for.
+// The type stays b_ssd whatever is asked, and there are two reasons rather than
+// the one written here for a long time.
+//
+// Never local: the catalogue declares volumes_constraint.min_size at 0 and the
+// CLI sums local volumes against it, so attaching a local volume here would make
+// the CLI refuse the very creation it just asked for.
+//
+// And never sbs_volume, which the first reason does not cover — sbs is block,
+// and sums to nothing there. Honouring it sends the Terraform provider to a
+// product this emulator does not mount: with an sbs root volume it polls
+// GET /block/v1/zones/<zone>/volumes/<id>, gets a 404, and the apply dies on
+// "waiting for Volume failed". Measured, by honouring the type and watching the
+// conformance suite fail; the override is load-bearing until block/v1 exists
+// here.
+//
+// The cost is real and belongs in the open: provider 2.79+ refuses to write
+// b_ssd at all ("not supported anymore ... migrate to sbs"), so a configuration
+// can carry either a value the provider rejects or one the emulator overrides.
+// Omitting root_volume is the only way through. docs/limits.md records it.
 func (p *Pack) rootVolume(server *resource.Resource, name, project, organization string, wanted volumeTemplate) *resource.Resource {
 	// The size the client asked for, when it asked. Ignoring it gave every
 	// server the catalogue's disk whatever the request said.

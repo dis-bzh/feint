@@ -36,6 +36,23 @@ It serves them anyway because the clients read them before creating anything: a
 404 there makes `scw instance server create` fail outright. Treat any capacity,
 price or availability answer as decoration.
 
+## A Scaleway root volume type cannot be written
+
+Every server's root volume is `b_ssd`, whatever the request asked for, and a
+configuration cannot say otherwise. The Terraform provider refuses to write
+`b_ssd` itself from 2.79 on — *"b_ssd volumes are not supported anymore …
+migrate to sbs"* — so the only value a current configuration can carry is
+`sbs_volume`, and the emulator answers `b_ssd` to it. One value will not plan,
+the other plans forever. **Omit the `root_volume` block and the apply works**;
+that is the way through, and it is why the conformance fixture has none.
+
+Honouring `sbs_volume` is not the small change it looks like, which is the part
+worth knowing before trying it. An sbs root volume moves the volume to another
+product: the provider then polls `GET /block/v1/zones/<zone>/volumes/<id>`, no
+route here mounts it, and the apply dies on `waiting for Volume failed: 404`.
+So the override protects against something beyond the local-volume rule stated
+beside it in `servers.go`, and it stays until Block Storage is emulated.
+
 ## Identifiers are not checked against anything
 
 A create that names an image, a template or a machine type the emulator has never
