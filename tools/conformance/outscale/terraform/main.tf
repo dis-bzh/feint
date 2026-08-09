@@ -107,8 +107,24 @@ output "volume_id" {
   value = outscale_volume.conformance.volume_id
 }
 
+# The link, which is where the volume meets the machine — and the only thing
+# that drives ReadVolumes with a LinkVolumeVmIds filter. The provider does not
+# poll the volume, it polls the link: ReadVolumes with VolumeIds +
+# LinkVolumeVmIds until LinkedVolumes[0].State reads "attached". While that
+# filter was refused, the wait failed outright and the resource could not be
+# used at all — with a volume in this file the whole time, unlinked.
+resource "outscale_volume_link" "conformance" {
+  device_name = "/dev/sdb"
+  volume_id   = outscale_volume.conformance.volume_id
+  vm_id       = outscale_vm.conformance.vm_id
+}
+
 output "keypair_id" {
   value = outscale_keypair.conformance.keypair_id
+}
+
+output "volume_link_state" {
+  value = outscale_volume_link.conformance.state
 }
 
 # Read from the data source rather than from the catalogue constant: an output

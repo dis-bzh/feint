@@ -1190,6 +1190,100 @@ func TestReadImagesFiltersTheCatalogue(t *testing.T) {
 	}
 }
 
+// A volume can be found by the machine it is attached to.
+//
+// The Terraform provider's outscale_volume_link does not poll the volume, it
+// polls the link: ReadVolumes with VolumeIds + LinkVolumeVmIds, until
+// LinkedVolumes[0].State reads "attached". With that filter refused the wait
+// failed outright and the resource could not be used at all.
+//
+// The unlinked case is the half worth holding: a volume attached to nothing must
+// not answer a filter naming a machine, or the provider would read a link that
+// is not there.
+func TestAVolumeIsFoundByTheMachineItIsAttachedTo(t *testing.T) {
+	ts := newServer(t)
+	_, subnetID := netAndSubnet(t, ts, "10.71.0.0/16", "10.71.1.0/24")
+	_, vmOut := post(t, ts, "CreateVms",
+		`{"ImageId":"ami-00000001","SubnetId":"`+subnetID+`","BootOnCreation":false}`)
+	vms, _ := vmOut["Vms"].([]any)
+	vm, _ := vms[0].(map[string]any)
+	vmID, _ := vm["VmId"].(string)
+
+	_, volOut := post(t, ts, "CreateVolume", `{"SubregionName":"eu-west-2a","Size":10}`)
+	volume, _ := volOut["Volume"].(map[string]any)
+	volumeID, _ := volume["VolumeId"].(string)
+
+	byVM := func() []any {
+		t.Helper()
+		status, out := post(t, ts, "ReadVolumes", `{"Filters":{"LinkVolumeVmIds":["`+vmID+`"]}}`)
+		if status != http.StatusOK {
+			t.Fatalf("ReadVolumes with a LinkVolumeVmIds filter answered %d: %v", status, out)
+		}
+		served, _ := out["Volumes"].([]any)
+		return served
+	}
+
+	// Before the link: the volume exists, but not on this machine.
+	if got := byVM(); len(got) != 0 {
+		t.Errorf("an unlinked volume answered a filter naming a machine: %v", got)
+	}
+
+	if status, out := post(t, ts, "LinkVolume",
+		`{"VolumeId":"`+volumeID+`","VmId":"`+vmID+`","DeviceName":"/dev/sdb"}`); status != http.StatusOK {
+		t.Fatalf("LinkVolume answered %d: %v", status, out)
+	}
+
+	served := byVM()
+	if len(served) != 1 {
+		t.Fatalf("the linked volume was not found by its machine: %v", served)
+	}
+	found, _ := served[0].(map[string]any)
+	if id, _ := found["VolumeId"].(string); id != volumeID {
+		t.Errorf("the filter answered volume %s, want %s", id, volumeID)
+	}
+	// What the provider actually reads off the answer.
+	links, _ := found["LinkedVolumes"].([]any)
+	if len(links) != 1 {
+		t.Fatalf("the volume publishes %d links, want 1", len(links))
+	}
+	link, _ := links[0].(map[string]any)
+	if state, _ := link["State"].(string); state != "attached" {
+		t.Errorf("the link reads %q, and the provider waits for \"attached\"", state)
+	}
+
+	// The detach the provider sends on destroy, ForceUnlink and all.
+	if status, out := post(t, ts, "UnlinkVolume",
+		`{"VolumeId":"`+volumeID+`","ForceUnlink":false}`); status != http.StatusOK {
+		t.Fatalf("UnlinkVolume answered %d: %v", status, out)
+	}
+	if got := byVM(); len(got) != 0 {
+		t.Errorf("the volume still answers a filter naming the machine it left: %v", got)
+	}
+}
+
+// ForceUnlink is read, and it is the only thing that makes a pointless detach
+// succeed.
+//
+// "Forces the detachment of the volume in case of previous failure", says their
+// api.yaml. Detaching a volume attached to nothing is that case, and it is the
+// one place the flag can mean something here: detachment is immediate and cannot
+// fail, so any other reading would be a flag accepted and dropped — which the
+// conformance gate reports as a field no handler read.
+func TestUnlinkVolumeReadsForceUnlink(t *testing.T) {
+	ts := newServer(t)
+	_, out := post(t, ts, "CreateVolume", `{"SubregionName":"eu-west-2a","Size":10}`)
+	volume, _ := out["Volume"].(map[string]any)
+	volumeID, _ := volume["VolumeId"].(string)
+
+	if status, _ := post(t, ts, "UnlinkVolume", `{"VolumeId":"`+volumeID+`"}`); status == http.StatusOK {
+		t.Error("detaching a volume attached to nothing answered success")
+	}
+	if status, out := post(t, ts, "UnlinkVolume",
+		`{"VolumeId":"`+volumeID+`","ForceUnlink":true}`); status != http.StatusOK {
+		t.Errorf("ForceUnlink did not override the refusal: %d %v", status, out)
+	}
+}
+
 // Tags live on the resource they name.
 //
 // The provider calls CreateTags on almost every resource, and reads them back
