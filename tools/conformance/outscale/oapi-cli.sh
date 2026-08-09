@@ -76,6 +76,15 @@ default_type="$(printf '%s' "$types" | jq -r '.VmTypes[0].VmTypeName')"
 imgs="$(osc ReadImages)" || fail "ReadImages rejected: $imgs"
 image_id="$(printf '%s' "$imgs" | jq -r '.Images[0].ImageId // empty')"
 [ -n "$image_id" ] || fail "no image on offer: $imgs"
+# Asked for one, answered one. ReadImages used to take no request at all, so
+# every filter matched the whole catalogue with a 200 — indistinguishable from a
+# match, which is what the rule "applied or refused, never ignored" exists for.
+one="$(osc ReadImages --Filters.ImageIds[] "$image_id")" || fail "a filtered ReadImages was rejected: $one"
+printf '%s' "$one" | jq -e --arg id "$image_id" '.Images | length == 1 and .[0].ImageId == $id' >/dev/null \
+  || fail "filtering on $image_id answered something else: $one"
+none="$(osc ReadImages --Filters.ImageIds[] ami-deadbeef)" || fail "ReadImages rejected an unknown id: $none"
+printf '%s' "$none" | jq -e '.Images | length == 0' >/dev/null \
+  || fail "an id nobody published matched something: $none"
 regions="$(osc ReadRegions)" || fail "ReadRegions rejected: $regions"
 # The endpoint a client would call next must be this emulator. Answering
 # Outscale's own address would send the following request to the real cloud.

@@ -89,7 +89,19 @@ type readVolumesRequest struct {
 }
 
 // volumeFilters are what a volume can answer from what is stored.
-var volumeFilters = []string{"VolumeIds", "VolumeStates", "VolumeTypes", "SubregionNames"}
+//
+// LinkVolumeVmIds is the one link filter served, and only because a client waits
+// on it: outscale_volume_link polls ReadVolumes with VolumeIds +
+// LinkVolumeVmIds until LinkedVolumes[0].State reads "attached" (their
+// resource_volume_link.go refreshFunc). Refusing it was correct and still left
+// the resource unusable — the wait failed outright instead of timing out.
+//
+// Its siblings stay refused: LinkVolumeDeviceNames and LinkVolumeLinkStates the
+// link view could answer, LinkVolumeLinkDates and LinkVolumeDeleteOnVmDeletion
+// it could not, and no client here drives any of the four. A filter added to
+// lengthen this list rather than to unblock somebody is what this project
+// declines.
+var volumeFilters = []string{"VolumeIds", "VolumeStates", "VolumeTypes", "SubregionNames", "LinkVolumeVmIds"}
 
 func (p *Pack) readVolumes(w http.ResponseWriter, r *http.Request) {
 	var req readVolumesRequest
@@ -105,10 +117,15 @@ func (p *Pack) readVolumes(w http.ResponseWriter, r *http.Request) {
 	for _, res := range p.env.Store.List(kindVolume, resource.Tenant{Provider: Name}) {
 		volumeType, _ := res.Attrs["VolumeType"].(string)
 		subregion, _ := res.Attrs["SubregionName"].(string)
+		// Empty when the volume is attached to nothing, so an unlinked volume
+		// cannot match a filter naming a machine — which is the answer the
+		// provider's wait depends on while the link is still being made.
+		linkedVM, _ := res.Attrs["LinkedVmId"].(string)
 		if !matchesStrings(req.Filters, "VolumeIds", res.ID) ||
 			!matchesStrings(req.Filters, "VolumeStates", res.State) ||
 			!matchesStrings(req.Filters, "VolumeTypes", volumeType) ||
-			!matchesStrings(req.Filters, "SubregionNames", subregion) {
+			!matchesStrings(req.Filters, "SubregionNames", subregion) ||
+			!matchesStrings(req.Filters, "LinkVolumeVmIds", linkedVM) {
 			continue
 		}
 		out = append(out, p.volumeView(res))
@@ -237,8 +254,9 @@ func (p *Pack) linkVolume(w http.ResponseWriter, r *http.Request) {
 
 func (p *Pack) unlinkVolume(w http.ResponseWriter, r *http.Request) {
 	var req struct {
-		VolumeID string `json:"VolumeId"`
-		DryRun   *bool  `json:"DryRun"`
+		VolumeID    string `json:"VolumeId"`
+		ForceUnlink *bool  `json:"ForceUnlink"`
+		DryRun      *bool  `json:"DryRun"`
 	}
 	if err := emulator.DecodeJSON(r, &req); err != nil {
 		p.badRequest(w, err.Error())
@@ -248,6 +266,18 @@ func (p *Pack) unlinkVolume(w http.ResponseWriter, r *http.Request) {
 	if !found {
 		p.notFound(w, "volume", req.VolumeID)
 		return
+	}
+	// Detaching what is attached to nothing is a refusal, and ForceUnlink is
+	// what overrides it — "forces the detachment of the volume in case of
+	// previous failure", says their api.yaml, and a volume that reads as
+	// unlinked after a detach that half-worked is that case. Nothing else here
+	// can give the field a meaning: detachment is immediate and cannot fail, so
+	// every other reading would be a flag accepted and dropped.
+	if linked, _ := res.Attrs["LinkedVmId"].(string); linked == "" {
+		if req.ForceUnlink == nil || !*req.ForceUnlink {
+			p.conflict(w, "the volume "+res.ID+" is linked to no machine")
+			return
+		}
 	}
 	delete(res.Attrs, "LinkedVmId")
 	delete(res.Attrs, "DeviceName")

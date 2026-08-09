@@ -108,9 +108,56 @@ func (p *Pack) readVmTypes(w http.ResponseWriter, _ *http.Request) {
 	})
 }
 
-func (p *Pack) readImages(w http.ResponseWriter, _ *http.Request) {
+type readImagesRequest struct {
+	Filters        filterSet `json:"Filters"`
+	ResultsPerPage int       `json:"ResultsPerPage"`
+}
+
+// imageFilters are what the catalogue can answer from what it holds. The rest of
+// FiltersImage is refused rather than ignored — the emulator stores no
+// description, hypervisor or virtualization type, and a filter that quietly
+// matches everything is indistinguishable from success. ProductCodes, SecureBoot
+// and TpmMandatory are left out too: the first is a list against a list and the
+// other two are booleans, none of which matchesStrings can answer honestly.
+var imageFilters = []string{"AccountIds", "Architectures", "ImageIds", "ImageNames", "RootDeviceTypes", "States"}
+
+// readImages used to take no request at all.
+//
+// It answered the whole catalogue whatever was asked, which is the exact failure
+// the filter rule above this pack exists to prevent: an audit sending
+// `ImageIds: [ami-deadbeef]` got three images back, with a 200. Worse than a
+// refusal, because it is indistinguishable from a match.
+func (p *Pack) readImages(w http.ResponseWriter, r *http.Request) {
+	var req readImagesRequest
+	if err := emulator.DecodeJSON(r, &req); err != nil {
+		p.badRequest(w, err.Error())
+		return
+	}
+	if p.refuseUnsupported(w, req.Filters, imageFilters...) {
+		return
+	}
+
+	out := make([]map[string]any, 0, len(images))
+	for _, image := range images {
+		id, _ := image["ImageId"].(string)
+		name, _ := image["ImageName"].(string)
+		architecture, _ := image["Architecture"].(string)
+		rootDeviceType, _ := image["RootDeviceType"].(string)
+		state, _ := image["State"].(string)
+		account, _ := image["AccountId"].(string)
+		if !matchesStrings(req.Filters, "ImageIds", id) ||
+			!matchesStrings(req.Filters, "ImageNames", name) ||
+			!matchesStrings(req.Filters, "Architectures", architecture) ||
+			!matchesStrings(req.Filters, "RootDeviceTypes", rootDeviceType) ||
+			!matchesStrings(req.Filters, "States", state) ||
+			!matchesStrings(req.Filters, "AccountIds", account) {
+			continue
+		}
+		out = append(out, image)
+	}
+
 	emulator.WriteJSON(w, http.StatusOK, map[string]any{
-		"Images":          images,
+		"Images":          page(out, req.ResultsPerPage),
 		"ResponseContext": p.context(),
 	})
 }

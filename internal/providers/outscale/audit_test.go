@@ -1134,6 +1134,62 @@ func TestEveryImagePublishesWhatTheProviderDereferences(t *testing.T) {
 	}
 }
 
+// ReadImages filters, and refuses what it cannot filter on.
+//
+// It used to take no request at all: every call answered the whole catalogue,
+// so asking for one image by id returned three with a 200. That is the failure
+// the pack's filter rule exists to prevent — indistinguishable from a match, and
+// a script that acts on what a filter returned acts on everything.
+func TestReadImagesFiltersTheCatalogue(t *testing.T) {
+	ts := newServer(t)
+
+	names := func(body string) []string {
+		t.Helper()
+		status, out := post(t, ts, "ReadImages", body)
+		if status != http.StatusOK {
+			t.Fatalf("ReadImages %s answered %d: %v", body, status, out)
+		}
+		served, _ := out["Images"].([]any)
+		var ids []string
+		for _, entry := range served {
+			image, _ := entry.(map[string]any)
+			id, _ := image["ImageId"].(string)
+			ids = append(ids, id)
+		}
+		return ids
+	}
+
+	// The unfiltered call is the reference every case below narrows from, so an
+	// empty catalogue would make the whole test vacuous.
+	whole := names(`{}`)
+	if len(whole) < 2 {
+		t.Fatalf("the catalogue served %d image(s); this test needs several to prove filtering", len(whole))
+	}
+	if got := names(`{"Filters":{"ImageIds":["ami-00000002"]}}`); len(got) != 1 || got[0] != "ami-00000002" {
+		t.Errorf("ImageIds filter returned %v, want [ami-00000002]", got)
+	}
+	if got := names(`{"Filters":{"ImageNames":["Debian-12-2025.01"]}}`); len(got) != 1 || got[0] != "ami-00000002" {
+		t.Errorf("ImageNames filter returned %v, want [ami-00000002]", got)
+	}
+	// An id nobody published matches nothing. Before this, it matched everything.
+	if got := names(`{"Filters":{"ImageIds":["ami-deadbeef"]}}`); len(got) != 0 {
+		t.Errorf("an unknown id returned %v, want nothing", got)
+	}
+	// Two filters are an intersection, not a union.
+	if got := names(`{"Filters":{"ImageIds":["ami-00000001"],"States":["pending"]}}`); len(got) != 0 {
+		t.Errorf("a known id in the wrong state returned %v, want nothing", got)
+	}
+	if got := names(`{"ResultsPerPage":2}`); len(got) != 2 {
+		t.Errorf("ResultsPerPage 2 returned %d images", len(got))
+	}
+
+	// A filter the catalogue cannot answer is refused by name, never ignored.
+	status, out := post(t, ts, "ReadImages", `{"Filters":{"Hypervisors":["xen"]}}`)
+	if status == http.StatusOK {
+		t.Errorf("an unsupported filter was accepted: %v", out)
+	}
+}
+
 // Tags live on the resource they name.
 //
 // The provider calls CreateTags on almost every resource, and reads them back
