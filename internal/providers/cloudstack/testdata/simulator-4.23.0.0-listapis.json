@@ -1,0 +1,1044 @@
+{
+ "source": "apache/cloudstack-simulator, CloudStack 4.23.0.0, listApis as admin",
+ "image": "sha256:59db60234cd0ae7be289d79862de5818fbec4ac618d74b3af448efadbed77c95",
+ "recorded": "2026-10-18",
+ "total_commands": 865,
+ "commands": {
+  "deployVirtualMachine": {
+   "isasync": true,
+   "params": {
+    "serviceofferingid": {
+     "type": "uuid",
+     "required": true
+    },
+    "userdataid": {
+     "type": "uuid",
+     "required": false
+    },
+    "snapshotid": {
+     "type": "uuid",
+     "required": false
+    },
+    "nicnetworklist": {
+     "type": "map",
+     "required": false
+    },
+    "iodriverpolicy": {
+     "type": "string",
+     "required": false
+    },
+    "account": {
+     "type": "string",
+     "required": false
+    },
+    "securitygroupnames": {
+     "type": "list",
+     "required": false
+    },
+    "group": {
+     "type": "string",
+     "required": false
+    },
+    "networkids": {
+     "type": "list",
+     "required": false
+    },
+    "leaseexpiryaction": {
+     "type": "string",
+     "required": false
+    },
+    "zoneid": {
+     "type": "uuid",
+     "required": true
+    },
+    "securitygroupids": {
+     "type": "list",
+     "required": false
+    },
+    "size": {
+     "type": "long",
+     "required": false
+    },
+    "keypairs": {
+     "type": "list",
+     "required": false
+    },
+    "rootdiskkmskeyid": {
+     "type": "uuid",
+     "required": false
+    },
+    "copyimagetags": {
+     "type": "boolean",
+     "required": false
+    },
+    "details": {
+     "type": "map",
+     "required": false
+    },
+    "affinitygroupnames": {
+     "type": "list",
+     "required": false
+    },
+    "macaddress": {
+     "type": "string",
+     "required": false
+    },
+    "affinitygroupids": {
+     "type": "list",
+     "required": false
+    },
+    "iptonetworklist": {
+     "type": "map",
+     "required": false
+    },
+    "customid": {
+     "type": "string",
+     "required": false
+    },
+    "volumeid": {
+     "type": "uuid",
+     "required": false
+    },
+    "podid": {
+     "type": "uuid",
+     "required": false
+    },
+    "diskofferingid": {
+     "type": "uuid",
+     "required": false
+    },
+    "bootmode": {
+     "type": "string",
+     "required": false
+    },
+    "userdatadetails": {
+     "type": "map",
+     "required": false
+    },
+    "rootdisksize": {
+     "type": "long",
+     "required": false
+    },
+    "projectid": {
+     "type": "uuid",
+     "required": false
+    },
+    "blankinstance": {
+     "type": "boolean",
+     "required": false
+    },
+    "overridediskofferingid": {
+     "type": "uuid",
+     "required": false
+    },
+    "password": {
+     "type": "string",
+     "required": false
+    },
+    "templateid": {
+     "type": "uuid",
+     "required": false
+    },
+    "hypervisor": {
+     "type": "string",
+     "required": false
+    },
+    "datadisksdetails": {
+     "type": "map",
+     "required": false
+    },
+    "boottype": {
+     "type": "string",
+     "required": false
+    },
+    "iothreadsenabled": {
+     "type": "boolean",
+     "required": false
+    },
+    "bootintosetup": {
+     "type": "boolean",
+     "required": false
+    },
+    "datadiskofferinglist": {
+     "type": "map",
+     "required": false
+    },
+    "ip6address": {
+     "type": "string",
+     "required": false
+    },
+    "keypair": {
+     "type": "string",
+     "required": false
+    },
+    "nicpackedvirtqueuesenabled": {
+     "type": "boolean",
+     "required": false
+    },
+    "startvm": {
+     "type": "boolean",
+     "required": false
+    },
+    "ipaddress": {
+     "type": "string",
+     "required": false
+    },
+    "keyboard": {
+     "type": "string",
+     "required": false
+    },
+    "userdata": {
+     "type": "string",
+     "required": false
+    },
+    "leaseduration": {
+     "type": "integer",
+     "required": false
+    },
+    "displayvm": {
+     "type": "boolean",
+     "required": false
+    },
+    "properties": {
+     "type": "map",
+     "required": false
+    },
+    "deploymentplanner": {
+     "type": "string",
+     "required": false
+    },
+    "extraconfig": {
+     "type": "string",
+     "required": false
+    },
+    "hostid": {
+     "type": "uuid",
+     "required": false
+    },
+    "domainid": {
+     "type": "uuid",
+     "required": false
+    },
+    "externaldetails": {
+     "type": "map",
+     "required": false
+    },
+    "clusterid": {
+     "type": "uuid",
+     "required": false
+    },
+    "nicmultiqueuenumber": {
+     "type": "integer",
+     "required": false
+    },
+    "dynamicscalingenabled": {
+     "type": "boolean",
+     "required": false
+    },
+    "name": {
+     "type": "string",
+     "required": false
+    },
+    "dhcpoptionsnetworklist": {
+     "type": "map",
+     "required": false
+    },
+    "displayname": {
+     "type": "string",
+     "required": false
+    }
+   }
+  },
+  "destroyVirtualMachine": {
+   "isasync": true,
+   "params": {
+    "volumeids": {
+     "type": "list",
+     "required": false
+    },
+    "forced": {
+     "type": "boolean",
+     "required": false
+    },
+    "expunge": {
+     "type": "boolean",
+     "required": false
+    },
+    "id": {
+     "type": "uuid",
+     "required": true
+    }
+   }
+  },
+  "listApis": {
+   "isasync": false,
+   "params": {
+    "name": {
+     "type": "string",
+     "required": false
+    }
+   }
+  },
+  "listNetworks": {
+   "isasync": false,
+   "params": {
+    "listall": {
+     "type": "boolean",
+     "required": false
+    },
+    "supportedservices": {
+     "type": "list",
+     "required": false
+    },
+    "account": {
+     "type": "string",
+     "required": false
+    },
+    "id": {
+     "type": "uuid",
+     "required": false
+    },
+    "issystem": {
+     "type": "boolean",
+     "required": false
+    },
+    "networkofferingid": {
+     "type": "uuid",
+     "required": false
+    },
+    "name": {
+     "type": "string",
+     "required": false
+    },
+    "zoneid": {
+     "type": "uuid",
+     "required": false
+    },
+    "type": {
+     "type": "string",
+     "required": false
+    },
+    "physicalnetworkid": {
+     "type": "uuid",
+     "required": false
+    },
+    "specifyipranges": {
+     "type": "boolean",
+     "required": false
+    },
+    "keyword": {
+     "type": "string",
+     "required": false
+    },
+    "retrieveonlyresourcecount": {
+     "type": "boolean",
+     "required": false
+    },
+    "projectid": {
+     "type": "uuid",
+     "required": false
+    },
+    "displaynetwork": {
+     "type": "boolean",
+     "required": false
+    },
+    "showicon": {
+     "type": "boolean",
+     "required": false
+    },
+    "acltype": {
+     "type": "string",
+     "required": false
+    },
+    "tags": {
+     "type": "map",
+     "required": false
+    },
+    "page": {
+     "type": "integer",
+     "required": false
+    },
+    "associatednetworkid": {
+     "type": "uuid",
+     "required": false
+    },
+    "canusefordeploy": {
+     "type": "boolean",
+     "required": false
+    },
+    "isrecursive": {
+     "type": "boolean",
+     "required": false
+    },
+    "networkfilter": {
+     "type": "string",
+     "required": false
+    },
+    "vpcid": {
+     "type": "uuid",
+     "required": false
+    },
+    "traffictype": {
+     "type": "string",
+     "required": false
+    },
+    "restartrequired": {
+     "type": "boolean",
+     "required": false
+    },
+    "forvpc": {
+     "type": "boolean",
+     "required": false
+    },
+    "domainid": {
+     "type": "uuid",
+     "required": false
+    },
+    "pagesize": {
+     "type": "integer",
+     "required": false
+    },
+    "vlan": {
+     "type": "string",
+     "required": false
+    }
+   }
+  },
+  "listServiceOfferings": {
+   "isasync": false,
+   "params": {
+    "page": {
+     "type": "integer",
+     "required": false
+    },
+    "keyword": {
+     "type": "string",
+     "required": false
+    },
+    "cpunumber": {
+     "type": "integer",
+     "required": false
+    },
+    "pagesize": {
+     "type": "integer",
+     "required": false
+    },
+    "domainid": {
+     "type": "uuid",
+     "required": false
+    },
+    "zoneid": {
+     "type": "uuid",
+     "required": false
+    },
+    "templateid": {
+     "type": "uuid",
+     "required": false
+    },
+    "gpuenabled": {
+     "type": "boolean",
+     "required": false
+    },
+    "account": {
+     "type": "string",
+     "required": false
+    },
+    "name": {
+     "type": "string",
+     "required": false
+    },
+    "listall": {
+     "type": "boolean",
+     "required": false
+    },
+    "issystem": {
+     "type": "boolean",
+     "required": false
+    },
+    "cpuspeed": {
+     "type": "integer",
+     "required": false
+    },
+    "memory": {
+     "type": "integer",
+     "required": false
+    },
+    "virtualmachineid": {
+     "type": "uuid",
+     "required": false
+    },
+    "vgpuprofileid": {
+     "type": "uuid",
+     "required": false
+    },
+    "projectid": {
+     "type": "uuid",
+     "required": false
+    },
+    "id": {
+     "type": "uuid",
+     "required": false
+    },
+    "encryptroot": {
+     "type": "boolean",
+     "required": false
+    },
+    "systemvmtype": {
+     "type": "string",
+     "required": false
+    },
+    "isrecursive": {
+     "type": "boolean",
+     "required": false
+    },
+    "storagetype": {
+     "type": "string",
+     "required": false
+    },
+    "state": {
+     "type": "string",
+     "required": false
+    }
+   }
+  },
+  "listTemplates": {
+   "isasync": false,
+   "params": {
+    "hypervisor": {
+     "type": "string",
+     "required": false
+    },
+    "storageid": {
+     "type": "uuid",
+     "required": false
+    },
+    "arch": {
+     "type": "string",
+     "required": false
+    },
+    "showremoved": {
+     "type": "boolean",
+     "required": false
+    },
+    "parenttemplateid": {
+     "type": "uuid",
+     "required": false
+    },
+    "domainid": {
+     "type": "uuid",
+     "required": false
+    },
+    "forcks": {
+     "type": "boolean",
+     "required": false
+    },
+    "listall": {
+     "type": "boolean",
+     "required": false
+    },
+    "templatefilter": {
+     "type": "string",
+     "required": true
+    },
+    "showicon": {
+     "type": "boolean",
+     "required": false
+    },
+    "page": {
+     "type": "integer",
+     "required": false
+    },
+    "isvnf": {
+     "type": "boolean",
+     "required": false
+    },
+    "projectid": {
+     "type": "uuid",
+     "required": false
+    },
+    "imagestoreid": {
+     "type": "uuid",
+     "required": false
+    },
+    "zoneid": {
+     "type": "uuid",
+     "required": false
+    },
+    "pagesize": {
+     "type": "integer",
+     "required": false
+    },
+    "keyword": {
+     "type": "string",
+     "required": false
+    },
+    "ids": {
+     "type": "list",
+     "required": false
+    },
+    "showunique": {
+     "type": "boolean",
+     "required": false
+    },
+    "extensionid": {
+     "type": "uuid",
+     "required": false
+    },
+    "isrecursive": {
+     "type": "boolean",
+     "required": false
+    },
+    "account": {
+     "type": "string",
+     "required": false
+    },
+    "templatetype": {
+     "type": "string",
+     "required": false
+    },
+    "details": {
+     "type": "list",
+     "required": false
+    },
+    "oscategoryid": {
+     "type": "uuid",
+     "required": false
+    },
+    "id": {
+     "type": "uuid",
+     "required": false
+    },
+    "tags": {
+     "type": "map",
+     "required": false
+    },
+    "name": {
+     "type": "string",
+     "required": false
+    },
+    "isready": {
+     "type": "boolean",
+     "required": false
+    }
+   }
+  },
+  "listVirtualMachines": {
+   "isasync": false,
+   "params": {
+    "listall": {
+     "type": "boolean",
+     "required": false
+    },
+    "id": {
+     "type": "uuid",
+     "required": false
+    },
+    "state": {
+     "type": "string",
+     "required": false
+    },
+    "haenable": {
+     "type": "boolean",
+     "required": false
+    },
+    "userdataid": {
+     "type": "uuid",
+     "required": false
+    },
+    "zoneid": {
+     "type": "uuid",
+     "required": false
+    },
+    "isrecursive": {
+     "type": "boolean",
+     "required": false
+    },
+    "userid": {
+     "type": "uuid",
+     "required": false
+    },
+    "isoid": {
+     "type": "uuid",
+     "required": false
+    },
+    "showicon": {
+     "type": "boolean",
+     "required": false
+    },
+    "userdata": {
+     "type": "boolean",
+     "required": false
+    },
+    "storageid": {
+     "type": "uuid",
+     "required": false
+    },
+    "arch": {
+     "type": "string",
+     "required": false
+    },
+    "gpuenabled": {
+     "type": "boolean",
+     "required": false
+    },
+    "hypervisor": {
+     "type": "string",
+     "required": false
+    },
+    "networkid": {
+     "type": "uuid",
+     "required": false
+    },
+    "podid": {
+     "type": "uuid",
+     "required": false
+    },
+    "isvnf": {
+     "type": "boolean",
+     "required": false
+    },
+    "keypair": {
+     "type": "string",
+     "required": false
+    },
+    "vpcid": {
+     "type": "uuid",
+     "required": false
+    },
+    "serviceofferingid": {
+     "type": "uuid",
+     "required": false
+    },
+    "page": {
+     "type": "integer",
+     "required": false
+    },
+    "groupid": {
+     "type": "uuid",
+     "required": false
+    },
+    "clusterid": {
+     "type": "uuid",
+     "required": false
+    },
+    "domainid": {
+     "type": "uuid",
+     "required": false
+    },
+    "retrieveonlyresourcecount": {
+     "type": "boolean",
+     "required": false
+    },
+    "accumulate": {
+     "type": "boolean",
+     "required": false
+    },
+    "ids": {
+     "type": "list",
+     "required": false
+    },
+    "backupofferingid": {
+     "type": "uuid",
+     "required": false
+    },
+    "securitygroupid": {
+     "type": "uuid",
+     "required": false
+    },
+    "name": {
+     "type": "string",
+     "required": false
+    },
+    "pagesize": {
+     "type": "integer",
+     "required": false
+    },
+    "leased": {
+     "type": "boolean",
+     "required": false
+    },
+    "forvirtualnetwork": {
+     "type": "boolean",
+     "required": false
+    },
+    "displayvm": {
+     "type": "boolean",
+     "required": false
+    },
+    "extensionid": {
+     "type": "uuid",
+     "required": false
+    },
+    "affinitygroupid": {
+     "type": "uuid",
+     "required": false
+    },
+    "autoscalevmgroupid": {
+     "type": "uuid",
+     "required": false
+    },
+    "templateid": {
+     "type": "uuid",
+     "required": false
+    },
+    "tags": {
+     "type": "map",
+     "required": false
+    },
+    "hostid": {
+     "type": "uuid",
+     "required": false
+    },
+    "projectid": {
+     "type": "uuid",
+     "required": false
+    },
+    "details": {
+     "type": "list",
+     "required": false
+    },
+    "keyword": {
+     "type": "string",
+     "required": false
+    },
+    "account": {
+     "type": "string",
+     "required": false
+    }
+   }
+  },
+  "listVolumes": {
+   "isasync": false,
+   "params": {
+    "diskofferingid": {
+     "type": "uuid",
+     "required": false
+    },
+    "listall": {
+     "type": "boolean",
+     "required": false
+    },
+    "pagesize": {
+     "type": "integer",
+     "required": false
+    },
+    "displayvolume": {
+     "type": "boolean",
+     "required": false
+    },
+    "isencrypted": {
+     "type": "boolean",
+     "required": false
+    },
+    "page": {
+     "type": "integer",
+     "required": false
+    },
+    "domainid": {
+     "type": "uuid",
+     "required": false
+    },
+    "name": {
+     "type": "string",
+     "required": false
+    },
+    "kmskeyid": {
+     "type": "uuid",
+     "required": false
+    },
+    "hostid": {
+     "type": "uuid",
+     "required": false
+    },
+    "podid": {
+     "type": "uuid",
+     "required": false
+    },
+    "state": {
+     "type": "string",
+     "required": false
+    },
+    "account": {
+     "type": "string",
+     "required": false
+    },
+    "clusterid": {
+     "type": "uuid",
+     "required": false
+    },
+    "isrecursive": {
+     "type": "boolean",
+     "required": false
+    },
+    "virtualmachineid": {
+     "type": "uuid",
+     "required": false
+    },
+    "storageid": {
+     "type": "string",
+     "required": false
+    },
+    "ids": {
+     "type": "list",
+     "required": false
+    },
+    "retrieveonlyresourcecount": {
+     "type": "boolean",
+     "required": false
+    },
+    "id": {
+     "type": "uuid",
+     "required": false
+    },
+    "zoneid": {
+     "type": "uuid",
+     "required": false
+    },
+    "type": {
+     "type": "string",
+     "required": false
+    },
+    "listsystemvms": {
+     "type": "boolean",
+     "required": false
+    },
+    "keyword": {
+     "type": "string",
+     "required": false
+    },
+    "projectid": {
+     "type": "uuid",
+     "required": false
+    },
+    "tags": {
+     "type": "map",
+     "required": false
+    },
+    "serviceofferingid": {
+     "type": "uuid",
+     "required": false
+    }
+   }
+  },
+  "listZones": {
+   "isasync": false,
+   "params": {
+    "storageaccessgroup": {
+     "type": "string",
+     "required": false
+    },
+    "page": {
+     "type": "integer",
+     "required": false
+    },
+    "available": {
+     "type": "boolean",
+     "required": false
+    },
+    "id": {
+     "type": "uuid",
+     "required": false
+    },
+    "tags": {
+     "type": "map",
+     "required": false
+    },
+    "showicon": {
+     "type": "boolean",
+     "required": false
+    },
+    "domainid": {
+     "type": "uuid",
+     "required": false
+    },
+    "pagesize": {
+     "type": "integer",
+     "required": false
+    },
+    "keyword": {
+     "type": "string",
+     "required": false
+    },
+    "showcapacities": {
+     "type": "boolean",
+     "required": false
+    },
+    "name": {
+     "type": "string",
+     "required": false
+    },
+    "ids": {
+     "type": "list",
+     "required": false
+    },
+    "networktype": {
+     "type": "string",
+     "required": false
+    }
+   }
+  },
+  "queryAsyncJobResult": {
+   "isasync": false,
+   "params": {
+    "resourcetype": {
+     "type": "string",
+     "required": false
+    },
+    "jobid": {
+     "type": "uuid",
+     "required": false
+    },
+    "resourceid": {
+     "type": "string",
+     "required": false
+    }
+   }
+  },
+  "startVirtualMachine": {
+   "isasync": true,
+   "params": {
+    "bootintosetup": {
+     "type": "boolean",
+     "required": false
+    },
+    "id": {
+     "type": "uuid",
+     "required": true
+    },
+    "podid": {
+     "type": "uuid",
+     "required": false
+    },
+    "hostid": {
+     "type": "uuid",
+     "required": false
+    },
+    "clusterid": {
+     "type": "uuid",
+     "required": false
+    },
+    "considerlasthost": {
+     "type": "boolean",
+     "required": false
+    },
+    "deploymentplanner": {
+     "type": "string",
+     "required": false
+    }
+   }
+  },
+  "stopVirtualMachine": {
+   "isasync": true,
+   "params": {
+    "forced": {
+     "type": "boolean",
+     "required": false
+    },
+    "id": {
+     "type": "uuid",
+     "required": true
+    }
+   }
+  }
+ }
+}
