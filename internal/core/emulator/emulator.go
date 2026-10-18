@@ -427,7 +427,19 @@ func NewServer(env *Env, packs ...Pack) (*Server, error) {
 			wrapped[action] = s.observer.wrap(m.Provider, m.Route)
 		}
 		wildcard := g.wildcard
+		selector := g.selector
 		s.mux.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
+			if selector != "" {
+				// Selected by a parameter: the value names the route and there is
+				// no identifier to re-set.
+				h, ok := wrapped[selectorValue(r, selector)]
+				if !ok {
+					s.handleUnrouted(w, r)
+					return
+				}
+				h(w, r)
+				return
+			}
 			segment := r.URL.Path[strings.LastIndex(r.URL.Path, "/")+1:]
 			value, action, _ := strings.Cut(segment, ":")
 			h, ok := wrapped[action]
