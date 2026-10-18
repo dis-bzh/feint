@@ -1,0 +1,67 @@
+# The module family behind cs_instance, played through its whole life against the
+# emulator: create, create again (must change nothing), read, stop, start, expunge.
+#
+# Variables name the catalogue, so the same playbook runs against the official
+# simulator; ansible.sh passes the emulator's.
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: the zone is listed
+      ngine_io.cloudstack.zone_info:
+      register: zones
+    - assert: { that: ["zones.zones | length >= 1"] }
+
+    - name: create an instance
+      ngine_io.cloudstack.instance:
+        name: ansible-vm
+        template: "{{ template_name }}"
+        service_offering: "{{ offering_name }}"
+        zone: "{{ zone_name }}"
+      register: created
+    - assert: { that: [created.changed, "created.state == 'Running'"] }
+
+    - name: create it again, which must change nothing
+      ngine_io.cloudstack.instance:
+        name: ansible-vm
+        template: "{{ template_name }}"
+        service_offering: "{{ offering_name }}"
+        zone: "{{ zone_name }}"
+      register: again
+    - assert: { that: [not again.changed] }
+
+    - name: read it back
+      ngine_io.cloudstack.instance_info:
+        name: ansible-vm
+      register: info
+    - assert: { that: ["info.instances | length == 1"] }
+
+    - name: stop it
+      ngine_io.cloudstack.instance:
+        name: ansible-vm
+        state: stopped
+        zone: "{{ zone_name }}"
+      register: stopped
+    - assert: { that: [stopped.changed, "stopped.state == 'Stopped'"] }
+
+    - name: start it
+      ngine_io.cloudstack.instance:
+        name: ansible-vm
+        state: started
+        zone: "{{ zone_name }}"
+      register: started
+    - assert: { that: [started.changed, "started.state == 'Running'"] }
+
+    - name: expunge it
+      ngine_io.cloudstack.instance:
+        name: ansible-vm
+        state: expunged
+        zone: "{{ zone_name }}"
+      register: gone
+    - assert: { that: [gone.changed] }
+
+    - name: it is gone (the module fails when the instance does not exist)
+      ngine_io.cloudstack.instance_info:
+        name: ansible-vm
+      register: after
+      ignore_errors: true
+    - assert: { that: [after is failed, "'not found' in after.msg"] }
