@@ -115,6 +115,12 @@ func TestNoPackBuildsItsOwnExclusion(t *testing.T) {
 // notInTheBarrage lists the shared controls a pack legitimately does not run,
 // with the reason. Same shape and same discipline as Declined().
 var notInTheBarrage = map[string]string{
+	"cloudstack/Orphans": "no resource of this pack names another: a machine carries its address and its " +
+		"interface inline, the catalogue is a table in the binary, and a job remembers the command that " +
+		"made it and a serialised answer, never the identifier of what it acted on",
+	"cloudstack/NoLostUpdate": "no command writes two independent fields of one resource: a transition writes " +
+		"the state under the store's lock (Store.Update), and nothing else about a machine can change after " +
+		"deploy. The day an update command or tags land, this entry is the one to delete",
 	"exoscale/Orphans": "this pack keeps its references on the owner rather than on the dependent — " +
 		"an instance carries the ids of its elastic IPs and the networks it joined, so deleting it " +
 		"takes the reference with it and no record is left naming something gone",

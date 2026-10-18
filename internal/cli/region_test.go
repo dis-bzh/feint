@@ -53,3 +53,40 @@ func TestAnUnknownOutscaleRegionRefusesToServe(t *testing.T) {
 		t.Errorf("the refusal does not name the offending value: %v", err)
 	}
 }
+
+// An experimental pack is mounted when asked for by name and not otherwise, and
+// a name nobody publishes refuses to serve rather than serving without it.
+func TestAnExperimentalPackIsMountedOnlyWhenAsked(t *testing.T) {
+	names := func(env *emulator.Env) []string {
+		packs, err := packsFor(env)
+		if err != nil {
+			t.Fatalf("packsFor: %v", err)
+		}
+		var out []string
+		for _, p := range packs {
+			out = append(out, p.Name())
+		}
+		return out
+	}
+	has := func(list []string, name string) bool {
+		for _, n := range list {
+			if n == name {
+				return true
+			}
+		}
+		return false
+	}
+
+	t.Setenv("FEINT_EXPERIMENTAL_PACKS", "")
+	if has(names(emulator.DefaultEnv()), "cloudstack") {
+		t.Error("an experimental pack was mounted without being asked for")
+	}
+	t.Setenv("FEINT_EXPERIMENTAL_PACKS", "cloudstack")
+	if got := names(emulator.DefaultEnv()); !has(got, "cloudstack") || len(got) != 4 {
+		t.Errorf("asked for cloudstack, mounted %v", got)
+	}
+	t.Setenv("FEINT_EXPERIMENTAL_PACKS", "atlantis")
+	if _, err := packsFor(emulator.DefaultEnv()); err == nil || !strings.Contains(err.Error(), "cloudstack") {
+		t.Errorf("an unknown experimental pack must refuse and name the known ones, got %v", err)
+	}
+}
