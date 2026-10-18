@@ -24,6 +24,7 @@ import (
 	"github.com/stephrobert/feint/internal/core/emulator"
 	"github.com/stephrobert/feint/internal/core/machine"
 	"github.com/stephrobert/feint/internal/drift"
+	"github.com/stephrobert/feint/internal/providers/cloudstack"
 	"github.com/stephrobert/feint/internal/providers/exoscale"
 	"github.com/stephrobert/feint/internal/providers/outscale"
 	"github.com/stephrobert/feint/internal/providers/scaleway"
@@ -855,8 +856,46 @@ func loadContracts(dir string) (map[string]*contract.Doc, error) {
 // default; a zone Exoscale does not publish refuses to serve, naming the
 // accepted list. TestAnUnknownExoscaleZoneRefusesToServe fails without the
 // refusal.
+//
+// FEINT_EXPERIMENTAL_PACKS mounts the packs that are not yet part of the
+// product, by name (cloudstack). It is read here and in packsFor only, never in
+// packsAt: the corpus gate's verdict must stay a property of committed files, and
+// a pack that has no committed coverage, evidence or contract yet is exactly the
+// one that would make that verdict depend on somebody's shell. A name nobody
+// publishes refuses to serve, like an unknown region.
+// TestAnExperimentalPackIsMountedOnlyWhenAsked fails without either half.
 var packsFor = func(env *emulator.Env) ([]emulator.Pack, error) {
-	return packsAt(env, os.Getenv("FEINT_OUTSCALE_REGION"), os.Getenv("FEINT_EXOSCALE_ZONE"))
+	packs, err := packsAt(env, os.Getenv("FEINT_OUTSCALE_REGION"), os.Getenv("FEINT_EXOSCALE_ZONE"))
+	if err != nil {
+		return nil, err
+	}
+	return withExperimental(env, packs, os.Getenv("FEINT_EXPERIMENTAL_PACKS"))
+}
+
+// experimentalPacks is what FEINT_EXPERIMENTAL_PACKS accepts.
+var experimentalPacks = map[string]func(*emulator.Env) emulator.Pack{
+	cloudstack.Name: func(env *emulator.Env) emulator.Pack { return cloudstack.New(env) },
+}
+
+// withExperimental appends the named experimental packs to the mounted ones.
+func withExperimental(env *emulator.Env, packs []emulator.Pack, names string) ([]emulator.Pack, error) {
+	for _, name := range strings.Split(names, ",") {
+		name = strings.TrimSpace(name)
+		if name == "" {
+			continue
+		}
+		build, ok := experimentalPacks[name]
+		if !ok {
+			known := make([]string, 0, len(experimentalPacks))
+			for k := range experimentalPacks {
+				known = append(known, k)
+			}
+			sort.Strings(known)
+			return nil, fmt.Errorf("FEINT_EXPERIMENTAL_PACKS: no experimental pack %q (there is %s)", name, strings.Join(known, ", "))
+		}
+		packs = append(packs, build(env))
+	}
+	return packs, nil
 }
 
 // packsAt is packsFor with the two deployment choices passed in rather than

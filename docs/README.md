@@ -61,3 +61,5 @@ small enough to read, and no cloud account.
   into the next operation to serve.
 - [fourth-pack.md](fourth-pack.md) — what adding a provider costs, written from
   the three that exist.
+- [cloudstack.md](cloudstack.md) — the first fourth pack, as a prototype: what two
+  real clients have driven, and what stands between it and a default mount.
