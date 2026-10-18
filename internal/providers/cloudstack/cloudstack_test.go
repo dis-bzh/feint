@@ -165,15 +165,6 @@ func TestEachDeployTakesTheNextFreeAddress(t *testing.T) {
 	}
 }
 
-func TestStartingARunningMachineIsRefused(t *testing.T) {
-	c := newClient(t)
-	d := c.ok("GET", signed("deployVirtualMachine", "zoneid", zone, "templateid", template, "serviceofferingid", small))
-	status, body := c.call("GET", signed("startVirtualMachine", "id", d["id"].(string)))
-	if status != 431 || body["errorcode"] != float64(431) {
-		t.Fatalf("status %d: %v", status, body)
-	}
-}
-
 func TestTheErrorsSpeakCloudStack(t *testing.T) {
 	c := newClient(t)
 	cases := []struct {
@@ -186,6 +177,7 @@ func TestTheErrorsSpeakCloudStack(t *testing.T) {
 		{"missing parameter", signed("deployVirtualMachine"), 431, "missing parameter serviceofferingid"},
 		{"unknown entity", signed("deployVirtualMachine", "zoneid", "nope", "templateid", template, "serviceofferingid", small), 431, "Invalid parameter zoneid value=nope"},
 		{"unknown job", signed("queryAsyncJobResult", "jobid", "nope"), 431, "Invalid parameter jobid"},
+		{"no job id", signed("queryAsyncJobResult"), 431, "Expected parameter job id"},
 		{"unknown command", signed("createUniverse"), 432, "createUniverse"},
 	}
 	for _, tc := range cases {
@@ -272,4 +264,27 @@ func TestTheApiKeyIsReadWhateverItsCase(t *testing.T) {
 	if body := c.ok("GET", v); body["count"] != float64(1) {
 		t.Fatalf("zones: %v", body)
 	}
+}
+
+// callWhole is call() without unwrapping the envelope.
+func (c *client) callWhole(method string, v map[string][]string) (int, map[string]any) {
+	c.t.Helper()
+	form := url.Values(v)
+	var resp *http.Response
+	var err error
+	if method == http.MethodGet {
+		resp, err = http.Get(c.srv.URL + "/client/api?" + form.Encode())
+	} else {
+		resp, err = http.Post(c.srv.URL+"/client/api", "application/x-www-form-urlencoded", strings.NewReader(form.Encode()))
+	}
+	if err != nil {
+		c.t.Fatal(err)
+	}
+	defer resp.Body.Close()
+	raw, _ := io.ReadAll(resp.Body)
+	var body map[string]any
+	if err := json.Unmarshal(raw, &body); err != nil {
+		c.t.Fatalf("not JSON (%d): %s", resp.StatusCode, raw)
+	}
+	return resp.StatusCode, body
 }

@@ -20,6 +20,7 @@ package cloudstack
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/stephrobert/feint/internal/core/emulator"
 	"github.com/stephrobert/feint/internal/core/resource"
@@ -36,15 +37,25 @@ const pathPrefix = "/client/api"
 const (
 	kindVM  = "virtualmachine"
 	kindJob = "asyncjob"
+	// kindGone is what an expunged machine leaves: its identifier and its
+	// database sequence number, and nothing else. The management server keeps the
+	// row, flagged removed, and three of its answers depend on it: a list by that
+	// id is empty rather than an error, an action on it is accepted and fails in
+	// the job, and the sequence number is what the job's error names.
+	kindGone = "expungedvm"
 )
 
 // Pack implements emulator.Pack for CloudStack.
 type Pack struct {
 	env *emulator.Env
+	// epoch is when the catalogue was registered: the creation date of the
+	// zone's offerings, template and network, fixed so that it does not move
+	// between two reads.
+	epoch time.Time
 }
 
 // New returns a CloudStack pack backed by env.
-func New(env *emulator.Env) *Pack { return &Pack{env: env} }
+func New(env *emulator.Env) *Pack { return &Pack{env: env, epoch: env.Now()} }
 
 // Name implements emulator.Pack.
 func (p *Pack) Name() string { return Name }
@@ -116,13 +127,14 @@ const (
 func (p *Pack) Prefixes() []string { return []string{pathPrefix} }
 
 // NotFound implements emulator.Unrouted: a command nobody serves is answered in
-// CloudStack's own words, 432, which is what a real management server says for
-// a command it does not know. cmk and cs both surface the errortext.
+// CloudStack's own words, which cmk and cs both surface. A request that names no
+// command at all is answered 200 with an empty body, as the management server
+// does: a client that sent one has a bug, and this is what it will see upstream.
 func (p *Pack) NotFound(w http.ResponseWriter, r *http.Request) {
 	command := commandOf(r)
-	text := "The given command '" + command + "' either does not exist, is not available for user, or not available from ip address '" + clientIP(r) + "'."
 	if command == "" {
-		text = "The request carries no command parameter."
+		w.WriteHeader(http.StatusOK)
+		return
 	}
-	writeError(w, "errorresponse", &apiError{status: 432, code: 432, text: text})
+	writeError(w, "errorresponse", &apiError{status: 432, code: 432, cs: 9999, text: "Unknown API command: " + command})
 }

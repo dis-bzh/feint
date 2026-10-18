@@ -37,13 +37,29 @@ type command struct {
 }
 
 // outcome is what an asynchronous command did: the immediate answer (the id of
-// what is being created, so a client can already name it) and the result the job
-// will report.
+// what is being created, so a client can already name it) and what the job will
+// report.
 type outcome struct {
-	ack    map[string]any
+	// ack is what the command answers beyond the jobid. Deploy answers the id of
+	// the machine it is creating; start, stop and destroy answer the jobid alone.
+	ack map[string]any
+	// result is what the job settles on when it succeeds.
 	result map[string]any
+	// fail is how the job ends when it does not. The command itself was accepted
+	// (HTTP 200, a jobid): the refusal travels in the job, which is where a
+	// client that only checks the HTTP status of the command will not look.
+	fail *jobFailure
 	// cmd is the upstream command class, which queryAsyncJobResult reports.
 	cmd string
+	// instance is the machine the job acts on, reported as jobinstanceid.
+	instance string
+}
+
+// jobFailure is a job that ended in error: jobstatus 2, the code in
+// jobresultcode and in the result.
+type jobFailure struct {
+	code int
+	text string
 }
 
 // commands is the served surface.
@@ -62,7 +78,7 @@ func commands() []command {
 		},
 		{
 			name: "listZones", desc: "Lists zones",
-			params: []param{id, name, keyword, listall, {"available", "boolean", false, "true if you want to retrieve all available zones"}},
+			params: []param{id, name, keyword, {"available", "boolean", false, "true if you want to retrieve all available zones"}},
 			fields: []string{"id", "name", "networktype", "allocationstate", "securitygroupsenabled", "localstorageenabled"},
 			run:    (*Pack).listZones,
 		},
@@ -88,12 +104,11 @@ func commands() []command {
 			name: "deployVirtualMachine", desc: "Creates and automatically starts a virtual machine based on a service offering, disk offering, and template.",
 			params: []param{
 				{"serviceofferingid", "uuid", true, "the ID of the service offering for the virtual machine"},
-				{"templateid", "uuid", true, "the ID of the template for the virtual machine"},
+				{"templateid", "uuid", false, "the ID of the template for the virtual machine"},
 				{"zoneid", "uuid", true, "availability zone for the virtual machine"},
 				name,
 				{"displayname", "string", false, "an optional user generated name for the virtual machine"},
 				{"networkids", "list", false, "list of network ids used by virtual machine"},
-				{"keypair", "string", false, "name of the ssh key pair used to login to the virtual machine"},
 				{"userdata", "string", false, "an optional binary data that can be sent to the virtual machine upon a successful deployment"},
 				{"startvm", "boolean", false, "true if start vm after creating; defaulted to true if not specified"},
 			},
@@ -125,8 +140,14 @@ func commands() []command {
 			job:    (*Pack).destroyVM,
 		},
 		{
+			name: "listVolumes", desc: "Lists all volumes.",
+			params: []param{id, name, keyword, listall, zone, {"virtualmachineid", "uuid", false, "the ID of the virtual machine"}, {"type", "string", false, "the type of disk volume"}},
+			fields: []string{"id", "name", "type", "size", "state", "virtualmachineid", "vmstate", "zoneid", "created"},
+			run:    (*Pack).listVolumes,
+		},
+		{
 			name: "queryAsyncJobResult", desc: "Retrieves the current status of asynchronous job.",
-			params: []param{{"jobid", "uuid", true, "the ID of the asychronous job"}},
+			params: []param{{"jobid", "uuid", false, "the ID of the asychronous job"}},
 			fields: []string{"jobid", "jobstatus", "jobresultcode", "jobresulttype", "jobresult", "cmd", "created"},
 			run:    (*Pack).queryAsyncJobResult,
 		},
@@ -164,7 +185,7 @@ func (p *Pack) serve(c command) http.HandlerFunc {
 		}
 		for _, pa := range c.params {
 			if pa.required && a.Get(pa.name) == "" {
-				writeError(w, key, invalid("Unable to execute API command "+strings.ToLower(c.name)+" due to missing parameter "+pa.name))
+				writeError(w, key, missing(pa.name))
 				return
 			}
 		}
@@ -175,8 +196,7 @@ func (p *Pack) serve(c command) http.HandlerFunc {
 				writeError(w, key, err)
 				return
 			}
-			jobID := p.newJob(out)
-			body := map[string]any{"jobid": jobID}
+			body := map[string]any{"jobid": p.newJob(out)}
 			for k, v := range out.ack {
 				body[k] = v
 			}
