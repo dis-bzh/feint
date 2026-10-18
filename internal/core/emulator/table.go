@@ -1,8 +1,12 @@
 package emulator
 
 import (
+	"bytes"
 	"fmt"
+	"io"
+	"mime"
 	"net/http"
+	"net/url"
 	"regexp"
 	"strings"
 )
@@ -43,8 +47,17 @@ type Mounted struct {
 // first colon of the final segment. The parsing is dialect-neutral — nothing
 // here knows which provider writes its verbs that way.
 //
+// A second extension, for the dialect that does not put the verb in the path at
+// all: a Route.Path of "/client/api?command=listZones" is a route selected by a
+// parameter. CloudStack serves its whole API on one URL and names the operation
+// in a `command` parameter, in the query of a GET or in the form body of a POST.
+// The text before the "?" is the pattern mounted; the key and value after it say
+// which request that route answers. As with the action suffix, the parsing is
+// dialect-neutral: nothing here knows which provider writes its verbs there.
+//
 // TestTheTableNamesTheOperationAServeMuxWouldRoute holds the plain half;
-// TestActionSuffixRoutesAreNamedAndServed holds the extension.
+// TestActionSuffixRoutesAreNamedAndServed holds the extension;
+// TestSelectorRoutesAreNamedAndServed holds the selector.
 type Table struct {
 	mux *http.ServeMux
 	at  map[string]Mounted
@@ -60,6 +73,10 @@ type actionGroup struct {
 	// pattern does not end in a wildcard, in which case no action route can
 	// exist under it either.
 	wildcard string
+	// selector is the parameter whose value picks the route, for a base mounted
+	// by "?key=value" routes. Empty otherwise. A group is one or the other: a
+	// base pattern is addressed by a path suffix or by a parameter, never both.
+	selector string
 	routes   map[string]Mounted
 }
 
@@ -74,6 +91,9 @@ var plainWildcard = regexp.MustCompile(`^\{([A-Za-z_][A-Za-z0-9_]*)\}$`)
 // action suffix this package resolves itself. Action is empty for an ordinary
 // path.
 func splitAction(path string) (base, wildcard, action string) {
+	if b, _, _, ok := splitSelector(path); ok {
+		return b, "", ""
+	}
 	i := strings.LastIndex(path, "/")
 	segment := path[i+1:]
 	if m := actionSegment.FindStringSubmatch(segment); m != nil {
@@ -83,6 +103,50 @@ func splitAction(path string) (base, wildcard, action string) {
 		return path, m[1], ""
 	}
 	return path, "", ""
+}
+
+// splitSelector cuts "/client/api?command=listZones" into the pattern net/http
+// can mount, the parameter that selects within it and the value that picks this
+// route. ok is false for an ordinary path.
+func splitSelector(path string) (base, key, value string, ok bool) {
+	base, query, found := strings.Cut(path, "?")
+	if !found {
+		return path, "", "", false
+	}
+	key, value, found = strings.Cut(query, "=")
+	if !found || key == "" || value == "" {
+		return path, "", "", false
+	}
+	return base, key, value, true
+}
+
+// selectorValue reads the parameter that selects a route: from the query, and
+// failing that from a form-encoded body, which is where a POST puts it.
+//
+// The body is read here and put back, for the reason Outscale's dry-run probe
+// does the same: the handler owns it afterwards, and a route that could not
+// read its own form would answer every POST with a missing parameter. Bounded
+// by MaxBody like every other body.
+func selectorValue(r *http.Request, key string) string {
+	if v := r.URL.Query().Get(key); v != "" {
+		return v
+	}
+	if r.Method != http.MethodPost || r.Body == nil {
+		return ""
+	}
+	if mt, _, _ := mime.ParseMediaType(r.Header.Get("Content-Type")); mt != "application/x-www-form-urlencoded" {
+		return ""
+	}
+	body, err := io.ReadAll(io.LimitReader(r.Body, MaxBody))
+	r.Body = io.NopCloser(io.MultiReader(bytes.NewReader(body), r.Body))
+	if err != nil {
+		return ""
+	}
+	form, err := url.ParseQuery(string(body))
+	if err != nil {
+		return ""
+	}
+	return form.Get(key)
 }
 
 // NewTable indexes every route the packs serve.
@@ -101,6 +165,10 @@ func NewTable(packs ...Pack) (*Table, error) {
 			t.at[pattern] = Mounted{Provider: p.Name(), Route: r}
 
 			base, wildcard, action := splitAction(r.Path)
+			_, selKey, selValue, selected := splitSelector(r.Path)
+			if selected {
+				action = selValue
+			}
 			basePattern := r.Method + " " + base
 			g := t.groups[basePattern]
 			if g == nil {
@@ -115,6 +183,17 @@ func NewTable(packs ...Pack) (*Table, error) {
 			}
 			if wildcard != "" {
 				g.wildcard = wildcard
+			}
+			if selected {
+				if _, plain := g.routes[""]; plain {
+					return nil, fmt.Errorf("route %q is mounted beside a plain route at %q: a base is addressed one way", pattern, base)
+				}
+				if g.selector != "" && g.selector != selKey {
+					return nil, fmt.Errorf("route %q selects by %q where %q is already selected by %q", pattern, selKey, base, g.selector)
+				}
+				g.selector = selKey
+			} else if g.selector != "" {
+				return nil, fmt.Errorf("route %q is mounted beside routes selected by %q: a base is addressed one way", pattern, g.selector)
 			}
 			if owner, dup := g.routes[action]; dup {
 				return nil, fmt.Errorf("route %q claimed by both %q and %q", pattern, owner.Provider, p.Name())
@@ -137,14 +216,18 @@ func (t *Table) Lookup(r *http.Request) (Mounted, bool) {
 	if !ok {
 		return Mounted{}, false
 	}
-	m, ok := g.routes[requestAction(g, r.URL.Path)]
+	m, ok := g.routes[requestAction(g, r)]
 	return m, ok
 }
 
 // requestAction extracts the action suffix of a request path, for a group that
 // serves at least one action. A group with none never parses the path at all,
 // so a colon inside an ordinary identifier keeps meaning nothing.
-func requestAction(g *actionGroup, path string) string {
+func requestAction(g *actionGroup, r *http.Request) string {
+	if g.selector != "" {
+		return selectorValue(r, g.selector)
+	}
+	path := r.URL.Path
 	if len(g.routes) == 1 {
 		if _, plainOnly := g.routes[""]; plainOnly {
 			return ""
