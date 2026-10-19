@@ -19,6 +19,38 @@ change ni l'un ni l'autre a sa place dans `git log`.
 
 ### Ajouté
 
+- **Un pack CloudStack expérimental** (`FEINT_EXPERIMENTAL_PACKS=cloudstack`) :
+  monté seulement sur demande, donc rien ne change par défaut : il n'est ni dans
+  les tableaux du README, ni dans `feint status`, et le registre de preuves n'a
+  aucune ligne pour lui.
+
+  CloudStack n'a qu'une URL, `/client/api?command=…`, et un pack sert douze de ses
+  commandes pour une zone Basic : `cloudstack/client/api.deployVirtualMachine`, `cloudstack/client/api.destroyVirtualMachine`, `cloudstack/client/api.listApis`, `cloudstack/client/api.listNetworks`, `cloudstack/client/api.listServiceOfferings`, `cloudstack/client/api.listTemplates`, `cloudstack/client/api.listVirtualMachines`, `cloudstack/client/api.listVolumes`, `cloudstack/client/api.listZones`, `cloudstack/client/api.queryAsyncJobResult`, `cloudstack/client/api.startVirtualMachine`, `cloudstack/client/api.stopVirtualMachine`. La machine déployée reçoit son
+  adresse à son premier démarrage et la garde jusqu'à son expunge, le démarrage
+  d'une machine qui tourne est accepté et c'est le *job* qui échoue avec un 431, et
+  `count` est le total que les filtres ont retenu.
+
+  Ce qui le tient, c'est le simulateur officiel, pas la documentation : CloudStack
+  4.23.0.0 a été lancé, piloté par un scénario de 85 étapes et enregistré, et le
+  même scénario contre le pack ne diffère sur aucune d'elles une fois écartées 22
+  différences qu'il accepte exprès, chacune avec sa raison dans
+  `tools/conformance/cloudstack/accepted.json`. Le contrat est généré à partir du
+  `listApis` du serveur lui-même par `tools/contract/extract-cloudstack.py` : 865
+  commandes, et le schéma d'une réponse seulement pour les commandes dont une
+  réponse a été enregistrée. Les 853 autres ne sont pas servies : 600 sont
+  déclinées avec une raison, en 30 groupes, et 253 forment le backlog
+  (`coverage/cloudstack-baseline.json`).
+
+  Le cœur gagne deux choses indépendantes du fournisseur : un groupe de routes
+  sélectionné par un paramètre de requête, et `contract.Operation.QueryRequired`
+  et `.Async`.
+
+  **Ce qui n'est pas revendiqué :** une machine déployée ne démarre pas, il n'y a
+  pas de modèle de tenance, et les quatre clients qui l'ont piloté (`cs`,
+  `ngine_io.cloudstack`, le fournisseur Terraform et `cmk`) ne sont pas encore
+  lancés par la CI. `docs/cloudstack.md` liste ce qui sépare ce pack d'un montage
+  par défaut.
+
 - **SCIM, toute la chaîne, et un démarrage spot** : la dérive nocturne du
   2026-09-29 (#800), triée en servant plutôt qu'en déclinant.
 

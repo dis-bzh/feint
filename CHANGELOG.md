@@ -17,6 +17,34 @@ what this project is judged on: **a response shape a client can observe**, and
 
 ### Added
 
+- **An experimental CloudStack pack** (`FEINT_EXPERIMENTAL_PACKS=cloudstack`) —
+  mounted only when asked for, so nothing changes by default: it is not in the
+  README tables, not in `feint status`, and the evidence record has no row for it.
+
+  CloudStack has one URL, `/client/api?command=…`, and a pack that serves twelve
+  of its commands for a Basic zone: `cloudstack/client/api.deployVirtualMachine`, `cloudstack/client/api.destroyVirtualMachine`, `cloudstack/client/api.listApis`, `cloudstack/client/api.listNetworks`, `cloudstack/client/api.listServiceOfferings`, `cloudstack/client/api.listTemplates`, `cloudstack/client/api.listVirtualMachines`, `cloudstack/client/api.listVolumes`, `cloudstack/client/api.listZones`, `cloudstack/client/api.queryAsyncJobResult`, `cloudstack/client/api.startVirtualMachine`, `cloudstack/client/api.stopVirtualMachine`. The deployed machine gets its
+  address at its first start and keeps it until it is expunged, a start of a
+  running machine is accepted and the *job* fails with 431, and `count` is the
+  total the filters matched.
+
+  What holds it is the official simulator, not the documentation: CloudStack
+  4.23.0.0 was run, driven through an 85-step scenario and recorded, and the same
+  scenario against the pack differs on none of those steps once 22 differences it
+  accepts on purpose are set aside, each with its reason in
+  `tools/conformance/cloudstack/accepted.json`. The contract is generated from the
+  server's own `listApis` by `tools/contract/extract-cloudstack.py`: 865 commands,
+  and the schema of an answer only for the commands an answer was recorded for.
+  The other 853 are not served: 600 are declined with a reason, in 30 groups, and
+  253 are the backlog (`coverage/cloudstack-baseline.json`).
+
+  The core gains two provider-neutral things: a route group selected by a request
+  parameter, and `contract.Operation.QueryRequired` and `.Async`.
+
+  **What is not claimed:** a deployed machine does not boot, there is no tenancy
+  model, and the four clients that drove it (`cs`, `ngine_io.cloudstack`, the
+  Terraform provider and `cmk`) are not run by CI yet. `docs/cloudstack.md` lists
+  what stands between this pack and a default mount.
+
 - **SCIM, the whole chain, and a spot start** — the nightly drift of 2026-09-29
   (#800), triaged by serving rather than declining.
 
