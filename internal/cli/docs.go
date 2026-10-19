@@ -719,6 +719,14 @@ func operationGroups(reports []drift.CoverageFile) map[string]string {
 
 // loadCoverage reads every <provider>-coverage.json in dir, ordered by provider
 // so two runs render the same document.
+//
+// An experimental pack's artefact is skipped, and always, whether or not the pack
+// was asked for. The tables this feeds are the product's: the README's, `feint
+// status` and the page count what is mounted by default, and a pack that is only
+// mounted on request would make them depend on the shell that generated them,
+// which the docs gate exists to forbid. Promoting a pack is removing it from
+// experimentalPacks, and the same change is what adds it to the tables.
+// TestTheTablesLeaveAnExperimentalPackOut fails without the skip.
 func loadCoverage(dir string) ([]drift.CoverageFile, error) {
 	paths, err := filepath.Glob(filepath.Join(dir, "*-coverage.json"))
 	if err != nil {
@@ -728,6 +736,10 @@ func loadCoverage(dir string) ([]drift.CoverageFile, error) {
 
 	reports := make([]drift.CoverageFile, 0, len(paths))
 	for _, path := range paths {
+		provider := strings.TrimSuffix(filepath.Base(path), "-coverage.json")
+		if _, experimental := experimentalPacks[provider]; experimental {
+			continue
+		}
 		f, err := os.Open(path) //nolint:gosec // the path comes from our own glob
 		if err != nil {
 			return nil, err

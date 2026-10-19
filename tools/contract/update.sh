@@ -69,3 +69,25 @@ extract contracts/scaleway.json --provider scaleway \
   --source "https://www.scaleway.com/en/developers/api/<product>/schema.yml" \
   --error-shape tools/contract/scaleway-error.yaml \
   --gateway tools/contract/scaleway-gateway.yaml $specs
+
+# CloudStack publishes no document. Its management server describes itself through
+# listApis, and that answer is the source: tools/contract/cloudstack-listapis.sh
+# fetches it from a simulator (or any server, as an admin) into .upstream/, which is
+# not versioned and is not in place on the weekly runner. So this block leaves the
+# committed artefact alone and says so when the answer is missing, rather than
+# failing the job for a source that nothing there provides.
+#
+# --wrappers is not upstream's: it is what the wire adds to listApis, recorded from
+# the simulator (tools/conformance/cloudstack/record_wrappers.py), and the artefact
+# carries a schema of an answer only for the commands it names.
+LISTAPIS_CLOUDSTACK="${FEINT_LISTAPIS_CLOUDSTACK:-$ROOT/.upstream/cloudstack-listapis.json}"
+if [ -f "$LISTAPIS_CLOUDSTACK" ]; then
+  python3 tools/contract/extract-cloudstack.py contracts/cloudstack.json \
+    --source "apache/cloudstack-simulator 4.23.0.0 (sha256:59db60234cd0ae7be289d79862de5818fbec4ac618d74b3af448efadbed77c95), listApis answered to admin" \
+    --version 4.23.0.0 \
+    --error-shape tools/contract/cloudstack-error.json \
+    --wrappers tools/contract/cloudstack-wrappers.json \
+    --listapis "$LISTAPIS_CLOUDSTACK"
+else
+  echo "contracts/cloudstack.json left as it is: no listApis answer at $LISTAPIS_CLOUDSTACK (tools/contract/cloudstack-listapis.sh fetches one)" >&2
+fi

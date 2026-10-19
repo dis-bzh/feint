@@ -1,0 +1,52 @@
+[
+ {
+  "step": "apis-zones",
+  "kind": "missing",
+  "paths": [
+   "listapisresponse.api[].params[].related",
+   "listapisresponse.api[].params[].since",
+   "listapisresponse.api[].related"
+  ],
+  "reason": "the pack does not know which version introduced a command or parameter, nor which commands relate to it, and writes none of that rather than a figure it made up"
+ },
+ {
+  "step": "apis-zones",
+  "kind": "missing",
+  "paths": [
+   "listapisresponse.api[].response[].response",
+   "listapisresponse.api[].response[].response[].description",
+   "listapisresponse.api[].response[].response[].name",
+   "listapisresponse.api[].response[].response[].type"
+  ],
+  "reason": "listApis describes the fields of a set or a list one level down, and the pack answers the flat list of field names a client uses to complete, without those nested descriptions"
+ },
+ {
+  "step": "apis-deploy",
+  "kind": "missing",
+  "paths": [
+   "listapisresponse.api[].params[].related",
+   "listapisresponse.api[].params[].since",
+   "listapisresponse.api[].related"
+  ],
+  "reason": "the pack does not know which version introduced a command or parameter, nor which commands relate to it, and writes none of that rather than a figure it made up"
+ },
+ {
+  "step": "apis-deploy",
+  "kind": "missing",
+  "paths": [
+   "listapisresponse.api[].response[].response",
+   "listapisresponse.api[].response[].response[].description",
+   "listapisresponse.api[].response[].response[].name",
+   "listapisresponse.api[].response[].response[].response",
+   "listapisresponse.api[].response[].response[].response[].description",
+   "listapisresponse.api[].response[].response[].response[].name",
+   "listapisresponse.api[].response[].response[].response[].response",
+   "listapisresponse.api[].response[].response[].response[].response[].description",
+   "listapisresponse.api[].response[].response[].response[].response[].name",
+   "listapisresponse.api[].response[].response[].response[].response[].type",
+   "listapisresponse.api[].response[].response[].response[].type",
+   "listapisresponse.api[].response[].response[].type"
+  ],
+  "reason": "listApis describes the fields of a set or a list one level down, and the pack answers the flat list of field names a client uses to complete, without those nested descriptions"
+ }
+]

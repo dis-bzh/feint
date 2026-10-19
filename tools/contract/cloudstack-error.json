@@ -1,0 +1,22 @@
+{
+ "citation": "Transcribed from apache/cloudstack api/src/main/java/org/apache/cloudstack/api/response/ExceptionResponse.java (the four @SerializedName fields uuidList, errorcode, cserrorcode, errortext; idList is initialised empty in the constructor, so uuidList is always present) and read against the 431, 401 and 432 answers a 4.23.0.0 management server gave on 2026-10-18 (tools/conformance/cloudstack/oracle.py). cserrorcode is absent from the 401 and optional. The envelope key is '<command>response' for a failure of a known command and 'errorresponse' for a command the server does not know (ApiServer.getSerializedApiError); the artefact can only name the second, because a property list cannot say 'any key ending in response', so ErrorResponse is open and the first form passes unchecked.",
+ "errorSchema": "ErrorResponse",
+ "schemas": {
+  "ErrorResponse": {
+   "closed": false,
+   "properties": {
+    "errorresponse": {"ref": "ErrorBody"}
+   }
+  },
+  "ErrorBody": {
+   "closed": true,
+   "required": ["errorcode", "errortext", "uuidList"],
+   "properties": {
+    "cserrorcode": {"type": "integer"},
+    "errorcode": {"type": "integer"},
+    "errortext": {"type": "string"},
+    "uuidList": {"type": "array"}
+   }
+  }
+ }
+}

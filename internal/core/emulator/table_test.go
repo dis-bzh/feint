@@ -205,3 +205,89 @@ func BenchmarkTableLookup(b *testing.B) {
 		}
 	}
 }
+
+// TestSelectorRoutesAreNamedAndServed holds the second extension: a dialect with
+// one URL and the operation in a parameter. The table must name the operation
+// from the query of a GET and from the form body of a POST, and the POST's body
+// must still be whole for the handler after the table has read it.
+func TestSelectorRoutesAreNamedAndServed(t *testing.T) {
+	var gotBody string
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		_ = r.ParseForm()
+		gotBody = r.Form.Get("name")
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{}`))
+	}
+	pack := stubPack{name: "stub", routes: []emulator.Route{
+		{Method: http.MethodGet, Path: "/api?command=listThings", Operation: "stub/API.listThings", Handler: handler},
+		{Method: http.MethodPost, Path: "/api?command=listThings", Operation: "stub/API.listThings", Handler: handler},
+		{Method: http.MethodPost, Path: "/api?command=makeThing", Operation: "stub/API.makeThing", Handler: handler},
+	}}
+	table, err := emulator.NewTable(pack)
+	if err != nil {
+		t.Fatalf("build the table: %v", err)
+	}
+
+	get := httptest.NewRequest(http.MethodGet, "/api?command=listThings", nil)
+	if m, ok := table.Lookup(get); !ok || m.Route.Operation != "stub/API.listThings" {
+		t.Errorf("GET ?command=listThings: named %q (found %v)", m.Route.Operation, ok)
+	}
+	form := func(command string) *http.Request {
+		r := httptest.NewRequest(http.MethodPost, "/api", strings.NewReader("command="+command+"&name=widget"))
+		r.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		return r
+	}
+	if m, ok := table.Lookup(form("makeThing")); !ok || m.Route.Operation != "stub/API.makeThing" {
+		t.Errorf("POST command=makeThing in the body: named %q (found %v)", m.Route.Operation, ok)
+	}
+	// A command nobody serves, and a request naming none, are unknown rather than
+	// the nearest route.
+	for name, r := range map[string]*http.Request{
+		"an unserved command": form("dropThing"),
+		"no command at all":   httptest.NewRequest(http.MethodGet, "/api", nil),
+	} {
+		if m, ok := table.Lookup(r); ok {
+			t.Errorf("%s: named %q", name, m.Route.Operation)
+		}
+	}
+
+	srv, err := emulator.NewServer(emulator.DefaultEnv(), pack)
+	if err != nil {
+		t.Fatalf("build the server: %v", err)
+	}
+	rec := httptest.NewRecorder()
+	srv.Handler().ServeHTTP(rec, form("makeThing"))
+	if rec.Code != http.StatusOK {
+		t.Fatalf("POST makeThing answered %d", rec.Code)
+	}
+	if gotBody != "widget" {
+		t.Errorf("the handler read %q from a body the table had already read, want \"widget\"", gotBody)
+	}
+	rec = httptest.NewRecorder()
+	srv.Handler().ServeHTTP(rec, form("dropThing"))
+	if rec.Code == http.StatusOK {
+		t.Error("an unserved command was served anyway")
+	}
+}
+
+// A base is addressed one way. Mixing a selected route with a plain one on the
+// same pattern would leave a request with no command answered by whichever the
+// mux liked, so the table refuses the pair when it is built.
+func TestASelectorRouteCannotShareABaseWithAPlainOne(t *testing.T) {
+	noop := func(http.ResponseWriter, *http.Request) {}
+	_, err := emulator.NewTable(stubPack{name: "stub", routes: []emulator.Route{
+		{Method: http.MethodGet, Path: "/api?command=a", Operation: "stub.a", Handler: noop},
+		{Method: http.MethodGet, Path: "/api", Operation: "stub.plain", Handler: noop},
+	}})
+	if err == nil {
+		t.Fatal("a plain route beside a selected one was accepted")
+	}
+	// And in the other order: the pair is refused whichever is declared first.
+	_, err = emulator.NewTable(stubPack{name: "stub", routes: []emulator.Route{
+		{Method: http.MethodGet, Path: "/api", Operation: "stub.plain", Handler: noop},
+		{Method: http.MethodGet, Path: "/api?command=a", Operation: "stub.a", Handler: noop},
+	}})
+	if err == nil {
+		t.Fatal("a selected route beside a plain one was accepted")
+	}
+}
