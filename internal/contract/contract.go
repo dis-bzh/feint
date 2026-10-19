@@ -144,6 +144,21 @@ type Operation struct {
 	// takes nothing (its pagination travels in the request body); Exoscale
 	// declares a handful of filters. Empty when the operation declares none.
 	Query map[string]Property `json:"query,omitempty"`
+	// QueryRequired lists the parameters of Query the document marks required.
+	//
+	// A Property says what a value may hold and nothing about whether it may be
+	// absent, so a provider whose description carries that per parameter had
+	// nowhere to put it. CloudStack's is the case that needed it: its listApis
+	// answers, for every one of 865 commands, each parameter with a required
+	// flag, and a request that omits one is refused with a 431 that clients
+	// branch on. Empty for the providers whose documents declare it elsewhere
+	// (a request schema's own Required) or not at all.
+	QueryRequired []string `json:"queryRequired,omitempty"`
+	// Async is true for an operation whose success answers a job to poll rather
+	// than the thing it acted on. The document says so per operation, and the
+	// answer's shape depends on it: the immediate answer is the job, and the
+	// schema Response names describes that, not the result the job settles on.
+	Async bool `json:"async,omitempty"`
 }
 
 // Schema is one object shape.
