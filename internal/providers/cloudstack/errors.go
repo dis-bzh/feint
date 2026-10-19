@@ -42,6 +42,12 @@ func unknownEntity(param, value string) *apiError {
 		" value=" + value + " due to incorrect long value format, or entity does not exist or due to incorrect parameter annotation for the field in api cmd class.")
 }
 
+// invalidValue is the answer to a parameter that cannot be read as the type it
+// has, a number that is not one.
+func invalidValue(value, param string) *apiError {
+	return invalid("Unable to execute API command " + commandMark + " due to invalid value " + value + " for parameter " + param)
+}
+
 func unauthenticated() *apiError {
 	return &apiError{status: 401, code: 401, text: "unable to verify user credentials"}
 }

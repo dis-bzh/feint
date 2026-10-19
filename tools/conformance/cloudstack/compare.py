@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 """Compare two oracle recordings: statuses, field sets and error sentences.
 
-    compare.py real.json mine.json
+    compare.py real.json mine.json [accepted.json]
+
+accepted.json lists the differences knowingly left, each with the reason: a step,
+the kind of difference ("missing" or "extra") and the field paths it covers. It is
+the register corpus/accepted.json is for the other packs, with the same two rules:
+an entry without a reason is refused, and an entry that covers nothing is refused
+too, because an exemption that outlived its cause reads like a considered one.
 
 What it does not compare is values: identifiers, dates and addresses differ by
 construction. A step that differs because the two servers were in different
@@ -12,10 +18,15 @@ import json
 import re
 import sys
 
-if len(sys.argv) != 3:
+if len(sys.argv) not in (3, 4):
     sys.exit(__doc__)
 real = {s["label"]: s for s in json.load(open(sys.argv[1]))}
 mine = {s["label"]: s for s in json.load(open(sys.argv[2]))}
+accepted = json.load(open(sys.argv[3])) if len(sys.argv) > 3 else []
+for entry in accepted:
+    if len(entry.get("reason", "").split()) < 8:
+        sys.exit(f"accepted entry {entry.get('step')}/{entry.get('kind')} carries no reason a reader can weigh")
+used = set()
 OPAQUE = {"details"}
 
 
@@ -61,6 +72,19 @@ for label, r in real.items():
     pr, pm = paths(r["body"]), paths(m["body"])
     miss = sorted(k for k in pr if k not in pm)
     extra = sorted(k for k in pm if k not in pr)
+
+    def unaccepted(paths, kind):
+        left = []
+        for path in paths:
+            for i, entry in enumerate(accepted):
+                if entry["step"] == label and entry["kind"] == kind and path in entry["paths"]:
+                    used.add((i, path))
+                    break
+            else:
+                left.append(path)
+        return left
+
+    miss, extra = unaccepted(miss, "missing"), unaccepted(extra, "extra")
     wrong = sorted(k for k in pr if k in pm and pr[k] != pm[k] and "null" not in (pr[k], pm[k]))
     if miss:
         notes.append("missing: " + ", ".join(miss[:8]) + (f" (+{len(miss) - 8})" if len(miss) > 8 else ""))
@@ -80,5 +104,9 @@ for label, r in real.items():
     if notes:
         bad += 1
         print(f"-- {label}: " + " | ".join(notes))
-print(f"{len(real)} steps compared, {bad} differ")
+stale = [(i, p) for i, entry in enumerate(accepted) for p in entry["paths"] if (i, p) not in used]
+for i, path in stale:
+    print(f"-- accepted entry {accepted[i]['step']}/{accepted[i]['kind']} covers nothing: {path}")
+    bad += 1
+print(f"{len(real)} steps compared, {len(used)} differences accepted, {bad} differ")
 sys.exit(1 if bad else 0)

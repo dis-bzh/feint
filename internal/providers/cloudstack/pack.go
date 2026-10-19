@@ -60,9 +60,10 @@ func New(env *emulator.Env) *Pack { return &Pack{env: env, epoch: env.Now()} }
 // Name implements emulator.Pack.
 func (p *Pack) Name() string { return Name }
 
-// operation returns the canonical name of a CloudStack command. The upstream
-// name is the command itself, as listApis spells it.
-func operation(command string) string { return "cs/API." + command }
+// operation returns the canonical name of a CloudStack command, spelled the way
+// the drift scan spells a contract's operations: the provider, the document's
+// path prefix, then the name the server itself gives the command.
+func operation(command string) string { return Name + pathPrefix + "." + command }
 
 // tenant is the one tenancy this prototype has: the ROOT domain's admin
 // account. CloudStack's domain, account and project model is not emulated.
@@ -70,29 +71,35 @@ func tenant() resource.Tenant { return resource.Tenant{Provider: Name} }
 
 // Routes implements emulator.Pack.
 //
-// Every command is mounted twice, GET and POST, because both are in use:
-// go-cloudstack and the Python cs library send GET, cmk sends POST with a form
-// body. The two share an operation name, since upstream they are one command.
+// Every command is mounted twice, because the server takes either verb and the
+// clients disagree about which to send. The contract names one per command, the
+// verb listApis calls the command's own, and that mounting is the primary one. The
+// other is a second spelling of the same operation, which is what
+// emulator.Route.Legacy is for, and it says who sends it. Measured on 2026-10-19:
+// the Python cs library sends every command as a GET, deploy included, and cmk
+// posts every command, a list included; go-cloudstack, under the Terraform
+// provider, follows the verb listApis names.
 func (p *Pack) Routes() []emulator.Route {
 	cmds := commands()
 	routes := make([]emulator.Route, 0, 2*len(cmds))
 	for _, c := range cmds {
-		for _, method := range []string{http.MethodGet, http.MethodPost} {
-			routes = append(routes, emulator.Route{
-				Method:    method,
-				Path:      pathPrefix + "?command=" + c.name,
-				Operation: operation(c.name),
-				Handler:   p.serve(c),
-			})
+		primary := emulator.Route{
+			Method:    c.method,
+			Path:      pathPrefix + "?command=" + c.name,
+			Operation: operation(c.name),
+			Handler:   p.serve(c),
 		}
+		other := primary
+		other.Legacy = "cmk posts every command, a read included, with its parameters in a form body"
+		other.Method = http.MethodPost
+		if c.method == http.MethodPost {
+			other.Method = http.MethodGet
+			other.Legacy = "the Python cs library, under ngine_io.cloudstack, sends every command as a GET, a command that changes something included"
+		}
+		routes = append(routes, primary, other)
 	}
 	return routes
 }
-
-// Declined implements emulator.Pack. The prototype has no contract to join
-// against yet, so there is no upstream list to subtract from; the declarations
-// arrive with the listApis extractor.
-func (p *Pack) Declined() []emulator.Decline { return nil }
 
 // Env implements emulator.Pack.
 //

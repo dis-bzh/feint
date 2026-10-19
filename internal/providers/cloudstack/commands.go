@@ -17,15 +17,34 @@ type param struct {
 	desc     string
 }
 
+// lengths holds the parameters whose longest value is not the 255 that listApis
+// answers for 5223 of its 5316. Only the served ones are here, read off 4.23.0.0.
+var lengths = map[string]int{"userdata": 1048576}
+
+func lengthOf(param string) int {
+	if n, ok := lengths[param]; ok {
+		return n
+	}
+	return 255
+}
+
 // command is one served CloudStack command. The table in commands() is the one
 // place the API surface is written down: Routes mounts it, serve checks the
 // required parameters against it, and listApis describes it, so a command
 // cannot be mounted without being described or described without being
 // mounted.
 type command struct {
-	name   string
-	desc   string
-	params []param
+	name string
+	// method is the verb listApis names as the command's own (httprequesttype):
+	// GET for a read, POST for a command that changes something. The server
+	// accepts either, which is why Routes mounts the other one too.
+	method string
+	// related is the commands listApis names as acting on the same object, which
+	// cmk uses to complete one from the other. Read off 4.23.0.0 for each served
+	// command; the server answers it on every one of them.
+	related string
+	desc    string
+	params  []param
 	// fields are the names of the response, for listApis. cmk uses them to
 	// complete and to filter output; a client that does not ask never sees them.
 	fields []string
@@ -69,39 +88,41 @@ func commands() []command {
 	keyword := param{"keyword", "string", false, "list by keyword"}
 	listall := param{"listall", "boolean", false, "list resources by account"}
 	zone := param{"zoneid", "uuid", false, "the ID of the availability zone"}
+	page := param{"page", "integer", false, ""}
+	pagesize := param{"pagesize", "integer", false, ""}
 	cmds := []command{
 		{
-			name: "listApis", desc: "lists all available apis on the server, provided by the Api Discovery plugin",
+			name: "listApis", method: http.MethodGet, related: "", desc: "lists all available apis on the server, provided by the Api Discovery plugin",
 			params: []param{{"name", "string", false, "API name"}},
 			fields: []string{"name", "description", "isasync", "related", "params", "response"},
 			run:    (*Pack).listAPIs,
 		},
 		{
-			name: "listZones", desc: "Lists zones",
-			params: []param{id, name, keyword, {"available", "boolean", false, "true if you want to retrieve all available zones"}},
+			name: "listZones", method: http.MethodGet, related: "createZone,listZones", desc: "Lists zones",
+			params: []param{page, pagesize, id, name, keyword, {"available", "boolean", false, "true if you want to retrieve all available zones"}},
 			fields: []string{"id", "name", "networktype", "allocationstate", "securitygroupsenabled", "localstorageenabled"},
 			run:    (*Pack).listZones,
 		},
 		{
-			name: "listServiceOfferings", desc: "Lists all available service offerings.",
-			params: []param{id, name, keyword, listall},
+			name: "listServiceOfferings", method: http.MethodGet, related: "updateServiceOffering", desc: "Lists all available service offerings.",
+			params: []param{page, pagesize, id, name, keyword, listall},
 			fields: []string{"id", "name", "displaytext", "cpunumber", "cpuspeed", "memory"},
 			run:    (*Pack).listServiceOfferings,
 		},
 		{
-			name: "listTemplates", desc: "List all public, private, and privileged templates.",
-			params: []param{{"templatefilter", "string", true, "possible values are \"featured\", \"self\", \"selfexecutable\", \"sharedexecutable\", \"executable\", and \"community\""}, id, name, keyword, zone, listall},
+			name: "listTemplates", method: http.MethodGet, related: "prepareTemplate,listIsos,updateIso,createTemplate,registerTemplate,updateTemplate,listTemplates,createTemplate,copyTemplate,registerTemplate,registerIso,copyIso,listIsos,linkUserDataToTemplate,registerVnfTemplate,registerVnfTemplate,listVnfTemplates,listVnfTemplates,updateVnfTemplate,updateVnfTemplate", desc: "List all public, private, and privileged templates.",
+			params: []param{page, pagesize, {"templatefilter", "string", true, "possible values are \"featured\", \"self\", \"selfexecutable\", \"sharedexecutable\", \"executable\", and \"community\""}, id, name, keyword, zone, listall},
 			fields: []string{"id", "name", "displaytext", "ostypename", "isready", "format", "hypervisor", "zoneid"},
 			run:    (*Pack).listTemplates,
 		},
 		{
-			name: "listNetworks", desc: "Lists all available networks.",
-			params: []param{id, name, keyword, zone, listall},
+			name: "listNetworks", method: http.MethodGet, related: "createNetwork,createNetwork,updateNetwork,listNetworks,migrateNetwork,listPaloAltoFirewallNetworks", desc: "Lists all available networks.",
+			params: []param{page, pagesize, id, name, keyword, zone, listall},
 			fields: []string{"id", "name", "displaytext", "type", "traffictype", "zoneid", "cidr", "gateway"},
 			run:    (*Pack).listNetworks,
 		},
 		{
-			name: "deployVirtualMachine", desc: "Creates and automatically starts a virtual machine based on a service offering, disk offering, and template.",
+			name: "deployVirtualMachine", method: http.MethodPost, related: "scaleVirtualMachine,removeNicFromVirtualMachine,stopVirtualMachine,updateVMAffinityGroup,attachIso,detachIso,updateVMAffinityGroup,addNicToVirtualMachine,removeNicFromVirtualMachine,updateDefaultNicForVirtualMachine,deployVirtualMachine,destroyVirtualMachine,rebootVirtualMachine,resetPasswordForVirtualMachine,resetSSHKeyForVirtualMachine,restoreVirtualMachine,startVirtualMachine,stopVirtualMachine,updateVirtualMachine,changeServiceForVirtualMachine,revertToVMSnapshot,listVirtualMachines,deployVnfAppliance,listVnfAppliances,listVnfAppliances,createVMFromBackup,importVm", desc: "Creates and automatically starts a virtual machine based on a service offering, disk offering, and template.",
 			params: []param{
 				{"serviceofferingid", "uuid", true, "the ID of the service offering for the virtual machine"},
 				{"templateid", "uuid", false, "the ID of the template for the virtual machine"},
@@ -116,38 +137,38 @@ func commands() []command {
 			job:    (*Pack).deployVM,
 		},
 		{
-			name: "listVirtualMachines", desc: "List the virtual machines owned by the account.",
-			params: []param{id, name, keyword, zone, listall, {"state", "string", false, "state of the virtual machine"}},
+			name: "listVirtualMachines", method: http.MethodGet, related: "assignVirtualMachine,migrateVirtualMachineWithVolume,recoverVirtualMachine,attachIso,deployVirtualMachine,destroyVirtualMachine,scaleVirtualMachine,rebootVirtualMachine,removeNicFromVirtualMachine,resetSSHKeyForVirtualMachine,resetUserDataForVirtualMachine,startVirtualMachine,stopVirtualMachine,updateVirtualMachine,changeServiceForVirtualMachine,revertToVMSnapshot,updateVMAffinityGroup,attachIso,detachIso,updateVMAffinityGroup,addNicToVirtualMachine,removeNicFromVirtualMachine,updateDefaultNicForVirtualMachine,deployVirtualMachine,destroyVirtualMachine,rebootVirtualMachine,resetPasswordForVirtualMachine,resetSSHKeyForVirtualMachine,restoreVirtualMachine,startVirtualMachine,stopVirtualMachine,updateVirtualMachine,changeServiceForVirtualMachine,revertToVMSnapshot,listVirtualMachines,deployVnfAppliance,deployVnfAppliance,listVnfAppliances,listVnfAppliances,createVMFromBackup,createVMFromBackup,importUnmanagedInstance,importVm", desc: "List the virtual machines owned by the account.",
+			params: []param{page, pagesize, id, name, keyword, zone, listall, {"state", "string", false, "state of the virtual machine"}},
 			fields: vmFields,
 			run:    (*Pack).listVMs,
 		},
 		{
-			name: "startVirtualMachine", desc: "Starts a virtual machine.",
+			name: "startVirtualMachine", method: http.MethodPost, related: "assignVirtualMachine,deployVirtualMachine,scaleVirtualMachine,rebootVirtualMachine,removeNicFromVirtualMachine,resetSSHKeyForVirtualMachine,resetUserDataForVirtualMachine,stopVirtualMachine,updateVirtualMachine,changeServiceForVirtualMachine,updateVMAffinityGroup,attachIso,detachIso,updateVMAffinityGroup,addNicToVirtualMachine,removeNicFromVirtualMachine,updateDefaultNicForVirtualMachine,deployVirtualMachine,destroyVirtualMachine,rebootVirtualMachine,resetPasswordForVirtualMachine,resetSSHKeyForVirtualMachine,restoreVirtualMachine,startVirtualMachine,stopVirtualMachine,updateVirtualMachine,changeServiceForVirtualMachine,revertToVMSnapshot,listVirtualMachines,deployVnfAppliance,deployVnfAppliance,listVnfAppliances,listVnfAppliances,createVMFromBackup,importVm", desc: "Starts a virtual machine.",
 			params: []param{{"id", "uuid", true, "The ID of the virtual machine"}},
 			fields: vmFields,
 			job:    (*Pack).startVM,
 		},
 		{
-			name: "stopVirtualMachine", desc: "Stops a virtual machine.",
+			name: "stopVirtualMachine", method: http.MethodPost, related: "scaleVirtualMachine,attachIso,detachIso,updateVMAffinityGroup,addNicToVirtualMachine,removeNicFromVirtualMachine,updateDefaultNicForVirtualMachine,deployVirtualMachine,destroyVirtualMachine,rebootVirtualMachine,resetPasswordForVirtualMachine,resetSSHKeyForVirtualMachine,restoreVirtualMachine,startVirtualMachine,stopVirtualMachine,updateVirtualMachine,changeServiceForVirtualMachine,revertToVMSnapshot,listVirtualMachines,deployVnfAppliance,listVnfAppliances,createVMFromBackup", desc: "Stops a virtual machine.",
 			params: []param{{"id", "uuid", true, "The ID of the virtual machine"}, {"forced", "boolean", false, "Force stop the VM"}},
 			fields: vmFields,
 			job:    (*Pack).stopVM,
 		},
 		{
-			name: "destroyVirtualMachine", desc: "Destroys a virtual machine.",
+			name: "destroyVirtualMachine", method: http.MethodPost, related: "assignVirtualMachine,deployVirtualMachine,scaleVirtualMachine,rebootVirtualMachine,removeNicFromVirtualMachine,resetSSHKeyForVirtualMachine,resetUserDataForVirtualMachine,startVirtualMachine,stopVirtualMachine,updateVirtualMachine,changeServiceForVirtualMachine,updateVMAffinityGroup,attachIso,detachIso,updateVMAffinityGroup,addNicToVirtualMachine,removeNicFromVirtualMachine,updateDefaultNicForVirtualMachine,deployVirtualMachine,destroyVirtualMachine,rebootVirtualMachine,resetPasswordForVirtualMachine,resetSSHKeyForVirtualMachine,restoreVirtualMachine,startVirtualMachine,stopVirtualMachine,updateVirtualMachine,changeServiceForVirtualMachine,revertToVMSnapshot,listVirtualMachines,deployVnfAppliance,deployVnfAppliance,listVnfAppliances,listVnfAppliances,createVMFromBackup,importVm", desc: "Destroys a virtual machine.",
 			params: []param{{"id", "uuid", true, "The ID of the virtual machine"}, {"expunge", "boolean", false, "If true is passed, the vm is expunged immediately. False by default."}},
 			fields: vmFields,
 			job:    (*Pack).destroyVM,
 		},
 		{
-			name: "listVolumes", desc: "Lists all volumes.",
-			params: []param{id, name, keyword, listall, zone, {"virtualmachineid", "uuid", false, "the ID of the virtual machine"}, {"type", "string", false, "the type of disk volume"}},
+			name: "listVolumes", method: http.MethodGet, related: "createVolume,recoverVolume,attachVolume,createVolume,detachVolume,migrateVolume,resizeVolume,updateVolume,uploadVolume,listVolumes,destroyVolume,recoverVolume", desc: "Lists all volumes.",
+			params: []param{page, pagesize, id, name, keyword, listall, zone, {"virtualmachineid", "uuid", false, "the ID of the virtual machine"}, {"type", "string", false, "the type of disk volume"}},
 			fields: []string{"id", "name", "type", "size", "state", "virtualmachineid", "vmstate", "zoneid", "created"},
 			run:    (*Pack).listVolumes,
 		},
 		{
-			name: "queryAsyncJobResult", desc: "Retrieves the current status of asynchronous job.",
-			params: []param{{"jobid", "uuid", false, "the ID of the asychronous job"}},
+			name: "queryAsyncJobResult", method: http.MethodGet, related: "", desc: "Retrieves the current status of asynchronous job.",
+			params: []param{{"jobid", "uuid", false, "the ID of the asynchronous job"}},
 			fields: []string{"jobid", "jobstatus", "jobresultcode", "jobresulttype", "jobresult", "cmd", "created"},
 			run:    (*Pack).queryAsyncJobResult,
 		},
@@ -217,6 +238,12 @@ func (p *Pack) serve(c command) http.HandlerFunc {
 // This is what makes cmk usable: on `sync` it asks for this list and builds its
 // command set out of it, so an emulator that did not answer it would be
 // unreachable by the client most people type by hand.
+//
+// Only what is known is said. The server also answers, per command, the version it
+// appeared in (`since`) and the commands it relates to (`related`), and this pack
+// knows neither: an earlier version of it wrote a `since` of 3.0.0 on everything,
+// which was a figure it made up. httprequesttype is the verb the contract names
+// for the command, and `length` is 255 except where lengths says otherwise.
 func (p *Pack) listAPIs(a url.Values) (map[string]any, *apiError) {
 	want := a.Get("name")
 	var apis []any
@@ -227,8 +254,8 @@ func (p *Pack) listAPIs(a url.Values) (map[string]any, *apiError) {
 		params := make([]any, 0, len(c.params))
 		for _, pa := range c.params {
 			params = append(params, map[string]any{
-				"name": pa.name, "description": pa.desc, "required": pa.required,
-				"length": 255, "type": pa.typ, "related": "", "since": "3.0.0",
+				"name": pa.name, "description": pa.desc, "type": pa.typ,
+				"length": lengthOf(pa.name), "required": pa.required,
 			})
 		}
 		fields := make([]any, 0, len(c.fields))
@@ -237,11 +264,12 @@ func (p *Pack) listAPIs(a url.Values) (map[string]any, *apiError) {
 		}
 		apis = append(apis, map[string]any{
 			"name": c.name, "description": c.desc, "isasync": c.job != nil,
-			"related": "", "since": "3.0.0", "params": params, "response": fields,
+			"related": c.related, "httprequesttype": c.method, "params": params, "response": fields,
 		})
 	}
 	if len(apis) == 0 {
-		return map[string]any{}, nil
+		// The discovery plugin's own refusal, for a name it does not list.
+		return nil, &apiError{status: 530, code: 530, cs: 9999, text: "Api Discovery plugin was unable to find an api by that name or process any apis"}
 	}
 	return map[string]any{"count": len(apis), "api": apis}, nil
 }

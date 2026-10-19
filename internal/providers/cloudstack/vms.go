@@ -177,7 +177,7 @@ func (p *Pack) listVMs(a url.Values) (map[string]any, *apiError) {
 		}
 		items = append(items, vmView(vm))
 	}
-	return list("virtualmachine", items), nil
+	return list("virtualmachine", a, items)
 }
 
 func (p *Pack) deployVM(a url.Values) (outcome, *apiError) {

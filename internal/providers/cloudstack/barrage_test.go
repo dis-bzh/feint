@@ -132,7 +132,7 @@ func between(s, open, close string) string {
 func TestAnInjectedFaultIsACloudStackError(t *testing.T) {
 	c := newClient(t)
 	req, _ := http.NewRequest(http.MethodPut, c.srv.URL+"/_feint/faults",
-		strings.NewReader(`{"faults":[{"operation":"cs/API.listZones","status":503}]}`))
+		strings.NewReader(`{"faults":[{"operation":"cloudstack/client/api.listZones","status":503}]}`))
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {

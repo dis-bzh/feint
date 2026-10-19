@@ -6,6 +6,7 @@ import (
 
 	"github.com/stephrobert/feint/internal/contract"
 	"github.com/stephrobert/feint/internal/core/emulator"
+	"github.com/stephrobert/feint/internal/providers/cloudstack"
 	"github.com/stephrobert/feint/internal/providers/exoscale"
 	"github.com/stephrobert/feint/internal/providers/outscale"
 	"github.com/stephrobert/feint/internal/providers/scaleway"
@@ -26,6 +27,9 @@ func TestEveryRouteMatchesItsContract(t *testing.T) {
 		scaleway.Name: scaleway.New(env),
 		outscale.Name: outscale.New(env),
 		exoscale.Name: exoscale.New(env),
+		// Experimental, and checked all the same: the contract is the part of it
+		// that is already versioned.
+		cloudstack.Name: cloudstack.New(env),
 	}
 
 	for provider, pack := range packs {
@@ -67,6 +71,12 @@ func TestWhatEachContractGuaranteesIsRecorded(t *testing.T) {
 		// every list the emulator answers correctly, so the shape check stays
 		// open there and the contract is used for operations and paths only.
 		scaleway.Name: "declared",
+		// CloudStack's listApis lists the fields of an answer without saying
+		// whether the list is complete, so closing the schemas is this project's
+		// decision, as for Exoscale. It is held by a measurement: every field the
+		// simulator answered for the commands recorded is declared by its own
+		// listApis (TestTheRecordingValidatesAgainstTheContract, in internal/providers/cloudstack).
+		cloudstack.Name: "assumed",
 	}
 
 	for provider, policy := range want {
