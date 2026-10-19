@@ -26,7 +26,13 @@ func (p *Pack) FaultStatuses() []int {
 
 // WriteFault implements emulator.Faulter.
 func (p *Pack) WriteFault(w http.ResponseWriter, r *http.Request, status int) {
-	writeError(w, responseKey(commandOf(r)), &apiError{
+	// "errorresponse" is the key the server answers under when no command was
+	// recognised, which is the only name a failure has without one.
+	key := "errorresponse"
+	if command := commandOf(r); command != "" {
+		key = responseKey(command)
+	}
+	writeError(w, key, &apiError{
 		status: status,
 		code:   status,
 		text:   "feint answered " + http.StatusText(status) + " because a fault rule is armed for this operation; GET /_feint/faults lists them",

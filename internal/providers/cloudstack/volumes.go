@@ -101,5 +101,5 @@ func (p *Pack) listVolumes(a url.Values) (map[string]any, *apiError) {
 		}
 		items = append(items, view)
 	}
-	return list("volume", items), nil
+	return list("volume", a, items)
 }

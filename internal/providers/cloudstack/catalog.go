@@ -2,6 +2,7 @@ package cloudstack
 
 import (
 	"net/url"
+	"strconv"
 	"strings"
 )
 
@@ -103,14 +104,93 @@ func knownID(a url.Values, held ...string) *apiError {
 }
 
 // list is the shape of every list answer: a count and the items under their own
-// key, and nothing at all when there are none. CloudStack omits both for an empty
+// key, and nothing at all when nothing matched. CloudStack omits both for an empty
 // list, and a client that expects an empty array there is wrong against the real
 // thing.
-func list(key string, items []any) map[string]any {
-	if len(items) == 0 {
-		return map[string]any{}
+//
+// It pages the matches first, which is what page and pagesize are for and what the
+// contract checks an answer against (internal/contract's PageBound): count is the
+// total the filters matched and not the size of the page, and a page past the end
+// keeps the count and loses its items.
+func list(key string, a url.Values, items []any) (map[string]any, *apiError) {
+	page, err := paged(a, len(items))
+	if err != nil {
+		return nil, err
 	}
-	return map[string]any{"count": len(items), key: items}
+	if len(items) == 0 {
+		return map[string]any{}, nil
+	}
+	body := map[string]any{"count": len(items)}
+	if page.end > page.start {
+		body[key] = items[page.start:page.end]
+	}
+	return body, nil
+}
+
+// maxPageSize is the management server's own bound, its default.page.size.
+const maxPageSize = 500
+
+type window struct{ start, end int }
+
+// paged resolves page and pagesize against the n items that matched, with every
+// rule the server applies, each read off 4.23.0.0 (oracle.py, the page-* steps):
+//
+//   - page and pagesize come together. One without the other is a 431 naming the
+//     missing one, except pagesize=-1, which asks for everything and refuses a page;
+//   - page is read before pagesize, so a request wrong in both is refused for page;
+//   - a page below 1 is the first;
+//   - pagesize=0 is a page of nothing: the count survives and the items do not;
+//   - more than 500 is refused.
+//
+// One thing is not reproduced. pagesize below -1 is answered 530 by the server with
+// the text of a SQL syntax error, which is a defect of theirs and not a behaviour
+// to copy; this pack refuses it as a value it cannot read.
+func paged(a url.Values, n int) (window, *apiError) {
+	rawPage, rawSize := a.Get("page"), a.Get("pagesize")
+	all := window{0, n}
+
+	var page, size int
+	var err error
+	if rawPage != "" {
+		if page, err = strconv.Atoi(rawPage); err != nil {
+			return all, invalidValue(rawPage, "page")
+		}
+	}
+	if rawSize != "" {
+		if size, err = strconv.Atoi(rawSize); err != nil {
+			return all, invalidValue(rawSize, "pagesize")
+		}
+	}
+
+	switch {
+	case rawPage == "" && rawSize == "":
+		return all, nil
+	case rawSize == "":
+		return all, invalid(`"pagesize" parameter is required when "page" is specified`)
+	case size == -1 && rawPage == "":
+		return all, nil
+	case size == -1:
+		return all, &apiError{status: 431, code: 431, cs: 4350, text: "Can't specify page parameter when pagesize is -1 (Unlimited)"}
+	case size < 0:
+		return all, invalidValue(rawSize, "pagesize")
+	case rawPage == "":
+		return all, invalid(`"page" parameter is required when "pagesize" is specified`)
+	case size > maxPageSize:
+		return all, &apiError{status: 431, code: 431, cs: 4350, text: "Page size can't exceed max allowed page size value: " + strconv.Itoa(maxPageSize)}
+	}
+
+	if page < 1 {
+		page = 1
+	}
+	start := (page - 1) * size
+	if start > n {
+		start = n
+	}
+	end := start + size
+	if end > n {
+		end = n
+	}
+	return window{start, end}, nil
 }
 
 func (p *Pack) listZones(a url.Values) (map[string]any, *apiError) {
@@ -121,7 +201,7 @@ func (p *Pack) listZones(a url.Values) (map[string]any, *apiError) {
 	if matches(a, zoneID, zoneName) {
 		items = append(items, zoneView())
 	}
-	return list("zone", items), nil
+	return list("zone", a, items)
 }
 
 func zoneView() map[string]any {
@@ -150,7 +230,7 @@ func (p *Pack) listServiceOfferings(a url.Values) (map[string]any, *apiError) {
 			items = append(items, p.offeringView(o))
 		}
 	}
-	return list("serviceoffering", items), nil
+	return list("serviceoffering", a, items)
 }
 
 func (p *Pack) offeringView(o offering) map[string]any {
@@ -186,7 +266,7 @@ func (p *Pack) listTemplates(a url.Values) (map[string]any, *apiError) {
 	if matches(a, templateID, templateName) && (a.Get("zoneid") == "" || a.Get("zoneid") == zoneID) {
 		items = append(items, p.templateView())
 	}
-	return list("template", items), nil
+	return list("template", a, items)
 }
 
 func (p *Pack) templateView() map[string]any {
@@ -216,7 +296,7 @@ func (p *Pack) listNetworks(a url.Values) (map[string]any, *apiError) {
 	if matches(a, networkID, networkName) && (a.Get("zoneid") == "" || a.Get("zoneid") == zoneID) {
 		items = append(items, p.networkView())
 	}
-	return list("network", items), nil
+	return list("network", a, items)
 }
 
 func (p *Pack) networkView() map[string]any {

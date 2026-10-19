@@ -1,187 +1,189 @@
 package cloudstack_test
 
 import (
-	"encoding/json"
 	"net/http"
-	"os"
 	"sort"
 	"strings"
 	"testing"
 )
 
-// The fixture is the field set of every kind of answer, read off a CloudStack
-// 4.23.0.0 management server. This test plays the same scenario against the pack
-// and requires the same fields, in both directions.
+// Every kind of answer the pack gives has the fields the real server gives it, in
+// both directions. A field the server always answers and the pack omits is a client
+// that reads it and gets nothing (cs_instance reads instancename and hypervisor, and
+// go-cloudstack decodes into typed structs). A field the pack answers and the server
+// never does is an invention, which this project calls an invented format: nothing
+// downstream can tell it from a real one.
 //
-// Both directions, because they fail differently. A field the server answers and
-// the pack omits is a client that reads it and gets nothing (cs_instance reads
-// instancename and hypervisor, go-cloudstack decodes into typed structs). A field
-// the pack answers and the server does not is an invention, which this project
-// calls an invented format: nothing downstream can tell it from a real one.
-type shapeFixture struct {
-	Source   string `json:"source"`
-	Recorded string `json:"recorded"`
-	Shapes   map[string]struct {
-		What  string   `json:"what"`
-		Paths []string `json:"paths"`
-	} `json:"shapes"`
+// The server's side is the recording (recording_test.go), not a second fixture, so
+// there is nothing to regenerate in step with it.
+type kindOfAnswer struct {
+	name string
+	what string
+	real func(r map[string]recorded) any
 }
 
-// paths lists every field path of a value, lists flattened under "[]". The free
-// form "details" map is one opaque path: its keys are data, not shape.
-func paths(v any, prefix string, out map[string]bool) {
-	switch x := v.(type) {
-	case map[string]any:
-		for k, child := range x {
-			p := k
-			if prefix != "" {
-				p = prefix + "." + k
+func body(label string) func(map[string]recorded) any {
+	return func(r map[string]recorded) any { return r[label].Body }
+}
+
+// first is the first object of a list answer, under the item key.
+func first(label, key string) func(map[string]recorded) any {
+	return func(r map[string]recorded) any {
+		inner := onlyValue(r[label].Body)
+		return inner[key].([]any)[0]
+	}
+}
+
+func onlyValue(m map[string]any) map[string]any {
+	for _, v := range m {
+		return v.(map[string]any)
+	}
+	return nil
+}
+
+// jobMachine is the machine a finished job reports, without the job's own
+// marker, which a list does not carry.
+func jobMachine(label string) func(map[string]recorded) any {
+	return func(r map[string]recorded) any {
+		vm := onlyValue(r[label].Body)["jobresult"].(map[string]any)["virtualmachine"].(map[string]any)
+		out := map[string]any{}
+		for k, v := range vm {
+			if k != "jobid" && k != "jobstatus" {
+				out[k] = v
 			}
-			out[p] = true
-			if k == "details" {
-				continue
-			}
-			paths(child, p, out)
 		}
-	case []any:
-		for _, child := range x {
-			paths(child, prefix+"[]", out)
-		}
+		return out
 	}
 }
 
-func shapeOf(body map[string]any) map[string]bool {
-	out := map[string]bool{}
-	paths(body, "", out)
-	return out
+var kindsOfAnswer = []kindOfAnswer{
+	{"zone", "a zone, as listZones answers it", first("zones", "zone")},
+	{"serviceoffering", "a service offering", first("offerings", "serviceoffering")},
+	{"template", "a template", first("templates", "template")},
+	{"network", "a network", first("networks", "network")},
+	{"vm.running", "a running machine in a list", first("vms-by-name", "virtualmachine")},
+	// A list does not give the history of a machine that ran and was stopped, so it is
+	// read off the stop job, which carries the same view plus the job's marker.
+	{"vm.stopped", "a machine stopped after it ran", jobMachine("stop-job")},
+	{"vm.stopped_never_run", "a machine deployed with startvm=false and never started", first("vms2-state", "virtualmachine")},
+	{"vm.destroyed", "a machine destroyed after it ran", first("vms-destroyed", "virtualmachine")},
+	{"vm.destroyed_never_run", "a machine destroyed without ever having run", first("vms2-destroyed", "virtualmachine")},
+	{"volume.running", "the root volume of a machine that has run", first("volumes-running", "volume")},
+	{"volume.never_run", "the root volume of a machine that never ran", first("volumes-never-run", "volume")},
+	{"answer.list_empty", "a list with nothing in it", body("vms-empty")},
+	{"answer.page_past", "a page past the end: the count survives", body("zones-page-past")},
+	{"answer.deploy", "the immediate answer to deployVirtualMachine", body("deploy")},
+	{"answer.stop", "the immediate answer to stop, start and destroy: the jobid alone", body("stop")},
+	{"answer.apis", "listApis for one command", body("apis-zones")},
+	{"job.deploy", "queryAsyncJobResult for a finished deploy", body("deploy-job")},
+	{"job.expunge", "queryAsyncJobResult for a finished expunge", body("expunge-job")},
+	{"job.failed", "queryAsyncJobResult for a job that failed", body("start-running-job")},
+	{"error.entity", "an id that names nothing", body("err-unknown-id")},
+	{"error.pagination", "a page size without a page", body("pagesize-only")},
+	{"error.apis_unknown", "listApis for a command that does not exist", body("apis-unknown")},
+	{"error.unauthenticated", "a request without credentials", body("no-auth")},
+	{"error.unknown_command", "a command that does not exist", body("err-unknown-command")},
 }
 
-func TestEveryObjectCarriesExactlyTheFieldsTheSimulatorAnswers(t *testing.T) {
-	raw, err := os.ReadFile("testdata/simulator-4.23.0.0-shapes.json")
-	if err != nil {
-		t.Fatal(err)
-	}
-	var fix shapeFixture
-	if err := json.Unmarshal(raw, &fix); err != nil {
-		t.Fatal(err)
-	}
-
-	c := newClient(t)
-	// raw answers: the whole envelope, because the envelope is part of the shape.
-	whole := func(v map[string][]string) map[string]any {
+// play drives the pack through every history a machine has, and returns the
+// answer of each kind. It is also what the contract test runs against a server
+// that validates its own answers.
+func play(t *testing.T, c *client) map[string]any {
+	t.Helper()
+	got := map[string]any{}
+	whole := func(command string, kv ...string) map[string]any {
 		t.Helper()
-		return c.wholeAnswer("GET", signedMap(v))
-	}
-	first := func(answer map[string]any, listKey string) map[string]any {
-		return answer[firstKey(answer)].(map[string]any)[listKey].([]any)[0].(map[string]any)
-	}
-	deploy := func(kv ...string) (string, map[string]any) {
-		t.Helper()
-		args := map[string][]string{"command": {"deployVirtualMachine"}, "zoneid": {zone}, "templateid": {template}, "serviceofferingid": {small}}
+		args := map[string][]string{"command": {command}}
 		for i := 0; i < len(kv); i += 2 {
 			args[kv[i]] = []string{kv[i+1]}
 		}
-		ack := whole(args)
-		inner := ack[firstKey(ack)].(map[string]any)
-		return inner["id"].(string), ack
+		return c.wholeAnswer("GET", signedMap(args))
 	}
-	cmd := func(command, id string, extra ...string) map[string]any {
-		args := map[string][]string{"command": {command}, "id": {id}}
-		for i := 0; i < len(extra); i += 2 {
-			args[extra[i]] = []string{extra[i+1]}
-		}
-		return whole(args)
+	item := func(answer map[string]any, key string) any {
+		return onlyValue(answer)[key].([]any)[0]
 	}
-	jobOf := func(ack map[string]any) map[string]any {
-		return whole(map[string][]string{"command": {"queryAsyncJobResult"}, "jobid": {ack[firstKey(ack)].(map[string]any)["jobid"].(string)}})
+	job := func(ack map[string]any) map[string]any {
+		return whole("queryAsyncJobResult", "jobid", onlyValue(ack)["jobid"].(string))
 	}
-	listVM := func(id string) map[string]any {
-		return first(whole(map[string][]string{"command": {"listVirtualMachines"}, "id": {id}}), "virtualmachine")
+	deploy := func(kv ...string) (string, map[string]any) {
+		ack := whole("deployVirtualMachine", append([]string{"zoneid", zone, "templateid", template, "serviceofferingid", small}, kv...)...)
+		return onlyValue(ack)["id"].(string), ack
 	}
+	machine := func(id string) any { return item(whole("listVirtualMachines", "id", id), "virtualmachine") }
+	volume := func(id string) any { return item(whole("listVolumes", "virtualmachineid", id), "volume") }
 
-	got := map[string]map[string]bool{}
-	got["zone"] = shapeOf(first(whole(map[string][]string{"command": {"listZones"}}), "zone"))
-	got["serviceoffering"] = shapeOf(first(whole(map[string][]string{"command": {"listServiceOfferings"}}), "serviceoffering"))
-	got["template"] = shapeOf(first(whole(map[string][]string{"command": {"listTemplates"}, "templatefilter": {"executable"}}), "template"))
-	got["network"] = shapeOf(first(whole(map[string][]string{"command": {"listNetworks"}}), "network"))
-	got["answer.list_empty"] = shapeOf(whole(map[string][]string{"command": {"listVirtualMachines"}}))
+	got["zone"] = item(whole("listZones"), "zone")
+	got["serviceoffering"] = item(whole("listServiceOfferings"), "serviceoffering")
+	got["template"] = item(whole("listTemplates", "templatefilter", "executable"), "template")
+	got["network"] = item(whole("listNetworks"), "network")
+	got["answer.list_empty"] = whole("listVirtualMachines", "name", "no-such-machine-name")
+	got["answer.page_past"] = whole("listZones", "pagesize", "1", "page", "2")
+	got["answer.apis"] = whole("listApis", "name", "listZones")
 
 	id, ack := deploy("name", "w")
-	got["answer.deploy"] = shapeOf(ack)
-	got["job.deploy"] = shapeOf(jobOf(ack))
-	got["vm.running"] = shapeOf(listVM(id))
-	volumeOf := func(vm string) map[string]any {
-		return first(whole(map[string][]string{"command": {"listVolumes"}, "virtualmachineid": {vm}}), "volume")
-	}
-	got["volume.running"] = shapeOf(volumeOf(id))
+	got["answer.deploy"] = ack
+	got["job.deploy"] = job(ack)
+	got["vm.running"] = machine(id)
+	got["volume.running"] = volume(id)
 
-	stopAck := cmd("stopVirtualMachine", id)
-	got["answer.stop"] = shapeOf(stopAck)
-	jobOf(stopAck)
-	got["vm.stopped"] = shapeOf(listVM(id))
+	stop := whole("stopVirtualMachine", "id", id)
+	got["answer.stop"] = stop
+	job(stop)
+	got["vm.stopped"] = machine(id)
 
-	jobOf(cmd("startVirtualMachine", id))                              // stopped, so this one runs it again
-	got["job.failed"] = shapeOf(jobOf(cmd("startVirtualMachine", id))) // running, so this one fails
-
-	jobOf(cmd("destroyVirtualMachine", id))
-	got["vm.destroyed"] = shapeOf(listVM(id))
-	got["job.expunge"] = shapeOf(jobOf(cmd("destroyVirtualMachine", id, "expunge", "true")))
+	job(whole("startVirtualMachine", "id", id))                     // stopped, so this one runs it again
+	got["job.failed"] = job(whole("startVirtualMachine", "id", id)) // running, so this one fails
+	job(whole("destroyVirtualMachine", "id", id))
+	got["vm.destroyed"] = machine(id)
+	got["job.expunge"] = job(whole("destroyVirtualMachine", "id", id, "expunge", "true"))
 
 	idle, _ := deploy("startvm", "false")
-	got["vm.stopped_never_run"] = shapeOf(listVM(idle))
-	got["volume.never_run"] = shapeOf(volumeOf(idle))
-	jobOf(cmd("destroyVirtualMachine", idle))
-	got["vm.destroyed_never_run"] = shapeOf(listVM(idle))
+	got["vm.stopped_never_run"] = machine(idle)
+	got["volume.never_run"] = volume(idle)
+	job(whole("destroyVirtualMachine", "id", idle))
+	got["vm.destroyed_never_run"] = machine(idle)
 
-	_, body := c.callWhole("GET", signedMap(map[string][]string{"command": {"stopVirtualMachine"}, "id": {"nope"}}))
-	got["error.entity"] = shapeOf(body)
-	_, body = c.callWhole("GET", map[string][]string{"command": {"listZones"}, "response": {"json"}})
-	got["error.unauthenticated"] = shapeOf(body)
-	_, body = c.callWhole("GET", signedMap(map[string][]string{"command": {"createUniverse"}}))
-	got["error.unknown_command"] = shapeOf(body)
-
-	names := make([]string, 0, len(fix.Shapes))
-	for name := range fix.Shapes {
-		names = append(names, name)
+	fail := func(kv map[string][]string) map[string]any {
+		t.Helper()
+		_, b := c.callWhole("GET", kv)
+		return b
 	}
-	sort.Strings(names)
-	for _, name := range names {
-		want := map[string]bool{}
-		for _, p := range fix.Shapes[name].Paths {
-			want[p] = true
-		}
-		have, ok := got[name]
-		if !ok {
-			t.Errorf("%s: the scenario produced no such answer, so nothing was compared (%s)", name, fix.Shapes[name].What)
-			continue
-		}
-		var omitted, invented []string
-		for p := range want {
-			if !have[p] {
-				omitted = append(omitted, p)
-			}
-		}
-		for p := range have {
-			if !want[p] {
-				invented = append(invented, p)
-			}
-		}
-		sort.Strings(omitted)
-		sort.Strings(invented)
-		if len(omitted) > 0 {
-			t.Errorf("%s (%s): %d field(s) the server answers and this pack omits: %s", name, fix.Shapes[name].What, len(omitted), strings.Join(omitted, ", "))
-		}
-		if len(invented) > 0 {
-			t.Errorf("%s (%s): %d field(s) this pack answers and the server does not: %s", name, fix.Shapes[name].What, len(invented), strings.Join(invented, ", "))
-		}
-	}
+	got["error.entity"] = fail(signedMap(map[string][]string{"command": {"stopVirtualMachine"}, "id": {"nope"}}))
+	got["error.pagination"] = fail(signedMap(map[string][]string{"command": {"listServiceOfferings"}, "pagesize": {"1"}}))
+	got["error.apis_unknown"] = fail(signedMap(map[string][]string{"command": {"listApis"}, "name": {"nope"}}))
+	got["error.unauthenticated"] = fail(map[string][]string{"command": {"listZones"}, "response": {"json"}})
+	got["error.unknown_command"] = fail(signedMap(map[string][]string{"command": {"createUniverse"}}))
+	return got
 }
 
-func firstKey(m map[string]any) string {
-	for k := range m {
-		return k
+func TestEveryObjectCarriesExactlyTheFieldsTheSimulatorAnswers(t *testing.T) {
+	recording := recordingByLabel(t)
+	got := play(t, newClient(t))
+
+	names := make([]string, 0, len(kindsOfAnswer))
+	for _, k := range kindsOfAnswer {
+		names = append(names, k.name)
+		mine, ok := got[k.name]
+		if !ok {
+			t.Errorf("%s: the scenario produced no such answer, so nothing was compared (%s)", k.name, k.what)
+			continue
+		}
+		omitted, invented := difference(shapeOf(k.real(recording)), shapeOf(mine))
+		if len(omitted) > 0 {
+			t.Errorf("%s (%s): %d field(s) the server always answers and this pack omits: %s", k.name, k.what, len(omitted), strings.Join(omitted, ", "))
+		}
+		if len(invented) > 0 {
+			t.Errorf("%s (%s): %d field(s) this pack answers and the server never does: %s", k.name, k.what, len(invented), strings.Join(invented, ", "))
+		}
 	}
-	return ""
+	// And the other way round: an answer the scenario gives and no kind compares is a
+	// shape nothing holds.
+	sort.Strings(names)
+	for name := range got {
+		if i := sort.SearchStrings(names, name); i == len(names) || names[i] != name {
+			t.Errorf("%s: the scenario produces it and no kind of answer compares it", name)
+		}
+	}
 }
 
 func signedMap(v map[string][]string) map[string][]string {

@@ -1,0 +1,5380 @@
+[
+ {
+  "label": "zones",
+  "command": "listZones",
+  "args": {},
+  "status": 200,
+  "body": {
+   "listzonesresponse": {
+    "count": 1,
+    "zone": [
+     {
+      "id": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "name": "Sandbox-simulator",
+      "dns1": "8.8.8.8",
+      "internaldns1": "8.8.8.8",
+      "networktype": "Basic",
+      "securitygroupsenabled": true,
+      "gputotal": 0,
+      "gpuused": 0,
+      "allocationstate": "Enabled",
+      "zonetoken": "0990df8f-2aec-327c-9f7a-e8b54a16f62c",
+      "dhcpprovider": "VirtualRouter",
+      "localstorageenabled": false,
+      "tags": [],
+      "allowuserspecifyvrmtu": false,
+      "routerprivateinterfacemaxmtu": 1500,
+      "routerpublicinterfacemaxmtu": 1500,
+      "type": "Core",
+      "isnsxenabled": false,
+      "ismultiarch": false,
+      "asnrange": "",
+      "routedmodeenabled": true,
+      "hasannotations": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "offerings",
+  "command": "listServiceOfferings",
+  "args": {},
+  "status": 200,
+  "body": {
+   "listserviceofferingsresponse": {
+    "count": 2,
+    "serviceoffering": [
+     {
+      "id": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "name": "Small Instance",
+      "state": "Active",
+      "displaytext": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "created": "2026-10-19T06:56:45+0000",
+      "storagetype": "shared",
+      "provisioningtype": "thin",
+      "offerha": false,
+      "limitcpuuse": false,
+      "isvolatile": false,
+      "issystem": false,
+      "defaultuse": false,
+      "iscustomized": false,
+      "rootdisksize": 0,
+      "dynamicscalingenabled": true,
+      "diskofferingstrictness": false,
+      "diskofferingid": "31ea5883-393e-4842-bb48-5717e57ae455",
+      "diskofferingname": "Small Instance",
+      "diskofferingdisplaytext": "Small Instance",
+      "encryptroot": false,
+      "hasannotations": false
+     },
+     {
+      "id": "71862ecf-77d1-450e-a751-ec2e52f947c9",
+      "name": "Medium Instance",
+      "state": "Active",
+      "displaytext": "Medium Instance",
+      "cpunumber": 1,
+      "cpuspeed": 1000,
+      "memory": 1024,
+      "created": "2026-10-19T06:56:45+0000",
+      "storagetype": "shared",
+      "provisioningtype": "thin",
+      "offerha": false,
+      "limitcpuuse": false,
+      "isvolatile": false,
+      "issystem": false,
+      "defaultuse": false,
+      "iscustomized": false,
+      "rootdisksize": 0,
+      "dynamicscalingenabled": true,
+      "diskofferingstrictness": false,
+      "diskofferingid": "c76e0362-318a-46b3-bc30-ae64a56dc6b4",
+      "diskofferingname": "Medium Instance",
+      "diskofferingdisplaytext": "Medium Instance",
+      "encryptroot": false,
+      "hasannotations": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "templates",
+  "command": "listTemplates",
+  "args": {
+   "templatefilter": "executable"
+  },
+  "status": 200,
+  "body": {
+   "listtemplatesresponse": {
+    "count": 1,
+    "template": [
+     {
+      "id": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "name": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "displaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "ispublic": true,
+      "created": "2026-09-01T16:29:34+0000",
+      "isready": true,
+      "passwordenabled": false,
+      "format": "VHD",
+      "isfeatured": true,
+      "crossZones": true,
+      "ostypeid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "ostypename": "CentOS 5.6 (64-bit)",
+      "account": "system",
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "status": "Download Complete",
+      "size": 2147483648,
+      "physicalsize": 2147483648,
+      "templatetype": "BUILTIN",
+      "hypervisor": "Simulator",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "isextractable": false,
+      "checksum": "",
+      "details": {},
+      "downloaddetails": [
+       {
+        "downloadState": "DOWNLOADED",
+        "datastore": "nfs://nfsstor:/export/home/sandbox/secondary",
+        "datastoreRole": "Image",
+        "downloadPercent": "100",
+        "datastoreId": "0b7df8fb-5cf5-48d9-87f4-920ba1a3f318"
+       }
+      ],
+      "arch": "x86_64",
+      "bits": 0,
+      "sshkeyenabled": false,
+      "isdynamicallyscalable": false,
+      "directdownload": false,
+      "deployasis": false,
+      "forcks": false,
+      "requireshvm": false,
+      "url": "http://nfs1.lab.vmops.com/templates/centos53-x86_64/latest/f59f18fb-ae94-4f97-afd2-f84755767aca.vhd.bz2",
+      "tags": [],
+      "hasannotations": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "networks",
+  "command": "listNetworks",
+  "args": {},
+  "status": 200,
+  "body": {
+   "listnetworksresponse": {
+    "count": 1,
+    "network": [
+     {
+      "id": "67324663-9554-4798-8c5f-4b9ffb3f6df1",
+      "name": "guestNetworkForBasicZone",
+      "displaytext": "guestNetworkForBasicZone",
+      "broadcastdomaintype": "Native",
+      "traffictype": "Guest",
+      "gateway": "60.147.41.1",
+      "netmask": "255.255.255.0",
+      "cidr": "60.147.41.0/24",
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "networkofferingid": "1b0e0cb9-84ba-4295-b083-cc57df4de431",
+      "networkofferingname": "DefaultSharedNetworkOfferingWithSGService",
+      "networkofferingdisplaytext": "Offering for Shared Security group enabled networks",
+      "networkofferingconservemode": true,
+      "networkofferingavailability": "Optional",
+      "issystem": false,
+      "state": "Setup",
+      "related": "67324663-9554-4798-8c5f-4b9ffb3f6df1",
+      "broadcasturi": "vlan://untagged",
+      "dns1": "8.8.8.8",
+      "type": "Shared",
+      "vlan": "untagged",
+      "acltype": "Domain",
+      "subdomainaccess": true,
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "service": [
+       {
+        "name": "SecurityGroup",
+        "provider": [
+         {
+          "name": "SecurityGroupProvider"
+         }
+        ],
+        "capability": []
+       },
+       {
+        "name": "Dns",
+        "provider": [
+         {
+          "name": "VirtualRouter"
+         }
+        ],
+        "capability": [
+         {
+          "name": "AllowDnsSuffixModification",
+          "value": "true",
+          "canchooseservicecapability": false
+         }
+        ]
+       },
+       {
+        "name": "Dhcp",
+        "provider": [
+         {
+          "name": "VirtualRouter"
+         }
+        ],
+        "capability": [
+         {
+          "name": "DhcpAccrossMultipleSubnets",
+          "value": "true",
+          "canchooseservicecapability": false
+         }
+        ]
+       },
+       {
+        "name": "UserData",
+        "provider": [
+         {
+          "name": "VirtualRouter"
+         }
+        ],
+        "capability": []
+       }
+      ],
+      "networkdomain": "cs1sandbox.simulator",
+      "physicalnetworkid": "7edac19d-b14a-4f46-ba1f-ab8add530242",
+      "restartrequired": false,
+      "specifyvlan": true,
+      "specifyipranges": true,
+      "canusefordeploy": true,
+      "ispersistent": false,
+      "tags": [],
+      "details": {},
+      "displaynetwork": true,
+      "strechedl2subnet": false,
+      "redundantrouter": false,
+      "supportsvmautoscaling": false,
+      "created": "2026-10-19T06:57:33+0000",
+      "receivedbytes": 0,
+      "sentbytes": 0,
+      "publicmtu": 1500,
+      "privatemtu": 1500,
+      "hasannotations": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "vms-empty",
+  "command": "listVirtualMachines",
+  "args": {
+   "name": "no-such-machine-name"
+  },
+  "status": 200,
+  "body": {
+   "listvirtualmachinesresponse": {}
+  }
+ },
+ {
+  "label": "deploy",
+  "command": "deployVirtualMachine",
+  "args": {
+   "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+   "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+   "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+   "name": "oracle-vm"
+  },
+  "status": 200,
+  "body": {
+   "deployvirtualmachineresponse": {
+    "id": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+    "jobid": "81b2d13c-7989-47d0-a791-abf06e13385d"
+   }
+  }
+ },
+ {
+  "label": "deploy-job",
+  "command": "queryAsyncJobResult",
+  "args": {
+   "jobid": "81b2d13c-7989-47d0-a791-abf06e13385d"
+  },
+  "status": 200,
+  "body": {
+   "queryasyncjobresultresponse": {
+    "accountid": "39886e99-a622-11f1-a89d-ee147cfcbd84",
+    "account": "admin",
+    "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+    "domainpath": "ROOT",
+    "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+    "cmd": "org.apache.cloudstack.api.command.admin.vm.DeployVMCmdByAdmin",
+    "jobprocstatus": 0,
+    "jobresultcode": 0,
+    "jobresulttype": "object",
+    "jobresult": {
+     "virtualmachine": {
+      "id": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+      "name": "oracle-vm",
+      "displayname": "oracle-vm",
+      "account": "admin",
+      "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+      "username": "admin",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "created": "2026-10-19T07:03:37+0000",
+      "lastupdated": "2026-10-19T07:03:38+0000",
+      "state": "Running",
+      "haenable": false,
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "hostid": "028eef91-9f52-4926-8c35-1492a6806d6f",
+      "hostname": "SimulatedAgent.6aba6b24-ef6d-47e4-9bd5-92f333416efc",
+      "hostcontrolstate": "Enabled",
+      "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "templatename": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "templatetype": "BUILTIN",
+      "templateformat": "VHD",
+      "templatedisplaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "passwordenabled": false,
+      "isos": [],
+      "isomaxcount": 1,
+      "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "serviceofferingname": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "guestosid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "rootdeviceid": 0,
+      "rootdevicetype": "ROOT",
+      "securitygroup": [
+       {
+        "id": "3ec11894-cb8a-11f1-8697-02fc00000001",
+        "name": "default",
+        "description": "Default Security Group",
+        "account": "admin",
+        "ingressrule": [],
+        "egressrule": [],
+        "tags": [],
+        "virtualmachineids": []
+       }
+      ],
+      "nic": [
+       {
+        "id": "bfa6f226-fda1-40a0-b96f-657fcee1f258",
+        "networkid": "67324663-9554-4798-8c5f-4b9ffb3f6df1",
+        "networkname": "guestNetworkForBasicZone",
+        "netmask": "255.255.255.0",
+        "gateway": "60.147.41.1",
+        "ipaddress": "60.147.41.4",
+        "broadcasturi": "vlan://untagged",
+        "traffictype": "Guest",
+        "type": "Shared",
+        "isdefault": true,
+        "macaddress": "1e:01:87:00:01:00",
+        "secondaryip": [],
+        "extradhcpoption": [],
+        "deviceid": "0",
+        "enabled": true
+       }
+      ],
+      "hypervisor": "Simulator",
+      "ipaddress": "60.147.41.4",
+      "instancename": "i-2-7-VM",
+      "details": {},
+      "affinitygroup": [],
+      "displayvm": true,
+      "isdynamicallyscalable": false,
+      "deleteprotection": false,
+      "ostypeid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "osdisplayname": "CentOS 5.6 (64-bit)",
+      "bootmode": "legacy",
+      "boottype": "Bios",
+      "pooltype": "NetworkFilesystem",
+      "receivedbytes": 0,
+      "sentbytes": 0,
+      "arch": "x86_64",
+      "tags": [],
+      "hasannotations": false,
+      "jobid": "81b2d13c-7989-47d0-a791-abf06e13385d",
+      "jobstatus": 0
+     }
+    },
+    "jobinstancetype": "VirtualMachine",
+    "jobinstanceid": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+    "created": "2026-10-19T07:03:37+0000",
+    "completed": "2026-10-19T07:03:38+0000",
+    "jobid": "81b2d13c-7989-47d0-a791-abf06e13385d",
+    "jobstatus": 1
+   }
+  }
+ },
+ {
+  "label": "vms-by-name",
+  "command": "listVirtualMachines",
+  "args": {
+   "name": "oracle-vm"
+  },
+  "status": 200,
+  "body": {
+   "listvirtualmachinesresponse": {
+    "count": 1,
+    "virtualmachine": [
+     {
+      "id": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+      "name": "oracle-vm",
+      "displayname": "oracle-vm",
+      "account": "admin",
+      "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+      "username": "admin",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "created": "2026-10-19T07:03:37+0000",
+      "lastupdated": "2026-10-19T07:03:38+0000",
+      "state": "Running",
+      "haenable": false,
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "hostid": "028eef91-9f52-4926-8c35-1492a6806d6f",
+      "hostname": "SimulatedAgent.6aba6b24-ef6d-47e4-9bd5-92f333416efc",
+      "hostcontrolstate": "Enabled",
+      "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "templatename": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "templatetype": "BUILTIN",
+      "templateformat": "VHD",
+      "templatedisplaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "passwordenabled": false,
+      "isos": [],
+      "isomaxcount": 1,
+      "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "serviceofferingname": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "guestosid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "rootdeviceid": 0,
+      "rootdevicetype": "ROOT",
+      "securitygroup": [
+       {
+        "id": "3ec11894-cb8a-11f1-8697-02fc00000001",
+        "name": "default",
+        "description": "Default Security Group",
+        "account": "admin",
+        "ingressrule": [],
+        "egressrule": [],
+        "tags": [],
+        "virtualmachineids": []
+       }
+      ],
+      "nic": [
+       {
+        "id": "bfa6f226-fda1-40a0-b96f-657fcee1f258",
+        "networkid": "67324663-9554-4798-8c5f-4b9ffb3f6df1",
+        "networkname": "guestNetworkForBasicZone",
+        "netmask": "255.255.255.0",
+        "gateway": "60.147.41.1",
+        "ipaddress": "60.147.41.4",
+        "broadcasturi": "vlan://untagged",
+        "traffictype": "Guest",
+        "type": "Shared",
+        "isdefault": true,
+        "macaddress": "1e:01:87:00:01:00",
+        "secondaryip": [],
+        "extradhcpoption": [],
+        "deviceid": "0",
+        "enabled": true
+       }
+      ],
+      "hypervisor": "Simulator",
+      "ipaddress": "60.147.41.4",
+      "instancename": "i-2-7-VM",
+      "details": {},
+      "affinitygroup": [],
+      "displayvm": true,
+      "isdynamicallyscalable": false,
+      "deleteprotection": false,
+      "ostypeid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "osdisplayname": "CentOS 5.6 (64-bit)",
+      "bootmode": "legacy",
+      "boottype": "Bios",
+      "pooltype": "NetworkFilesystem",
+      "receivedbytes": 0,
+      "sentbytes": 0,
+      "arch": "x86_64",
+      "tags": [],
+      "hasannotations": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "volumes-running",
+  "command": "listVolumes",
+  "args": {
+   "virtualmachineid": "06be5a93-e641-48b6-8e65-2b8bcd624616"
+  },
+  "status": 200,
+  "body": {
+   "listvolumesresponse": {
+    "count": 1,
+    "volume": [
+     {
+      "id": "f2771f93-35eb-4410-8a1e-51ad7d764a6f",
+      "name": "ROOT-7",
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "type": "ROOT",
+      "deviceid": 0,
+      "virtualmachineid": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+      "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "templatename": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "templatedisplaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "vmname": "oracle-vm",
+      "vmdisplayname": "oracle-vm",
+      "vmstate": "Running",
+      "vmtype": "User",
+      "provisioningtype": "thin",
+      "size": 2147483648,
+      "created": "2026-10-19T07:03:37+0000",
+      "state": "Ready",
+      "account": "admin",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "storagetype": "shared",
+      "diskkbsread": 0,
+      "diskkbswrite": 0,
+      "diskioread": 0,
+      "diskiowrite": 0,
+      "hypervisor": "Simulator",
+      "storage": "PS0",
+      "destroyed": false,
+      "serviceofferingid": "1",
+      "serviceofferingname": "Small Instance",
+      "serviceofferingdisplaytext": "Small Instance",
+      "isextractable": false,
+      "displayvolume": true,
+      "path": "6e108f53-0ed8-4254-824a-18b2ae92a35f",
+      "storageid": "416b18ef-adae-39e2-a86b-ba518578772d",
+      "quiescevm": false,
+      "supportsstoragesnapshot": false,
+      "deleteprotection": false,
+      "clusterid": "92615fb7-a6e5-4670-8bcf-58bd07649ab1",
+      "clustername": "C0",
+      "podid": "2a2cc387-1c88-48bb-9f55-4b5205791e64",
+      "podname": "POD0",
+      "tags": [],
+      "hasannotations": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "start-running",
+  "command": "startVirtualMachine",
+  "args": {
+   "id": "06be5a93-e641-48b6-8e65-2b8bcd624616"
+  },
+  "status": 200,
+  "body": {
+   "startvirtualmachineresponse": {
+    "jobid": "e54551bb-2bd8-4df3-a5cb-566d91b457ed"
+   }
+  }
+ },
+ {
+  "label": "start-running-job",
+  "command": "queryAsyncJobResult",
+  "args": {
+   "jobid": "e54551bb-2bd8-4df3-a5cb-566d91b457ed"
+  },
+  "status": 200,
+  "body": {
+   "queryasyncjobresultresponse": {
+    "accountid": "39886e99-a622-11f1-a89d-ee147cfcbd84",
+    "account": "admin",
+    "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+    "domainpath": "ROOT",
+    "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+    "cmd": "org.apache.cloudstack.api.command.admin.vm.StartVMCmdByAdmin",
+    "jobprocstatus": 0,
+    "jobresultcode": 431,
+    "jobresulttype": "object",
+    "jobresult": {
+     "errorcode": 431,
+     "errortext": "The virtual machine 06be5a93-e641-48b6-8e65-2b8bcd624616 (oracle-vm) is already running"
+    },
+    "jobinstancetype": "VirtualMachine",
+    "jobinstanceid": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+    "created": "2026-10-19T07:03:39+0000",
+    "completed": "2026-10-19T07:03:39+0000",
+    "jobid": "e54551bb-2bd8-4df3-a5cb-566d91b457ed",
+    "jobstatus": 2
+   }
+  }
+ },
+ {
+  "label": "stop",
+  "command": "stopVirtualMachine",
+  "args": {
+   "id": "06be5a93-e641-48b6-8e65-2b8bcd624616"
+  },
+  "status": 200,
+  "body": {
+   "stopvirtualmachineresponse": {
+    "jobid": "c8f53762-51d8-420f-8189-f9e08adfb42c"
+   }
+  }
+ },
+ {
+  "label": "stop-job",
+  "command": "queryAsyncJobResult",
+  "args": {
+   "jobid": "c8f53762-51d8-420f-8189-f9e08adfb42c"
+  },
+  "status": 200,
+  "body": {
+   "queryasyncjobresultresponse": {
+    "accountid": "39886e99-a622-11f1-a89d-ee147cfcbd84",
+    "account": "admin",
+    "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+    "domainpath": "ROOT",
+    "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+    "cmd": "org.apache.cloudstack.api.command.admin.vm.StopVMCmdByAdmin",
+    "jobprocstatus": 0,
+    "jobresultcode": 0,
+    "jobresulttype": "object",
+    "jobresult": {
+     "virtualmachine": {
+      "id": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+      "name": "oracle-vm",
+      "displayname": "oracle-vm",
+      "account": "admin",
+      "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+      "username": "admin",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "created": "2026-10-19T07:03:37+0000",
+      "lastupdated": "2026-10-19T07:03:42+0000",
+      "state": "Stopped",
+      "haenable": false,
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "templatename": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "templatetype": "BUILTIN",
+      "templateformat": "VHD",
+      "templatedisplaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "passwordenabled": false,
+      "isos": [],
+      "isomaxcount": 1,
+      "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "serviceofferingname": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "guestosid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "rootdeviceid": 0,
+      "rootdevicetype": "ROOT",
+      "securitygroup": [
+       {
+        "id": "3ec11894-cb8a-11f1-8697-02fc00000001",
+        "name": "default",
+        "description": "Default Security Group",
+        "account": "admin",
+        "ingressrule": [],
+        "egressrule": [],
+        "tags": [],
+        "virtualmachineids": []
+       }
+      ],
+      "nic": [
+       {
+        "id": "bfa6f226-fda1-40a0-b96f-657fcee1f258",
+        "networkid": "67324663-9554-4798-8c5f-4b9ffb3f6df1",
+        "networkname": "guestNetworkForBasicZone",
+        "netmask": "255.255.255.0",
+        "gateway": "60.147.41.1",
+        "ipaddress": "60.147.41.4",
+        "broadcasturi": "vlan://untagged",
+        "traffictype": "Guest",
+        "type": "Shared",
+        "isdefault": true,
+        "macaddress": "1e:01:87:00:01:00",
+        "secondaryip": [],
+        "extradhcpoption": [],
+        "deviceid": "0",
+        "enabled": true
+       }
+      ],
+      "hypervisor": "Simulator",
+      "ipaddress": "60.147.41.4",
+      "instancename": "i-2-7-VM",
+      "details": {
+       "Message.ReservedCapacityFreed.Flag": "false"
+      },
+      "affinitygroup": [],
+      "displayvm": true,
+      "isdynamicallyscalable": false,
+      "deleteprotection": false,
+      "ostypeid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "osdisplayname": "CentOS 5.6 (64-bit)",
+      "pooltype": "NetworkFilesystem",
+      "receivedbytes": 0,
+      "sentbytes": 0,
+      "arch": "x86_64",
+      "tags": [],
+      "hasannotations": false,
+      "jobid": "c8f53762-51d8-420f-8189-f9e08adfb42c",
+      "jobstatus": 0
+     }
+    },
+    "jobinstancetype": "VirtualMachine",
+    "jobinstanceid": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+    "created": "2026-10-19T07:03:40+0000",
+    "completed": "2026-10-19T07:03:42+0000",
+    "jobid": "c8f53762-51d8-420f-8189-f9e08adfb42c",
+    "jobstatus": 1
+   }
+  }
+ },
+ {
+  "label": "stop-stopped",
+  "command": "stopVirtualMachine",
+  "args": {
+   "id": "06be5a93-e641-48b6-8e65-2b8bcd624616"
+  },
+  "status": 200,
+  "body": {
+   "stopvirtualmachineresponse": {
+    "jobid": "262858c7-2c7a-431a-bb76-5b7594854df5"
+   }
+  }
+ },
+ {
+  "label": "stop-stopped-job",
+  "command": "queryAsyncJobResult",
+  "args": {
+   "jobid": "262858c7-2c7a-431a-bb76-5b7594854df5"
+  },
+  "status": 200,
+  "body": {
+   "queryasyncjobresultresponse": {
+    "accountid": "39886e99-a622-11f1-a89d-ee147cfcbd84",
+    "account": "admin",
+    "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+    "domainpath": "ROOT",
+    "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+    "cmd": "org.apache.cloudstack.api.command.admin.vm.StopVMCmdByAdmin",
+    "jobprocstatus": 0,
+    "jobresultcode": 0,
+    "jobresulttype": "object",
+    "jobresult": {
+     "virtualmachine": {
+      "id": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+      "name": "oracle-vm",
+      "displayname": "oracle-vm",
+      "account": "admin",
+      "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+      "username": "admin",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "created": "2026-10-19T07:03:37+0000",
+      "lastupdated": "2026-10-19T07:03:42+0000",
+      "state": "Stopped",
+      "haenable": false,
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "templatename": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "templatetype": "BUILTIN",
+      "templateformat": "VHD",
+      "templatedisplaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "passwordenabled": false,
+      "isos": [],
+      "isomaxcount": 1,
+      "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "serviceofferingname": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "guestosid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "rootdeviceid": 0,
+      "rootdevicetype": "ROOT",
+      "securitygroup": [
+       {
+        "id": "3ec11894-cb8a-11f1-8697-02fc00000001",
+        "name": "default",
+        "description": "Default Security Group",
+        "account": "admin",
+        "ingressrule": [],
+        "egressrule": [],
+        "tags": [],
+        "virtualmachineids": []
+       }
+      ],
+      "nic": [
+       {
+        "id": "bfa6f226-fda1-40a0-b96f-657fcee1f258",
+        "networkid": "67324663-9554-4798-8c5f-4b9ffb3f6df1",
+        "networkname": "guestNetworkForBasicZone",
+        "netmask": "255.255.255.0",
+        "gateway": "60.147.41.1",
+        "ipaddress": "60.147.41.4",
+        "broadcasturi": "vlan://untagged",
+        "traffictype": "Guest",
+        "type": "Shared",
+        "isdefault": true,
+        "macaddress": "1e:01:87:00:01:00",
+        "secondaryip": [],
+        "extradhcpoption": [],
+        "deviceid": "0",
+        "enabled": true
+       }
+      ],
+      "hypervisor": "Simulator",
+      "ipaddress": "60.147.41.4",
+      "instancename": "i-2-7-VM",
+      "details": {
+       "Message.ReservedCapacityFreed.Flag": "false"
+      },
+      "affinitygroup": [],
+      "displayvm": true,
+      "isdynamicallyscalable": false,
+      "deleteprotection": false,
+      "ostypeid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "osdisplayname": "CentOS 5.6 (64-bit)",
+      "pooltype": "NetworkFilesystem",
+      "receivedbytes": 0,
+      "sentbytes": 0,
+      "arch": "x86_64",
+      "tags": [],
+      "hasannotations": false,
+      "jobid": "262858c7-2c7a-431a-bb76-5b7594854df5",
+      "jobstatus": 0
+     }
+    },
+    "jobinstancetype": "VirtualMachine",
+    "jobinstanceid": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+    "created": "2026-10-19T07:03:42+0000",
+    "completed": "2026-10-19T07:03:44+0000",
+    "jobid": "262858c7-2c7a-431a-bb76-5b7594854df5",
+    "jobstatus": 1
+   }
+  }
+ },
+ {
+  "label": "volumes-stopped",
+  "command": "listVolumes",
+  "args": {
+   "virtualmachineid": "06be5a93-e641-48b6-8e65-2b8bcd624616"
+  },
+  "status": 200,
+  "body": {
+   "listvolumesresponse": {
+    "count": 1,
+    "volume": [
+     {
+      "id": "f2771f93-35eb-4410-8a1e-51ad7d764a6f",
+      "name": "ROOT-7",
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "type": "ROOT",
+      "deviceid": 0,
+      "virtualmachineid": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+      "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "templatename": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "templatedisplaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "vmname": "oracle-vm",
+      "vmdisplayname": "oracle-vm",
+      "vmstate": "Stopped",
+      "vmtype": "User",
+      "provisioningtype": "thin",
+      "size": 2147483648,
+      "created": "2026-10-19T07:03:37+0000",
+      "state": "Ready",
+      "account": "admin",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "storagetype": "shared",
+      "diskkbsread": 0,
+      "diskkbswrite": 0,
+      "diskioread": 0,
+      "diskiowrite": 0,
+      "hypervisor": "Simulator",
+      "storage": "PS0",
+      "destroyed": false,
+      "serviceofferingid": "1",
+      "serviceofferingname": "Small Instance",
+      "serviceofferingdisplaytext": "Small Instance",
+      "isextractable": false,
+      "displayvolume": true,
+      "path": "6e108f53-0ed8-4254-824a-18b2ae92a35f",
+      "storageid": "416b18ef-adae-39e2-a86b-ba518578772d",
+      "quiescevm": false,
+      "supportsstoragesnapshot": false,
+      "deleteprotection": false,
+      "clusterid": "92615fb7-a6e5-4670-8bcf-58bd07649ab1",
+      "clustername": "C0",
+      "podid": "2a2cc387-1c88-48bb-9f55-4b5205791e64",
+      "podname": "POD0",
+      "tags": [],
+      "hasannotations": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "start",
+  "command": "startVirtualMachine",
+  "args": {
+   "id": "06be5a93-e641-48b6-8e65-2b8bcd624616"
+  },
+  "status": 200,
+  "body": {
+   "startvirtualmachineresponse": {
+    "jobid": "ba9b2190-42ed-4e79-8fdd-ff4a78b0d2f4"
+   }
+  }
+ },
+ {
+  "label": "start-job",
+  "command": "queryAsyncJobResult",
+  "args": {
+   "jobid": "ba9b2190-42ed-4e79-8fdd-ff4a78b0d2f4"
+  },
+  "status": 200,
+  "body": {
+   "queryasyncjobresultresponse": {
+    "accountid": "39886e99-a622-11f1-a89d-ee147cfcbd84",
+    "account": "admin",
+    "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+    "domainpath": "ROOT",
+    "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+    "cmd": "org.apache.cloudstack.api.command.admin.vm.StartVMCmdByAdmin",
+    "jobprocstatus": 0,
+    "jobresultcode": 0,
+    "jobresulttype": "object",
+    "jobresult": {
+     "virtualmachine": {
+      "id": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+      "name": "oracle-vm",
+      "displayname": "oracle-vm",
+      "account": "admin",
+      "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+      "username": "admin",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "created": "2026-10-19T07:03:37+0000",
+      "lastupdated": "2026-10-19T07:03:46+0000",
+      "state": "Running",
+      "haenable": false,
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "hostid": "028eef91-9f52-4926-8c35-1492a6806d6f",
+      "hostname": "SimulatedAgent.6aba6b24-ef6d-47e4-9bd5-92f333416efc",
+      "hostcontrolstate": "Enabled",
+      "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "templatename": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "templatetype": "BUILTIN",
+      "templateformat": "VHD",
+      "templatedisplaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "passwordenabled": false,
+      "isos": [],
+      "isomaxcount": 1,
+      "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "serviceofferingname": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "guestosid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "rootdeviceid": 0,
+      "rootdevicetype": "ROOT",
+      "securitygroup": [
+       {
+        "id": "3ec11894-cb8a-11f1-8697-02fc00000001",
+        "name": "default",
+        "description": "Default Security Group",
+        "account": "admin",
+        "ingressrule": [],
+        "egressrule": [],
+        "tags": [],
+        "virtualmachineids": []
+       }
+      ],
+      "nic": [
+       {
+        "id": "bfa6f226-fda1-40a0-b96f-657fcee1f258",
+        "networkid": "67324663-9554-4798-8c5f-4b9ffb3f6df1",
+        "networkname": "guestNetworkForBasicZone",
+        "netmask": "255.255.255.0",
+        "gateway": "60.147.41.1",
+        "ipaddress": "60.147.41.4",
+        "broadcasturi": "vlan://untagged",
+        "traffictype": "Guest",
+        "type": "Shared",
+        "isdefault": true,
+        "macaddress": "1e:01:87:00:01:00",
+        "secondaryip": [],
+        "extradhcpoption": [],
+        "deviceid": "0",
+        "enabled": true
+       }
+      ],
+      "hypervisor": "Simulator",
+      "ipaddress": "60.147.41.4",
+      "instancename": "i-2-7-VM",
+      "details": {
+       "Message.ReservedCapacityFreed.Flag": "false"
+      },
+      "affinitygroup": [],
+      "displayvm": true,
+      "isdynamicallyscalable": false,
+      "deleteprotection": false,
+      "ostypeid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "osdisplayname": "CentOS 5.6 (64-bit)",
+      "pooltype": "NetworkFilesystem",
+      "receivedbytes": 0,
+      "sentbytes": 0,
+      "arch": "x86_64",
+      "tags": [],
+      "hasannotations": false,
+      "jobid": "ba9b2190-42ed-4e79-8fdd-ff4a78b0d2f4",
+      "jobstatus": 0
+     }
+    },
+    "jobinstancetype": "VirtualMachine",
+    "jobinstanceid": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+    "created": "2026-10-19T07:03:44+0000",
+    "completed": "2026-10-19T07:03:46+0000",
+    "jobid": "ba9b2190-42ed-4e79-8fdd-ff4a78b0d2f4",
+    "jobstatus": 1
+   }
+  }
+ },
+ {
+  "label": "destroy",
+  "command": "destroyVirtualMachine",
+  "args": {
+   "id": "06be5a93-e641-48b6-8e65-2b8bcd624616"
+  },
+  "status": 200,
+  "body": {
+   "destroyvirtualmachineresponse": {
+    "jobid": "57f8c19e-5eac-4dfb-8298-e3d70e885070"
+   }
+  }
+ },
+ {
+  "label": "destroy-job",
+  "command": "queryAsyncJobResult",
+  "args": {
+   "jobid": "57f8c19e-5eac-4dfb-8298-e3d70e885070"
+  },
+  "status": 200,
+  "body": {
+   "queryasyncjobresultresponse": {
+    "accountid": "39886e99-a622-11f1-a89d-ee147cfcbd84",
+    "account": "admin",
+    "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+    "domainpath": "ROOT",
+    "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+    "cmd": "org.apache.cloudstack.api.command.admin.vm.DestroyVMCmdByAdmin",
+    "jobprocstatus": 0,
+    "jobresultcode": 0,
+    "jobresulttype": "object",
+    "jobresult": {
+     "virtualmachine": {
+      "id": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+      "name": "oracle-vm",
+      "displayname": "oracle-vm",
+      "account": "admin",
+      "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+      "username": "admin",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "created": "2026-10-19T07:03:37+0000",
+      "lastupdated": "2026-10-19T07:03:52+0000",
+      "state": "Destroyed",
+      "haenable": false,
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "templatename": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "templatetype": "BUILTIN",
+      "templateformat": "VHD",
+      "templatedisplaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "passwordenabled": false,
+      "isos": [],
+      "isomaxcount": 1,
+      "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "serviceofferingname": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "guestosid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "rootdeviceid": 0,
+      "rootdevicetype": "ROOT",
+      "securitygroup": [
+       {
+        "id": "3ec11894-cb8a-11f1-8697-02fc00000001",
+        "name": "default",
+        "description": "Default Security Group",
+        "account": "admin",
+        "ingressrule": [],
+        "egressrule": [],
+        "tags": [],
+        "virtualmachineids": []
+       }
+      ],
+      "nic": [
+       {
+        "id": "bfa6f226-fda1-40a0-b96f-657fcee1f258",
+        "networkid": "67324663-9554-4798-8c5f-4b9ffb3f6df1",
+        "networkname": "guestNetworkForBasicZone",
+        "netmask": "255.255.255.0",
+        "gateway": "60.147.41.1",
+        "ipaddress": "60.147.41.4",
+        "broadcasturi": "vlan://untagged",
+        "traffictype": "Guest",
+        "type": "Shared",
+        "isdefault": true,
+        "macaddress": "1e:01:87:00:01:00",
+        "secondaryip": [],
+        "extradhcpoption": [],
+        "deviceid": "0",
+        "enabled": true
+       }
+      ],
+      "hypervisor": "Simulator",
+      "ipaddress": "60.147.41.4",
+      "instancename": "i-2-7-VM",
+      "details": {
+       "Message.ReservedCapacityFreed.Flag": "false"
+      },
+      "affinitygroup": [],
+      "displayvm": true,
+      "isdynamicallyscalable": false,
+      "deleteprotection": false,
+      "ostypeid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "osdisplayname": "CentOS 5.6 (64-bit)",
+      "pooltype": "NetworkFilesystem",
+      "receivedbytes": 0,
+      "sentbytes": 0,
+      "arch": "x86_64",
+      "tags": [],
+      "hasannotations": false,
+      "jobid": "57f8c19e-5eac-4dfb-8298-e3d70e885070",
+      "jobstatus": 0
+     }
+    },
+    "jobinstancetype": "VirtualMachine",
+    "jobinstanceid": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+    "created": "2026-10-19T07:03:46+0000",
+    "completed": "2026-10-19T07:03:52+0000",
+    "jobid": "57f8c19e-5eac-4dfb-8298-e3d70e885070",
+    "jobstatus": 1
+   }
+  }
+ },
+ {
+  "label": "vms-destroyed",
+  "command": "listVirtualMachines",
+  "args": {
+   "id": "06be5a93-e641-48b6-8e65-2b8bcd624616"
+  },
+  "status": 200,
+  "body": {
+   "listvirtualmachinesresponse": {
+    "count": 1,
+    "virtualmachine": [
+     {
+      "id": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+      "name": "oracle-vm",
+      "displayname": "oracle-vm",
+      "account": "admin",
+      "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+      "username": "admin",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "created": "2026-10-19T07:03:37+0000",
+      "lastupdated": "2026-10-19T07:03:52+0000",
+      "state": "Destroyed",
+      "haenable": false,
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "templatename": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "templatetype": "BUILTIN",
+      "templateformat": "VHD",
+      "templatedisplaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "passwordenabled": false,
+      "isos": [],
+      "isomaxcount": 1,
+      "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "serviceofferingname": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "guestosid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "rootdeviceid": 0,
+      "rootdevicetype": "ROOT",
+      "securitygroup": [
+       {
+        "id": "3ec11894-cb8a-11f1-8697-02fc00000001",
+        "name": "default",
+        "description": "Default Security Group",
+        "account": "admin",
+        "ingressrule": [],
+        "egressrule": [],
+        "tags": [],
+        "virtualmachineids": []
+       }
+      ],
+      "nic": [
+       {
+        "id": "bfa6f226-fda1-40a0-b96f-657fcee1f258",
+        "networkid": "67324663-9554-4798-8c5f-4b9ffb3f6df1",
+        "networkname": "guestNetworkForBasicZone",
+        "netmask": "255.255.255.0",
+        "gateway": "60.147.41.1",
+        "ipaddress": "60.147.41.4",
+        "broadcasturi": "vlan://untagged",
+        "traffictype": "Guest",
+        "type": "Shared",
+        "isdefault": true,
+        "macaddress": "1e:01:87:00:01:00",
+        "secondaryip": [],
+        "extradhcpoption": [],
+        "deviceid": "0",
+        "enabled": true
+       }
+      ],
+      "hypervisor": "Simulator",
+      "ipaddress": "60.147.41.4",
+      "instancename": "i-2-7-VM",
+      "details": {
+       "Message.ReservedCapacityFreed.Flag": "false"
+      },
+      "affinitygroup": [],
+      "displayvm": true,
+      "isdynamicallyscalable": false,
+      "deleteprotection": false,
+      "ostypeid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "osdisplayname": "CentOS 5.6 (64-bit)",
+      "pooltype": "NetworkFilesystem",
+      "receivedbytes": 0,
+      "sentbytes": 0,
+      "arch": "x86_64",
+      "tags": [],
+      "hasannotations": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "volumes-destroyed",
+  "command": "listVolumes",
+  "args": {
+   "virtualmachineid": "06be5a93-e641-48b6-8e65-2b8bcd624616"
+  },
+  "status": 200,
+  "body": {
+   "listvolumesresponse": {
+    "count": 1,
+    "volume": [
+     {
+      "id": "f2771f93-35eb-4410-8a1e-51ad7d764a6f",
+      "name": "ROOT-7",
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "type": "ROOT",
+      "deviceid": 0,
+      "virtualmachineid": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+      "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "templatename": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "templatedisplaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "vmname": "oracle-vm",
+      "vmdisplayname": "oracle-vm",
+      "vmstate": "Destroyed",
+      "vmtype": "User",
+      "provisioningtype": "thin",
+      "size": 2147483648,
+      "created": "2026-10-19T07:03:37+0000",
+      "state": "Ready",
+      "account": "admin",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "storagetype": "shared",
+      "diskkbsread": 0,
+      "diskkbswrite": 0,
+      "diskioread": 0,
+      "diskiowrite": 0,
+      "hypervisor": "Simulator",
+      "storage": "PS0",
+      "destroyed": false,
+      "serviceofferingid": "1",
+      "serviceofferingname": "Small Instance",
+      "serviceofferingdisplaytext": "Small Instance",
+      "isextractable": false,
+      "displayvolume": true,
+      "path": "6e108f53-0ed8-4254-824a-18b2ae92a35f",
+      "storageid": "416b18ef-adae-39e2-a86b-ba518578772d",
+      "quiescevm": false,
+      "supportsstoragesnapshot": false,
+      "deleteprotection": false,
+      "clusterid": "92615fb7-a6e5-4670-8bcf-58bd07649ab1",
+      "clustername": "C0",
+      "podid": "2a2cc387-1c88-48bb-9f55-4b5205791e64",
+      "podname": "POD0",
+      "tags": [],
+      "hasannotations": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "start-destroyed",
+  "command": "startVirtualMachine",
+  "args": {
+   "id": "06be5a93-e641-48b6-8e65-2b8bcd624616"
+  },
+  "status": 200,
+  "body": {
+   "startvirtualmachineresponse": {
+    "jobid": "20a17cee-b3a5-493e-bd1d-54344a7f50cf"
+   }
+  }
+ },
+ {
+  "label": "start-destroyed-job",
+  "command": "queryAsyncJobResult",
+  "args": {
+   "jobid": "20a17cee-b3a5-493e-bd1d-54344a7f50cf"
+  },
+  "status": 200,
+  "body": {
+   "queryasyncjobresultresponse": {
+    "accountid": "39886e99-a622-11f1-a89d-ee147cfcbd84",
+    "account": "admin",
+    "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+    "domainpath": "ROOT",
+    "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+    "cmd": "org.apache.cloudstack.api.command.admin.vm.StartVMCmdByAdmin",
+    "jobprocstatus": 0,
+    "jobresultcode": 530,
+    "jobresulttype": "object",
+    "jobresult": {
+     "errorcode": 530,
+     "errortext": "Unable to orchestrate the start of VM instance {\"instanceName\":\"i-2-7-VM\",\"uuid\":\"06be5a93-e641-48b6-8e65-2b8bcd624616\"}."
+    },
+    "jobinstancetype": "VirtualMachine",
+    "jobinstanceid": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+    "created": "2026-10-19T07:03:53+0000",
+    "completed": "2026-10-19T07:03:56+0000",
+    "jobid": "20a17cee-b3a5-493e-bd1d-54344a7f50cf",
+    "jobstatus": 2
+   }
+  }
+ },
+ {
+  "label": "expunge",
+  "command": "destroyVirtualMachine",
+  "args": {
+   "id": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+   "expunge": "true"
+  },
+  "status": 200,
+  "body": {
+   "destroyvirtualmachineresponse": {
+    "jobid": "d25e750a-e391-4248-9636-1ba96092ca88"
+   }
+  }
+ },
+ {
+  "label": "expunge-job",
+  "command": "queryAsyncJobResult",
+  "args": {
+   "jobid": "d25e750a-e391-4248-9636-1ba96092ca88"
+  },
+  "status": 200,
+  "body": {
+   "queryasyncjobresultresponse": {
+    "accountid": "39886e99-a622-11f1-a89d-ee147cfcbd84",
+    "account": "admin",
+    "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+    "domainpath": "ROOT",
+    "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+    "cmd": "org.apache.cloudstack.api.command.admin.vm.DestroyVMCmdByAdmin",
+    "jobprocstatus": 0,
+    "jobresultcode": 0,
+    "jobresulttype": "object",
+    "jobresult": {
+     "virtualmachine": {
+      "securitygroup": [],
+      "nic": [],
+      "affinitygroup": [],
+      "deleteprotection": false,
+      "tags": []
+     }
+    },
+    "jobinstancetype": "VirtualMachine",
+    "jobinstanceid": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+    "created": "2026-10-19T07:03:57+0000",
+    "completed": "2026-10-19T07:04:00+0000",
+    "jobid": "d25e750a-e391-4248-9636-1ba96092ca88",
+    "jobstatus": 1
+   }
+  }
+ },
+ {
+  "label": "vms-after-expunge",
+  "command": "listVirtualMachines",
+  "args": {
+   "id": "06be5a93-e641-48b6-8e65-2b8bcd624616"
+  },
+  "status": 200,
+  "body": {
+   "listvirtualmachinesresponse": {}
+  }
+ },
+ {
+  "label": "volumes-after-expunge",
+  "command": "listVolumes",
+  "args": {
+   "virtualmachineid": "06be5a93-e641-48b6-8e65-2b8bcd624616"
+  },
+  "status": 200,
+  "body": {
+   "listvolumesresponse": {}
+  }
+ },
+ {
+  "label": "stop-expunged",
+  "command": "stopVirtualMachine",
+  "args": {
+   "id": "06be5a93-e641-48b6-8e65-2b8bcd624616"
+  },
+  "status": 200,
+  "body": {
+   "stopvirtualmachineresponse": {
+    "jobid": "13d4261c-5161-4661-ac47-e8dae9726ae5"
+   }
+  }
+ },
+ {
+  "label": "stop-expunged-job",
+  "command": "queryAsyncJobResult",
+  "args": {
+   "jobid": "13d4261c-5161-4661-ac47-e8dae9726ae5"
+  },
+  "status": 200,
+  "body": {
+   "queryasyncjobresultresponse": {
+    "accountid": "39886e99-a622-11f1-a89d-ee147cfcbd84",
+    "account": "admin",
+    "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+    "domainpath": "ROOT",
+    "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+    "cmd": "org.apache.cloudstack.api.command.admin.vm.StopVMCmdByAdmin",
+    "jobprocstatus": 0,
+    "jobresultcode": 431,
+    "jobresulttype": "object",
+    "jobresult": {
+     "errorcode": 431,
+     "errortext": "unable to find a virtual machine with id 7"
+    },
+    "jobinstancetype": "VirtualMachine",
+    "jobinstanceid": "06be5a93-e641-48b6-8e65-2b8bcd624616",
+    "created": "2026-10-19T07:04:01+0000",
+    "completed": "2026-10-19T07:04:01+0000",
+    "jobid": "13d4261c-5161-4661-ac47-e8dae9726ae5",
+    "jobstatus": 2
+   }
+  }
+ },
+ {
+  "label": "deploy-stopped",
+  "command": "deployVirtualMachine",
+  "args": {
+   "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+   "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+   "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+   "name": "oracle-vm2",
+   "startvm": "false"
+  },
+  "status": 200,
+  "body": {
+   "deployvirtualmachineresponse": {
+    "id": "3006df8e-a708-47e1-8843-26a4d5f729f2",
+    "jobid": "179f9472-ceaf-498e-bb63-b80eb90a291f"
+   }
+  }
+ },
+ {
+  "label": "deploy-stopped-job",
+  "command": "queryAsyncJobResult",
+  "args": {
+   "jobid": "179f9472-ceaf-498e-bb63-b80eb90a291f"
+  },
+  "status": 200,
+  "body": {
+   "queryasyncjobresultresponse": {
+    "accountid": "39886e99-a622-11f1-a89d-ee147cfcbd84",
+    "account": "admin",
+    "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+    "domainpath": "ROOT",
+    "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+    "cmd": "org.apache.cloudstack.api.command.admin.vm.DeployVMCmdByAdmin",
+    "jobprocstatus": 0,
+    "jobresultcode": 0,
+    "jobresulttype": "object",
+    "jobresult": {
+     "virtualmachine": {
+      "id": "3006df8e-a708-47e1-8843-26a4d5f729f2",
+      "name": "oracle-vm2",
+      "displayname": "oracle-vm2",
+      "account": "admin",
+      "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+      "username": "admin",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "created": "2026-10-19T07:04:02+0000",
+      "state": "Stopped",
+      "haenable": false,
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "templatename": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "templatetype": "BUILTIN",
+      "templateformat": "VHD",
+      "templatedisplaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "passwordenabled": false,
+      "isos": [],
+      "isomaxcount": 1,
+      "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "serviceofferingname": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "guestosid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "rootdeviceid": 0,
+      "rootdevicetype": "ROOT",
+      "securitygroup": [
+       {
+        "id": "3ec11894-cb8a-11f1-8697-02fc00000001",
+        "name": "default",
+        "description": "Default Security Group",
+        "account": "admin",
+        "ingressrule": [],
+        "egressrule": [],
+        "tags": [],
+        "virtualmachineids": []
+       }
+      ],
+      "nic": [
+       {
+        "id": "a8046ba6-b011-41af-be11-46df020d7ff8",
+        "networkid": "67324663-9554-4798-8c5f-4b9ffb3f6df1",
+        "networkname": "guestNetworkForBasicZone",
+        "traffictype": "Guest",
+        "type": "Shared",
+        "isdefault": true,
+        "secondaryip": [],
+        "extradhcpoption": [],
+        "deviceid": "0",
+        "enabled": true
+       }
+      ],
+      "hypervisor": "Simulator",
+      "instancename": "i-2-8-VM",
+      "details": {
+       "deployvm": "true"
+      },
+      "affinitygroup": [],
+      "displayvm": true,
+      "isdynamicallyscalable": false,
+      "deleteprotection": false,
+      "ostypeid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "osdisplayname": "CentOS 5.6 (64-bit)",
+      "receivedbytes": 0,
+      "sentbytes": 0,
+      "arch": "x86_64",
+      "tags": [],
+      "hasannotations": false,
+      "jobid": "179f9472-ceaf-498e-bb63-b80eb90a291f",
+      "jobstatus": 0
+     }
+    },
+    "jobinstancetype": "VirtualMachine",
+    "jobinstanceid": "3006df8e-a708-47e1-8843-26a4d5f729f2",
+    "created": "2026-10-19T07:04:02+0000",
+    "completed": "2026-10-19T07:04:02+0000",
+    "jobid": "179f9472-ceaf-498e-bb63-b80eb90a291f",
+    "jobstatus": 1
+   }
+  }
+ },
+ {
+  "label": "vms2-state",
+  "command": "listVirtualMachines",
+  "args": {
+   "id": "3006df8e-a708-47e1-8843-26a4d5f729f2"
+  },
+  "status": 200,
+  "body": {
+   "listvirtualmachinesresponse": {
+    "count": 1,
+    "virtualmachine": [
+     {
+      "id": "3006df8e-a708-47e1-8843-26a4d5f729f2",
+      "name": "oracle-vm2",
+      "displayname": "oracle-vm2",
+      "account": "admin",
+      "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+      "username": "admin",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "created": "2026-10-19T07:04:02+0000",
+      "state": "Stopped",
+      "haenable": false,
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "templatename": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "templatetype": "BUILTIN",
+      "templateformat": "VHD",
+      "templatedisplaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "passwordenabled": false,
+      "isos": [],
+      "isomaxcount": 1,
+      "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "serviceofferingname": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "guestosid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "rootdeviceid": 0,
+      "rootdevicetype": "ROOT",
+      "securitygroup": [
+       {
+        "id": "3ec11894-cb8a-11f1-8697-02fc00000001",
+        "name": "default",
+        "description": "Default Security Group",
+        "account": "admin",
+        "ingressrule": [],
+        "egressrule": [],
+        "tags": [],
+        "virtualmachineids": []
+       }
+      ],
+      "nic": [
+       {
+        "id": "a8046ba6-b011-41af-be11-46df020d7ff8",
+        "networkid": "67324663-9554-4798-8c5f-4b9ffb3f6df1",
+        "networkname": "guestNetworkForBasicZone",
+        "traffictype": "Guest",
+        "type": "Shared",
+        "isdefault": true,
+        "secondaryip": [],
+        "extradhcpoption": [],
+        "deviceid": "0",
+        "enabled": true
+       }
+      ],
+      "hypervisor": "Simulator",
+      "instancename": "i-2-8-VM",
+      "details": {
+       "deployvm": "true"
+      },
+      "affinitygroup": [],
+      "displayvm": true,
+      "isdynamicallyscalable": false,
+      "deleteprotection": false,
+      "ostypeid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "osdisplayname": "CentOS 5.6 (64-bit)",
+      "receivedbytes": 0,
+      "sentbytes": 0,
+      "arch": "x86_64",
+      "tags": [],
+      "hasannotations": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "volumes-never-run",
+  "command": "listVolumes",
+  "args": {
+   "virtualmachineid": "3006df8e-a708-47e1-8843-26a4d5f729f2"
+  },
+  "status": 200,
+  "body": {
+   "listvolumesresponse": {
+    "count": 1,
+    "volume": [
+     {
+      "id": "6c2b566d-50f0-484c-a5de-1829cbb64e7e",
+      "name": "ROOT-8",
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "type": "ROOT",
+      "deviceid": 0,
+      "virtualmachineid": "3006df8e-a708-47e1-8843-26a4d5f729f2",
+      "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "templatename": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "templatedisplaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "vmname": "oracle-vm2",
+      "vmdisplayname": "oracle-vm2",
+      "vmstate": "Stopped",
+      "vmtype": "User",
+      "provisioningtype": "thin",
+      "size": 2147483648,
+      "created": "2026-10-19T07:04:02+0000",
+      "state": "Allocated",
+      "account": "admin",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "storagetype": "shared",
+      "hypervisor": "None",
+      "destroyed": false,
+      "serviceofferingid": "1",
+      "serviceofferingname": "Small Instance",
+      "serviceofferingdisplaytext": "Small Instance",
+      "isextractable": false,
+      "displayvolume": true,
+      "quiescevm": false,
+      "supportsstoragesnapshot": false,
+      "deleteprotection": false,
+      "tags": [],
+      "hasannotations": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "destroy-stopped",
+  "command": "destroyVirtualMachine",
+  "args": {
+   "id": "3006df8e-a708-47e1-8843-26a4d5f729f2"
+  },
+  "status": 200,
+  "body": {
+   "destroyvirtualmachineresponse": {
+    "jobid": "65b0b2c8-7be6-4d1a-9e72-2547c41a7d42"
+   }
+  }
+ },
+ {
+  "label": "destroy-stopped-job",
+  "command": "queryAsyncJobResult",
+  "args": {
+   "jobid": "65b0b2c8-7be6-4d1a-9e72-2547c41a7d42"
+  },
+  "status": 200,
+  "body": {
+   "queryasyncjobresultresponse": {
+    "accountid": "39886e99-a622-11f1-a89d-ee147cfcbd84",
+    "account": "admin",
+    "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+    "domainpath": "ROOT",
+    "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+    "cmd": "org.apache.cloudstack.api.command.admin.vm.DestroyVMCmdByAdmin",
+    "jobprocstatus": 0,
+    "jobresultcode": 0,
+    "jobresulttype": "object",
+    "jobresult": {
+     "virtualmachine": {
+      "id": "3006df8e-a708-47e1-8843-26a4d5f729f2",
+      "name": "oracle-vm2",
+      "displayname": "oracle-vm2",
+      "account": "admin",
+      "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+      "username": "admin",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "created": "2026-10-19T07:04:02+0000",
+      "lastupdated": "2026-10-19T07:04:08+0000",
+      "state": "Destroyed",
+      "haenable": false,
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "templatename": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "templatetype": "BUILTIN",
+      "templateformat": "VHD",
+      "templatedisplaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "passwordenabled": false,
+      "isos": [],
+      "isomaxcount": 1,
+      "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "serviceofferingname": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "guestosid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "rootdeviceid": 0,
+      "rootdevicetype": "ROOT",
+      "securitygroup": [
+       {
+        "id": "3ec11894-cb8a-11f1-8697-02fc00000001",
+        "name": "default",
+        "description": "Default Security Group",
+        "account": "admin",
+        "ingressrule": [],
+        "egressrule": [],
+        "tags": [],
+        "virtualmachineids": []
+       }
+      ],
+      "nic": [
+       {
+        "id": "a8046ba6-b011-41af-be11-46df020d7ff8",
+        "networkid": "67324663-9554-4798-8c5f-4b9ffb3f6df1",
+        "networkname": "guestNetworkForBasicZone",
+        "traffictype": "Guest",
+        "type": "Shared",
+        "isdefault": true,
+        "secondaryip": [],
+        "extradhcpoption": [],
+        "deviceid": "0",
+        "enabled": true
+       }
+      ],
+      "hypervisor": "Simulator",
+      "instancename": "i-2-8-VM",
+      "details": {
+       "deployvm": "true"
+      },
+      "affinitygroup": [],
+      "displayvm": true,
+      "isdynamicallyscalable": false,
+      "deleteprotection": false,
+      "ostypeid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "osdisplayname": "CentOS 5.6 (64-bit)",
+      "receivedbytes": 0,
+      "sentbytes": 0,
+      "arch": "x86_64",
+      "tags": [],
+      "hasannotations": false,
+      "jobid": "65b0b2c8-7be6-4d1a-9e72-2547c41a7d42",
+      "jobstatus": 0
+     }
+    },
+    "jobinstancetype": "VirtualMachine",
+    "jobinstanceid": "3006df8e-a708-47e1-8843-26a4d5f729f2",
+    "created": "2026-10-19T07:04:03+0000",
+    "completed": "2026-10-19T07:04:08+0000",
+    "jobid": "65b0b2c8-7be6-4d1a-9e72-2547c41a7d42",
+    "jobstatus": 1
+   }
+  }
+ },
+ {
+  "label": "vms2-destroyed",
+  "command": "listVirtualMachines",
+  "args": {
+   "id": "3006df8e-a708-47e1-8843-26a4d5f729f2"
+  },
+  "status": 200,
+  "body": {
+   "listvirtualmachinesresponse": {
+    "count": 1,
+    "virtualmachine": [
+     {
+      "id": "3006df8e-a708-47e1-8843-26a4d5f729f2",
+      "name": "oracle-vm2",
+      "displayname": "oracle-vm2",
+      "account": "admin",
+      "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+      "username": "admin",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "created": "2026-10-19T07:04:02+0000",
+      "lastupdated": "2026-10-19T07:04:08+0000",
+      "state": "Destroyed",
+      "haenable": false,
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "templatename": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "templatetype": "BUILTIN",
+      "templateformat": "VHD",
+      "templatedisplaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "passwordenabled": false,
+      "isos": [],
+      "isomaxcount": 1,
+      "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "serviceofferingname": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "guestosid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "rootdeviceid": 0,
+      "rootdevicetype": "ROOT",
+      "securitygroup": [
+       {
+        "id": "3ec11894-cb8a-11f1-8697-02fc00000001",
+        "name": "default",
+        "description": "Default Security Group",
+        "account": "admin",
+        "ingressrule": [],
+        "egressrule": [],
+        "tags": [],
+        "virtualmachineids": []
+       }
+      ],
+      "nic": [
+       {
+        "id": "a8046ba6-b011-41af-be11-46df020d7ff8",
+        "networkid": "67324663-9554-4798-8c5f-4b9ffb3f6df1",
+        "networkname": "guestNetworkForBasicZone",
+        "traffictype": "Guest",
+        "type": "Shared",
+        "isdefault": true,
+        "secondaryip": [],
+        "extradhcpoption": [],
+        "deviceid": "0",
+        "enabled": true
+       }
+      ],
+      "hypervisor": "Simulator",
+      "instancename": "i-2-8-VM",
+      "details": {
+       "deployvm": "true"
+      },
+      "affinitygroup": [],
+      "displayvm": true,
+      "isdynamicallyscalable": false,
+      "deleteprotection": false,
+      "ostypeid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "osdisplayname": "CentOS 5.6 (64-bit)",
+      "receivedbytes": 0,
+      "sentbytes": 0,
+      "arch": "x86_64",
+      "tags": [],
+      "hasannotations": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "stop-destroyed",
+  "command": "stopVirtualMachine",
+  "args": {
+   "id": "3006df8e-a708-47e1-8843-26a4d5f729f2"
+  },
+  "status": 200,
+  "body": {
+   "stopvirtualmachineresponse": {
+    "jobid": "49dd8018-26ff-47f4-82e6-525166395421"
+   }
+  }
+ },
+ {
+  "label": "stop-destroyed-job",
+  "command": "queryAsyncJobResult",
+  "args": {
+   "jobid": "49dd8018-26ff-47f4-82e6-525166395421"
+  },
+  "status": 200,
+  "body": {
+   "queryasyncjobresultresponse": {
+    "accountid": "39886e99-a622-11f1-a89d-ee147cfcbd84",
+    "account": "admin",
+    "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+    "domainpath": "ROOT",
+    "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+    "cmd": "org.apache.cloudstack.api.command.admin.vm.StopVMCmdByAdmin",
+    "jobprocstatus": 0,
+    "jobresultcode": 0,
+    "jobresulttype": "object",
+    "jobresult": {
+     "virtualmachine": {
+      "id": "3006df8e-a708-47e1-8843-26a4d5f729f2",
+      "name": "oracle-vm2",
+      "displayname": "oracle-vm2",
+      "account": "admin",
+      "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+      "username": "admin",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "created": "2026-10-19T07:04:02+0000",
+      "lastupdated": "2026-10-19T07:04:08+0000",
+      "state": "Destroyed",
+      "haenable": false,
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "templatename": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "templatetype": "BUILTIN",
+      "templateformat": "VHD",
+      "templatedisplaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "passwordenabled": false,
+      "isos": [],
+      "isomaxcount": 1,
+      "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "serviceofferingname": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "guestosid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "rootdeviceid": 0,
+      "rootdevicetype": "ROOT",
+      "securitygroup": [
+       {
+        "id": "3ec11894-cb8a-11f1-8697-02fc00000001",
+        "name": "default",
+        "description": "Default Security Group",
+        "account": "admin",
+        "ingressrule": [],
+        "egressrule": [],
+        "tags": [],
+        "virtualmachineids": []
+       }
+      ],
+      "nic": [
+       {
+        "id": "a8046ba6-b011-41af-be11-46df020d7ff8",
+        "networkid": "67324663-9554-4798-8c5f-4b9ffb3f6df1",
+        "networkname": "guestNetworkForBasicZone",
+        "traffictype": "Guest",
+        "type": "Shared",
+        "isdefault": true,
+        "secondaryip": [],
+        "extradhcpoption": [],
+        "deviceid": "0",
+        "enabled": true
+       }
+      ],
+      "hypervisor": "Simulator",
+      "instancename": "i-2-8-VM",
+      "details": {
+       "deployvm": "true"
+      },
+      "affinitygroup": [],
+      "displayvm": true,
+      "isdynamicallyscalable": false,
+      "deleteprotection": false,
+      "ostypeid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "osdisplayname": "CentOS 5.6 (64-bit)",
+      "receivedbytes": 0,
+      "sentbytes": 0,
+      "arch": "x86_64",
+      "tags": [],
+      "hasannotations": false,
+      "jobid": "49dd8018-26ff-47f4-82e6-525166395421",
+      "jobstatus": 0
+     }
+    },
+    "jobinstancetype": "VirtualMachine",
+    "jobinstanceid": "3006df8e-a708-47e1-8843-26a4d5f729f2",
+    "created": "2026-10-19T07:04:08+0000",
+    "completed": "2026-10-19T07:04:10+0000",
+    "jobid": "49dd8018-26ff-47f4-82e6-525166395421",
+    "jobstatus": 1
+   }
+  }
+ },
+ {
+  "label": "destroy-destroyed",
+  "command": "destroyVirtualMachine",
+  "args": {
+   "id": "3006df8e-a708-47e1-8843-26a4d5f729f2"
+  },
+  "status": 200,
+  "body": {
+   "destroyvirtualmachineresponse": {
+    "jobid": "136204b0-c9c4-4198-adc2-5ff150b688ae"
+   }
+  }
+ },
+ {
+  "label": "destroy-destroyed-job",
+  "command": "queryAsyncJobResult",
+  "args": {
+   "jobid": "136204b0-c9c4-4198-adc2-5ff150b688ae"
+  },
+  "status": 200,
+  "body": {
+   "queryasyncjobresultresponse": {
+    "accountid": "39886e99-a622-11f1-a89d-ee147cfcbd84",
+    "account": "admin",
+    "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+    "domainpath": "ROOT",
+    "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+    "cmd": "org.apache.cloudstack.api.command.admin.vm.DestroyVMCmdByAdmin",
+    "jobprocstatus": 0,
+    "jobresultcode": 0,
+    "jobresulttype": "object",
+    "jobresult": {
+     "virtualmachine": {
+      "id": "3006df8e-a708-47e1-8843-26a4d5f729f2",
+      "name": "oracle-vm2",
+      "displayname": "oracle-vm2",
+      "account": "admin",
+      "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+      "username": "admin",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "created": "2026-10-19T07:04:02+0000",
+      "lastupdated": "2026-10-19T07:04:08+0000",
+      "state": "Destroyed",
+      "haenable": false,
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "templatename": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "templatetype": "BUILTIN",
+      "templateformat": "VHD",
+      "templatedisplaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "passwordenabled": false,
+      "isos": [],
+      "isomaxcount": 1,
+      "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "serviceofferingname": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "guestosid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "rootdeviceid": 0,
+      "rootdevicetype": "ROOT",
+      "securitygroup": [
+       {
+        "id": "3ec11894-cb8a-11f1-8697-02fc00000001",
+        "name": "default",
+        "description": "Default Security Group",
+        "account": "admin",
+        "ingressrule": [],
+        "egressrule": [],
+        "tags": [],
+        "virtualmachineids": []
+       }
+      ],
+      "nic": [
+       {
+        "id": "a8046ba6-b011-41af-be11-46df020d7ff8",
+        "networkid": "67324663-9554-4798-8c5f-4b9ffb3f6df1",
+        "networkname": "guestNetworkForBasicZone",
+        "traffictype": "Guest",
+        "type": "Shared",
+        "isdefault": true,
+        "secondaryip": [],
+        "extradhcpoption": [],
+        "deviceid": "0",
+        "enabled": true
+       }
+      ],
+      "hypervisor": "Simulator",
+      "instancename": "i-2-8-VM",
+      "details": {
+       "deployvm": "true"
+      },
+      "affinitygroup": [],
+      "displayvm": true,
+      "isdynamicallyscalable": false,
+      "deleteprotection": false,
+      "ostypeid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "osdisplayname": "CentOS 5.6 (64-bit)",
+      "receivedbytes": 0,
+      "sentbytes": 0,
+      "arch": "x86_64",
+      "tags": [],
+      "hasannotations": false,
+      "jobid": "136204b0-c9c4-4198-adc2-5ff150b688ae",
+      "jobstatus": 0
+     }
+    },
+    "jobinstancetype": "VirtualMachine",
+    "jobinstanceid": "3006df8e-a708-47e1-8843-26a4d5f729f2",
+    "created": "2026-10-19T07:04:10+0000",
+    "completed": "2026-10-19T07:04:10+0000",
+    "jobid": "136204b0-c9c4-4198-adc2-5ff150b688ae",
+    "jobstatus": 1
+   }
+  }
+ },
+ {
+  "label": "expunge2",
+  "command": "destroyVirtualMachine",
+  "args": {
+   "id": "3006df8e-a708-47e1-8843-26a4d5f729f2",
+   "expunge": "true"
+  },
+  "status": 200,
+  "body": {
+   "destroyvirtualmachineresponse": {
+    "jobid": "09e90294-eb7d-478f-a311-39168f27137b"
+   }
+  }
+ },
+ {
+  "label": "expunge2-job",
+  "command": "queryAsyncJobResult",
+  "args": {
+   "jobid": "09e90294-eb7d-478f-a311-39168f27137b"
+  },
+  "status": 200,
+  "body": {
+   "queryasyncjobresultresponse": {
+    "accountid": "39886e99-a622-11f1-a89d-ee147cfcbd84",
+    "account": "admin",
+    "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+    "domainpath": "ROOT",
+    "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+    "cmd": "org.apache.cloudstack.api.command.admin.vm.DestroyVMCmdByAdmin",
+    "jobprocstatus": 0,
+    "jobresultcode": 0,
+    "jobresulttype": "object",
+    "jobresult": {
+     "virtualmachine": {
+      "securitygroup": [],
+      "nic": [],
+      "affinitygroup": [],
+      "deleteprotection": false,
+      "tags": []
+     }
+    },
+    "jobinstancetype": "VirtualMachine",
+    "jobinstanceid": "3006df8e-a708-47e1-8843-26a4d5f729f2",
+    "created": "2026-10-19T07:04:12+0000",
+    "completed": "2026-10-19T07:04:14+0000",
+    "jobid": "09e90294-eb7d-478f-a311-39168f27137b",
+    "jobstatus": 1
+   }
+  }
+ },
+ {
+  "label": "deploy-3",
+  "command": "deployVirtualMachine",
+  "args": {
+   "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+   "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+   "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+   "name": "oracle-vm3"
+  },
+  "status": 200,
+  "body": {
+   "deployvirtualmachineresponse": {
+    "id": "d1267636-4d37-4fa9-af88-e6bec0a0634e",
+    "jobid": "b0069e77-c9db-42cb-992a-f4c4ffce7923"
+   }
+  }
+ },
+ {
+  "label": "deploy-3-job",
+  "command": "queryAsyncJobResult",
+  "args": {
+   "jobid": "b0069e77-c9db-42cb-992a-f4c4ffce7923"
+  },
+  "status": 200,
+  "body": {
+   "queryasyncjobresultresponse": {
+    "accountid": "39886e99-a622-11f1-a89d-ee147cfcbd84",
+    "account": "admin",
+    "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+    "domainpath": "ROOT",
+    "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+    "cmd": "org.apache.cloudstack.api.command.admin.vm.DeployVMCmdByAdmin",
+    "jobprocstatus": 0,
+    "jobresultcode": 0,
+    "jobresulttype": "object",
+    "jobresult": {
+     "virtualmachine": {
+      "id": "d1267636-4d37-4fa9-af88-e6bec0a0634e",
+      "name": "oracle-vm3",
+      "displayname": "oracle-vm3",
+      "account": "admin",
+      "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+      "username": "admin",
+      "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+      "domain": "ROOT",
+      "domainpath": "ROOT",
+      "created": "2026-10-19T07:04:15+0000",
+      "lastupdated": "2026-10-19T07:04:16+0000",
+      "state": "Running",
+      "haenable": false,
+      "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+      "zonename": "Sandbox-simulator",
+      "hostid": "028eef91-9f52-4926-8c35-1492a6806d6f",
+      "hostname": "SimulatedAgent.6aba6b24-ef6d-47e4-9bd5-92f333416efc",
+      "hostcontrolstate": "Enabled",
+      "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+      "templatename": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "templatetype": "BUILTIN",
+      "templateformat": "VHD",
+      "templatedisplaytext": "CentOS 5.6 (64-bit) no GUI (Simulator)",
+      "passwordenabled": false,
+      "isos": [],
+      "isomaxcount": 1,
+      "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "serviceofferingname": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "guestosid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "rootdeviceid": 0,
+      "rootdevicetype": "ROOT",
+      "securitygroup": [
+       {
+        "id": "3ec11894-cb8a-11f1-8697-02fc00000001",
+        "name": "default",
+        "description": "Default Security Group",
+        "account": "admin",
+        "ingressrule": [],
+        "egressrule": [],
+        "tags": [],
+        "virtualmachineids": []
+       }
+      ],
+      "nic": [
+       {
+        "id": "e9516b4a-cc49-4edd-a7eb-704b48977c0c",
+        "networkid": "67324663-9554-4798-8c5f-4b9ffb3f6df1",
+        "networkname": "guestNetworkForBasicZone",
+        "netmask": "255.255.255.0",
+        "gateway": "60.147.41.1",
+        "ipaddress": "60.147.41.4",
+        "broadcasturi": "vlan://untagged",
+        "traffictype": "Guest",
+        "type": "Shared",
+        "isdefault": true,
+        "macaddress": "1e:01:17:00:01:00",
+        "secondaryip": [],
+        "extradhcpoption": [],
+        "deviceid": "0",
+        "enabled": true
+       }
+      ],
+      "hypervisor": "Simulator",
+      "ipaddress": "60.147.41.4",
+      "instancename": "i-2-9-VM",
+      "details": {},
+      "affinitygroup": [],
+      "displayvm": true,
+      "isdynamicallyscalable": false,
+      "deleteprotection": false,
+      "ostypeid": "397b7b91-a622-11f1-a89d-ee147cfcbd84",
+      "osdisplayname": "CentOS 5.6 (64-bit)",
+      "bootmode": "legacy",
+      "boottype": "Bios",
+      "pooltype": "NetworkFilesystem",
+      "receivedbytes": 0,
+      "sentbytes": 0,
+      "arch": "x86_64",
+      "tags": [],
+      "hasannotations": false,
+      "jobid": "b0069e77-c9db-42cb-992a-f4c4ffce7923",
+      "jobstatus": 0
+     }
+    },
+    "jobinstancetype": "VirtualMachine",
+    "jobinstanceid": "d1267636-4d37-4fa9-af88-e6bec0a0634e",
+    "created": "2026-10-19T07:04:15+0000",
+    "completed": "2026-10-19T07:04:16+0000",
+    "jobid": "b0069e77-c9db-42cb-992a-f4c4ffce7923",
+    "jobstatus": 1
+   }
+  }
+ },
+ {
+  "label": "expunge-running",
+  "command": "destroyVirtualMachine",
+  "args": {
+   "id": "d1267636-4d37-4fa9-af88-e6bec0a0634e",
+   "expunge": "true"
+  },
+  "status": 200,
+  "body": {
+   "destroyvirtualmachineresponse": {
+    "jobid": "4d213d14-293f-4811-8e5c-a73a41ba0d61"
+   }
+  }
+ },
+ {
+  "label": "expunge-running-job",
+  "command": "queryAsyncJobResult",
+  "args": {
+   "jobid": "4d213d14-293f-4811-8e5c-a73a41ba0d61"
+  },
+  "status": 200,
+  "body": {
+   "queryasyncjobresultresponse": {
+    "accountid": "39886e99-a622-11f1-a89d-ee147cfcbd84",
+    "account": "admin",
+    "domainid": "39883271-a622-11f1-a89d-ee147cfcbd84",
+    "domainpath": "ROOT",
+    "userid": "3988a617-a622-11f1-a89d-ee147cfcbd84",
+    "cmd": "org.apache.cloudstack.api.command.admin.vm.DestroyVMCmdByAdmin",
+    "jobprocstatus": 0,
+    "jobresultcode": 0,
+    "jobresulttype": "object",
+    "jobresult": {
+     "virtualmachine": {
+      "securitygroup": [],
+      "nic": [],
+      "affinitygroup": [],
+      "deleteprotection": false,
+      "tags": []
+     }
+    },
+    "jobinstancetype": "VirtualMachine",
+    "jobinstanceid": "d1267636-4d37-4fa9-af88-e6bec0a0634e",
+    "created": "2026-10-19T07:04:17+0000",
+    "completed": "2026-10-19T07:04:24+0000",
+    "jobid": "4d213d14-293f-4811-8e5c-a73a41ba0d61",
+    "jobstatus": 1
+   }
+  }
+ },
+ {
+  "label": "page-1",
+  "command": "listServiceOfferings",
+  "args": {
+   "pagesize": 1,
+   "page": 1
+  },
+  "status": 200,
+  "body": {
+   "listserviceofferingsresponse": {
+    "count": 2,
+    "serviceoffering": [
+     {
+      "id": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "name": "Small Instance",
+      "state": "Active",
+      "displaytext": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "created": "2026-10-19T06:56:45+0000",
+      "storagetype": "shared",
+      "provisioningtype": "thin",
+      "offerha": false,
+      "limitcpuuse": false,
+      "isvolatile": false,
+      "issystem": false,
+      "defaultuse": false,
+      "iscustomized": false,
+      "rootdisksize": 0,
+      "dynamicscalingenabled": true,
+      "diskofferingstrictness": false,
+      "diskofferingid": "31ea5883-393e-4842-bb48-5717e57ae455",
+      "diskofferingname": "Small Instance",
+      "diskofferingdisplaytext": "Small Instance",
+      "encryptroot": false,
+      "hasannotations": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "page-2",
+  "command": "listServiceOfferings",
+  "args": {
+   "pagesize": 1,
+   "page": 2
+  },
+  "status": 200,
+  "body": {
+   "listserviceofferingsresponse": {
+    "count": 2,
+    "serviceoffering": [
+     {
+      "id": "71862ecf-77d1-450e-a751-ec2e52f947c9",
+      "name": "Medium Instance",
+      "state": "Active",
+      "displaytext": "Medium Instance",
+      "cpunumber": 1,
+      "cpuspeed": 1000,
+      "memory": 1024,
+      "created": "2026-10-19T06:56:45+0000",
+      "storagetype": "shared",
+      "provisioningtype": "thin",
+      "offerha": false,
+      "limitcpuuse": false,
+      "isvolatile": false,
+      "issystem": false,
+      "defaultuse": false,
+      "iscustomized": false,
+      "rootdisksize": 0,
+      "dynamicscalingenabled": true,
+      "diskofferingstrictness": false,
+      "diskofferingid": "c76e0362-318a-46b3-bc30-ae64a56dc6b4",
+      "diskofferingname": "Medium Instance",
+      "diskofferingdisplaytext": "Medium Instance",
+      "encryptroot": false,
+      "hasannotations": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "page-3",
+  "command": "listServiceOfferings",
+  "args": {
+   "pagesize": 1,
+   "page": 3
+  },
+  "status": 200,
+  "body": {
+   "listserviceofferingsresponse": {
+    "count": 2
+   }
+  }
+ },
+ {
+  "label": "page-all",
+  "command": "listServiceOfferings",
+  "args": {
+   "pagesize": 5,
+   "page": 1
+  },
+  "status": 200,
+  "body": {
+   "listserviceofferingsresponse": {
+    "count": 2,
+    "serviceoffering": [
+     {
+      "id": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "name": "Small Instance",
+      "state": "Active",
+      "displaytext": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "created": "2026-10-19T06:56:45+0000",
+      "storagetype": "shared",
+      "provisioningtype": "thin",
+      "offerha": false,
+      "limitcpuuse": false,
+      "isvolatile": false,
+      "issystem": false,
+      "defaultuse": false,
+      "iscustomized": false,
+      "rootdisksize": 0,
+      "dynamicscalingenabled": true,
+      "diskofferingstrictness": false,
+      "diskofferingid": "31ea5883-393e-4842-bb48-5717e57ae455",
+      "diskofferingname": "Small Instance",
+      "diskofferingdisplaytext": "Small Instance",
+      "encryptroot": false,
+      "hasannotations": false
+     },
+     {
+      "id": "71862ecf-77d1-450e-a751-ec2e52f947c9",
+      "name": "Medium Instance",
+      "state": "Active",
+      "displaytext": "Medium Instance",
+      "cpunumber": 1,
+      "cpuspeed": 1000,
+      "memory": 1024,
+      "created": "2026-10-19T06:56:45+0000",
+      "storagetype": "shared",
+      "provisioningtype": "thin",
+      "offerha": false,
+      "limitcpuuse": false,
+      "isvolatile": false,
+      "issystem": false,
+      "defaultuse": false,
+      "iscustomized": false,
+      "rootdisksize": 0,
+      "dynamicscalingenabled": true,
+      "diskofferingstrictness": false,
+      "diskofferingid": "c76e0362-318a-46b3-bc30-ae64a56dc6b4",
+      "diskofferingname": "Medium Instance",
+      "diskofferingdisplaytext": "Medium Instance",
+      "encryptroot": false,
+      "hasannotations": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "page-keyword",
+  "command": "listServiceOfferings",
+  "args": {
+   "pagesize": 1,
+   "page": 1,
+   "keyword": "Medium"
+  },
+  "status": 200,
+  "body": {
+   "listserviceofferingsresponse": {
+    "count": 1,
+    "serviceoffering": [
+     {
+      "id": "71862ecf-77d1-450e-a751-ec2e52f947c9",
+      "name": "Medium Instance",
+      "state": "Active",
+      "displaytext": "Medium Instance",
+      "cpunumber": 1,
+      "cpuspeed": 1000,
+      "memory": 1024,
+      "created": "2026-10-19T06:56:45+0000",
+      "storagetype": "shared",
+      "provisioningtype": "thin",
+      "offerha": false,
+      "limitcpuuse": false,
+      "isvolatile": false,
+      "issystem": false,
+      "defaultuse": false,
+      "iscustomized": false,
+      "rootdisksize": 0,
+      "dynamicscalingenabled": true,
+      "diskofferingstrictness": false,
+      "diskofferingid": "c76e0362-318a-46b3-bc30-ae64a56dc6b4",
+      "diskofferingname": "Medium Instance",
+      "diskofferingdisplaytext": "Medium Instance",
+      "encryptroot": false,
+      "hasannotations": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "page-zero",
+  "command": "listServiceOfferings",
+  "args": {
+   "pagesize": 1,
+   "page": 0
+  },
+  "status": 200,
+  "body": {
+   "listserviceofferingsresponse": {
+    "count": 2,
+    "serviceoffering": [
+     {
+      "id": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "name": "Small Instance",
+      "state": "Active",
+      "displaytext": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "created": "2026-10-19T06:56:45+0000",
+      "storagetype": "shared",
+      "provisioningtype": "thin",
+      "offerha": false,
+      "limitcpuuse": false,
+      "isvolatile": false,
+      "issystem": false,
+      "defaultuse": false,
+      "iscustomized": false,
+      "rootdisksize": 0,
+      "dynamicscalingenabled": true,
+      "diskofferingstrictness": false,
+      "diskofferingid": "31ea5883-393e-4842-bb48-5717e57ae455",
+      "diskofferingname": "Small Instance",
+      "diskofferingdisplaytext": "Small Instance",
+      "encryptroot": false,
+      "hasannotations": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "pagesize-all",
+  "command": "listServiceOfferings",
+  "args": {
+   "pagesize": -1
+  },
+  "status": 200,
+  "body": {
+   "listserviceofferingsresponse": {
+    "count": 2,
+    "serviceoffering": [
+     {
+      "id": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+      "name": "Small Instance",
+      "state": "Active",
+      "displaytext": "Small Instance",
+      "cpunumber": 1,
+      "cpuspeed": 500,
+      "memory": 512,
+      "created": "2026-10-19T06:56:45+0000",
+      "storagetype": "shared",
+      "provisioningtype": "thin",
+      "offerha": false,
+      "limitcpuuse": false,
+      "isvolatile": false,
+      "issystem": false,
+      "defaultuse": false,
+      "iscustomized": false,
+      "rootdisksize": 0,
+      "dynamicscalingenabled": true,
+      "diskofferingstrictness": false,
+      "diskofferingid": "31ea5883-393e-4842-bb48-5717e57ae455",
+      "diskofferingname": "Small Instance",
+      "diskofferingdisplaytext": "Small Instance",
+      "encryptroot": false,
+      "hasannotations": false
+     },
+     {
+      "id": "71862ecf-77d1-450e-a751-ec2e52f947c9",
+      "name": "Medium Instance",
+      "state": "Active",
+      "displaytext": "Medium Instance",
+      "cpunumber": 1,
+      "cpuspeed": 1000,
+      "memory": 1024,
+      "created": "2026-10-19T06:56:45+0000",
+      "storagetype": "shared",
+      "provisioningtype": "thin",
+      "offerha": false,
+      "limitcpuuse": false,
+      "isvolatile": false,
+      "issystem": false,
+      "defaultuse": false,
+      "iscustomized": false,
+      "rootdisksize": 0,
+      "dynamicscalingenabled": true,
+      "diskofferingstrictness": false,
+      "diskofferingid": "c76e0362-318a-46b3-bc30-ae64a56dc6b4",
+      "diskofferingname": "Medium Instance",
+      "diskofferingdisplaytext": "Medium Instance",
+      "encryptroot": false,
+      "hasannotations": false
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "pagesize-zero",
+  "command": "listServiceOfferings",
+  "args": {
+   "pagesize": 0,
+   "page": 1
+  },
+  "status": 200,
+  "body": {
+   "listserviceofferingsresponse": {
+    "count": 2
+   }
+  }
+ },
+ {
+  "label": "pagesize-only",
+  "command": "listServiceOfferings",
+  "args": {
+   "pagesize": 1
+  },
+  "status": 431,
+  "body": {
+   "listserviceofferingsresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 9999,
+    "errortext": "\"page\" parameter is required when \"pagesize\" is specified"
+   }
+  }
+ },
+ {
+  "label": "page-only",
+  "command": "listServiceOfferings",
+  "args": {
+   "page": 1
+  },
+  "status": 431,
+  "body": {
+   "listserviceofferingsresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 9999,
+    "errortext": "\"pagesize\" parameter is required when \"page\" is specified"
+   }
+  }
+ },
+ {
+  "label": "pagesize-zero-alone",
+  "command": "listServiceOfferings",
+  "args": {
+   "pagesize": 0
+  },
+  "status": 431,
+  "body": {
+   "listserviceofferingsresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 9999,
+    "errortext": "\"page\" parameter is required when \"pagesize\" is specified"
+   }
+  }
+ },
+ {
+  "label": "pagesize-all-page",
+  "command": "listServiceOfferings",
+  "args": {
+   "pagesize": -1,
+   "page": 1
+  },
+  "status": 431,
+  "body": {
+   "listserviceofferingsresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 4350,
+    "errortext": "Can't specify page parameter when pagesize is -1 (Unlimited)"
+   }
+  }
+ },
+ {
+  "label": "pagesize-too-big",
+  "command": "listServiceOfferings",
+  "args": {
+   "pagesize": 1000,
+   "page": 1
+  },
+  "status": 431,
+  "body": {
+   "listserviceofferingsresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 4350,
+    "errortext": "Page size can't exceed max allowed page size value: 500"
+   }
+  }
+ },
+ {
+  "label": "page-text",
+  "command": "listServiceOfferings",
+  "args": {
+   "pagesize": 1,
+   "page": "abc"
+  },
+  "status": 431,
+  "body": {
+   "listserviceofferingsresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 9999,
+    "errortext": "Unable to execute API command listserviceofferings due to invalid value abc for parameter page"
+   }
+  }
+ },
+ {
+  "label": "pagesize-text",
+  "command": "listServiceOfferings",
+  "args": {
+   "pagesize": "abc",
+   "page": 1
+  },
+  "status": 431,
+  "body": {
+   "listserviceofferingsresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 9999,
+    "errortext": "Unable to execute API command listserviceofferings due to invalid value abc for parameter pagesize"
+   }
+  }
+ },
+ {
+  "label": "zones-page-past",
+  "command": "listZones",
+  "args": {
+   "pagesize": 1,
+   "page": 2
+  },
+  "status": 200,
+  "body": {
+   "listzonesresponse": {
+    "count": 1
+   }
+  }
+ },
+ {
+  "label": "apis-zones",
+  "command": "listApis",
+  "args": {
+   "name": "listZones"
+  },
+  "status": 200,
+  "body": {
+   "listapisresponse": {
+    "count": 1,
+    "api": [
+     {
+      "name": "listZones",
+      "description": "Lists zones",
+      "isasync": false,
+      "related": "createZone,listZones",
+      "params": [
+       {
+        "name": "storageaccessgroup",
+        "description": "the name of the storage access group",
+        "type": "string",
+        "length": 255,
+        "required": false,
+        "since": "4.21.0"
+       },
+       {
+        "name": "showicon",
+        "description": "Flag to display the resource image for the zones",
+        "type": "boolean",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "available",
+        "description": "True if you want to retrieve all available Zones. False if you only want to return the Zones from which you have at least one Instance. Default is false.",
+        "type": "boolean",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "ids",
+        "description": "the IDs of the zones, mutually exclusive with id",
+        "type": "list",
+        "length": 255,
+        "required": false,
+        "since": "4.19.0",
+        "related": "createZone,listZones,listZones"
+       },
+       {
+        "name": "domainid",
+        "description": "The ID of the domain associated with the zone",
+        "type": "uuid",
+        "length": 255,
+        "required": false,
+        "related": "createDomain,listDomainChildren,listDomains,listDomains,moveDomain"
+       },
+       {
+        "name": "showcapacities",
+        "description": "Flag to display the capacity of the zones",
+        "type": "boolean",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "name",
+        "description": "The name of the zone",
+        "type": "string",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "networktype",
+        "description": "The Network type of the zone that the Instance belongs to",
+        "type": "string",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "pagesize",
+        "description": "",
+        "type": "integer",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "page",
+        "description": "",
+        "type": "integer",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "keyword",
+        "description": "List by keyword",
+        "type": "string",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "id",
+        "description": "The ID of the zone",
+        "type": "uuid",
+        "length": 255,
+        "required": false,
+        "related": "createZone,listZones,listZones"
+       },
+       {
+        "name": "tags",
+        "description": "List zones by resource tags (key/value pairs)",
+        "type": "map",
+        "length": 255,
+        "required": false,
+        "since": "4.3"
+       }
+      ],
+      "response": [
+       {
+        "name": "domainname",
+        "description": "The name of the containing domain, null for public zones",
+        "type": "string"
+       },
+       {
+        "name": "id",
+        "description": "Zone id",
+        "type": "string"
+       },
+       {
+        "name": "name",
+        "description": "Zone name",
+        "type": "string"
+       },
+       {
+        "name": "securitygroupsenabled",
+        "description": "True if security groups support is enabled, false otherwise",
+        "type": "boolean"
+       },
+       {
+        "name": "routerpublicinterfacemaxmtu",
+        "description": "The maximum value the MTU can have on the VR's public interfaces",
+        "type": "integer"
+       },
+       {
+        "name": "ismultiarch",
+        "description": "True, if zone contains clusters and hosts from different CPU architectures",
+        "type": "boolean"
+       },
+       {
+        "name": "routerprivateinterfacemaxmtu",
+        "description": "The maximum value the MTU can have on the VR's private interfaces",
+        "type": "integer"
+       },
+       {
+        "name": "domain",
+        "description": "Network domain name for the Networks in the zone",
+        "type": "string"
+       },
+       {
+        "name": "networktype",
+        "description": "The Network type of the zone; can be Basic or Advanced",
+        "type": "string"
+       },
+       {
+        "name": "displaytext",
+        "description": "The display text of the zone",
+        "type": "string"
+       },
+       {
+        "name": "asnrange",
+        "description": "AS Number Range",
+        "type": "string"
+       },
+       {
+        "name": "zonetoken",
+        "description": "Zone Token",
+        "type": "string"
+       },
+       {
+        "name": "tags",
+        "description": "The list of resource tags associated with zone.",
+        "type": "set",
+        "response": [
+         {
+          "name": "resourceid",
+          "description": "ID of the resource",
+          "type": "string"
+         },
+         {
+          "name": "domainid",
+          "description": "The ID of the domain associated with the tag",
+          "type": "string"
+         },
+         {
+          "name": "key",
+          "description": "Tag key name",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "description": "Tag value",
+          "type": "string"
+         },
+         {
+          "name": "account",
+          "description": "The Account associated with the tag",
+          "type": "string"
+         },
+         {
+          "name": "domain",
+          "description": "The domain associated with the tag",
+          "type": "string"
+         },
+         {
+          "name": "customer",
+          "description": "Customer associated with the tag",
+          "type": "string"
+         },
+         {
+          "name": "projectid",
+          "description": "The project ID the tag belongs to",
+          "type": "string"
+         },
+         {
+          "name": "resourcetype",
+          "description": "Resource type",
+          "type": "string"
+         },
+         {
+          "name": "project",
+          "description": "The project name where tag belongs to",
+          "type": "string"
+         },
+         {
+          "name": "domainpath",
+          "description": "Path of the Domain associated with the tag",
+          "type": "string"
+         }
+        ]
+       },
+       {
+        "name": "allocationstate",
+        "description": "The allocation state of the cluster",
+        "type": "string"
+       },
+       {},
+       {
+        "name": "isnsxenabled",
+        "description": "True, if zone is NSX enabled",
+        "type": "boolean"
+       },
+       {
+        "name": "description",
+        "description": "Zone description",
+        "type": "string"
+       },
+       {
+        "name": "icon",
+        "description": "Base64 string representation of the resource icon",
+        "type": "resourceiconresponse"
+       },
+       {
+        "name": "internaldns1",
+        "description": "The first internal DNS for the Zone",
+        "type": "string"
+       },
+       {
+        "name": "internaldns2",
+        "description": "The second internal DNS for the Zone",
+        "type": "string"
+       },
+       {
+        "name": "jobid",
+        "description": "The UUID of the latest async job acting on this object",
+        "type": "string"
+       },
+       {
+        "name": "storageaccessgroups",
+        "description": "comma-separated list of storage access groups for the zone",
+        "type": "string"
+       },
+       {
+        "name": "jobstatus",
+        "description": "The current status of the latest async job acting on this object",
+        "type": "integer"
+       },
+       {
+        "name": "ip6dns1",
+        "description": "The first IPv6 DNS for the Zone",
+        "type": "string"
+       },
+       {
+        "name": "dns2",
+        "description": "The second DNS for the Zone",
+        "type": "string"
+       },
+       {
+        "name": "dhcpprovider",
+        "description": "The DHCP Provider for the Zone",
+        "type": "string"
+       },
+       {
+        "name": "routedmodeenabled",
+        "description": "True, if routed Network/VPC is enabled",
+        "type": "boolean"
+       },
+       {
+        "name": "resourcedetails",
+        "description": "Meta data associated with the zone (key/value pairs)",
+        "type": "map"
+       },
+       {
+        "name": "type",
+        "description": "The type of the zone - core or edge",
+        "type": "string"
+       },
+       {
+        "name": "hasannotations",
+        "description": "True if the entity/resource has annotations",
+        "type": "boolean"
+       },
+       {
+        "name": "ip6dns2",
+        "description": "The second IPv6 DNS for the Zone",
+        "type": "string"
+       },
+       {
+        "name": "gpuused",
+        "description": "Used GPUs in the Zone",
+        "type": "long"
+       },
+       {
+        "name": "allowuserspecifyvrmtu",
+        "description": "Allow end users to specify VR MTU",
+        "type": "boolean"
+       },
+       {
+        "name": "dns1",
+        "description": "The first DNS for the Zone",
+        "type": "string"
+       },
+       {},
+       {
+        "name": "domainid",
+        "description": "The UUID of the containing domain, null for public zones",
+        "type": "string"
+       },
+       {
+        "name": "localstorageenabled",
+        "description": "True if local storage offering enabled, false otherwise",
+        "type": "boolean"
+       },
+       {
+        "name": "guestcidraddress",
+        "description": "The guest CIDR address for the Zone",
+        "type": "string"
+       },
+       {
+        "name": "gputotal",
+        "description": "Total GPUs in the Zone",
+        "type": "long"
+       },
+       {
+        "name": "capacity",
+        "description": "The capacity of the Zone",
+        "type": "list",
+        "response": [
+         {
+          "name": "zonename",
+          "description": "The Zone name",
+          "type": "string"
+         },
+         {
+          "name": "podid",
+          "description": "The Pod ID",
+          "type": "string"
+         },
+         {
+          "name": "clusterid",
+          "description": "The Cluster ID",
+          "type": "string"
+         },
+         {
+          "name": "tag",
+          "description": "The tag for the capacity type",
+          "type": "string"
+         },
+         {
+          "name": "podname",
+          "description": "The Pod name",
+          "type": "string"
+         },
+         {
+          "name": "percentused",
+          "description": "The percentage of capacity currently in use",
+          "type": "string"
+         },
+         {
+          "name": "name",
+          "description": "The capacity name",
+          "type": "string"
+         },
+         {
+          "name": "capacityused",
+          "description": "The capacity currently in use",
+          "type": "long"
+         },
+         {
+          "name": "type",
+          "description": "The capacity type",
+          "type": "short"
+         },
+         {
+          "name": "capacityallocated",
+          "description": "The capacity currently in allocated",
+          "type": "long"
+         },
+         {
+          "name": "clustername",
+          "description": "The Cluster name",
+          "type": "string"
+         },
+         {
+          "name": "zoneid",
+          "description": "The Zone ID",
+          "type": "string"
+         },
+         {
+          "name": "capacitytotal",
+          "description": "The total capacity available",
+          "type": "long"
+         }
+        ]
+       },
+       {
+        "name": "provider",
+        "description": "External network provider if any",
+        "type": "string"
+       }
+      ],
+      "httprequesttype": "GET"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "apis-deploy",
+  "command": "listApis",
+  "args": {
+   "name": "deployVirtualMachine"
+  },
+  "status": 200,
+  "body": {
+   "listapisresponse": {
+    "count": 1,
+    "api": [
+     {
+      "name": "deployVirtualMachine",
+      "description": "Creates and automatically starts  an Instance based on a service offering, disk offering, and Template.",
+      "isasync": true,
+      "related": "scaleVirtualMachine,removeNicFromVirtualMachine,stopVirtualMachine,updateVMAffinityGroup,attachIso,detachIso,updateVMAffinityGroup,addNicToVirtualMachine,removeNicFromVirtualMachine,updateDefaultNicForVirtualMachine,deployVirtualMachine,destroyVirtualMachine,rebootVirtualMachine,resetPasswordForVirtualMachine,resetSSHKeyForVirtualMachine,restoreVirtualMachine,startVirtualMachine,stopVirtualMachine,updateVirtualMachine,changeServiceForVirtualMachine,revertToVMSnapshot,listVirtualMachines,deployVnfAppliance,listVnfAppliances,listVnfAppliances,createVMFromBackup,importVm",
+      "params": [
+       {
+        "name": "keypair",
+        "description": "name of the ssh key pair used to login to the virtual machine",
+        "type": "string",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "dhcpoptionsnetworklist",
+        "description": "DHCP options which are passed to the VM on start up Example: dhcpoptionsnetworklist[0].dhcp:114=url&dhcpoptionsetworklist[0].networkid=networkid&dhcpoptionsetworklist[0].dhcp:66=www.test.com",
+        "type": "map",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "account",
+        "description": "an optional account for the virtual machine. Must be used with domainId.",
+        "type": "string",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "startvm",
+        "description": "true if start vm after creating; defaulted to true if not specified",
+        "type": "boolean",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "affinitygroupids",
+        "description": "comma separated list of affinity groups id that are going to be applied to the virtual machine. Mutually exclusive with affinitygroupnames parameter",
+        "type": "list",
+        "length": 255,
+        "required": false,
+        "related": ""
+       },
+       {
+        "name": "userdata",
+        "description": "an optional binary data that can be sent to the virtual machine upon a successful deployment. This binary data must be base64 encoded before adding it to the request. Using HTTP GET (via querystring), you can send up to 4KB of data after base64 encoding. Using HTTP POST (via POST body), you can send up to 1MB of data after base64 encoding. You also need to change vm.userdata.max.length value",
+        "type": "string",
+        "length": 1048576,
+        "required": false
+       },
+       {
+        "name": "projectid",
+        "description": "Deploy vm for the project",
+        "type": "uuid",
+        "length": 255,
+        "required": false,
+        "related": ""
+       },
+       {
+        "name": "userdataid",
+        "description": "the ID of the Userdata",
+        "type": "uuid",
+        "length": 255,
+        "required": false,
+        "since": "4.18",
+        "related": ""
+       },
+       {
+        "name": "macaddress",
+        "description": "the mac address for default vm's network",
+        "type": "string",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "properties",
+        "description": "used to specify the vApp properties.",
+        "type": "map",
+        "length": 255,
+        "required": false,
+        "since": "4.15"
+       },
+       {
+        "name": "securitygroupids",
+        "description": "comma separated list of security groups id that going to be applied to the virtual machine. Should be passed only when vm is created from a zone with Basic Network support. Mutually exclusive with securitygroupnames parameter",
+        "type": "list",
+        "length": 255,
+        "required": false,
+        "related": ""
+       },
+       {
+        "name": "iodriverpolicy",
+        "description": "Controls specific policies on IO",
+        "type": "string",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "blankinstance",
+        "description": "Whether to create a blank instance without storage and network",
+        "type": "boolean",
+        "length": 255,
+        "required": false,
+        "since": "4.23.0"
+       },
+       {
+        "name": "leaseduration",
+        "description": "Number of days instance is leased for.",
+        "type": "integer",
+        "length": 255,
+        "required": false,
+        "since": "4.21.0"
+       },
+       {
+        "name": "snapshotid",
+        "description": "",
+        "type": "uuid",
+        "length": 255,
+        "required": false,
+        "since": "4.21",
+        "related": "copySnapshot,listSnapshots"
+       },
+       {
+        "name": "displayvm",
+        "description": "an optional field, whether to the display the vm to the end user or not.",
+        "type": "boolean",
+        "length": 255,
+        "required": false,
+        "since": "4.2"
+       },
+       {
+        "name": "iothreadsenabled",
+        "description": "IOThreads are dedicated event loop threads for supported disk devices to perform block I/O requests in order to improve scalability especially on an SMP host/guest with many LUNs.",
+        "type": "boolean",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "hypervisor",
+        "description": "the hypervisor on which to deploy the virtual machine. The parameter is required and respected only when hypervisor info is not set on the ISO/Template passed to the call",
+        "type": "string",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "bootintosetup",
+        "description": "Boot into hardware setup or not (ignored if startVm = false, only valid for vmware)",
+        "type": "boolean",
+        "length": 255,
+        "required": false,
+        "since": "4.15.0.0"
+       },
+       {
+        "name": "nicmultiqueuenumber",
+        "description": "The number of queues for multiqueue NICs.",
+        "type": "integer",
+        "length": 255,
+        "required": false,
+        "since": "4.18"
+       },
+       {
+        "name": "podid",
+        "description": "Destination Pod ID to deploy the Instance to - parameter available for root admin only",
+        "type": "uuid",
+        "length": 255,
+        "required": false,
+        "since": "4.13",
+        "related": "createManagementNetworkIpRange"
+       },
+       {
+        "name": "externaldetails",
+        "description": "Details in key/value pairs using format externaldetails[i].keyname=keyvalue. Example: externaldetails[0].server.type=typevalue",
+        "type": "map",
+        "length": 255,
+        "required": false,
+        "since": "4.21.0"
+       },
+       {
+        "name": "templateid",
+        "description": "The ID of the Template for the Instance",
+        "type": "uuid",
+        "length": 255,
+        "required": false,
+        "related": "listIsos,registerTemplate,listTemplates,createTemplate,copyTemplate,registerTemplate,registerIso,copyIso,listIsos,registerVnfTemplate,registerVnfTemplate,listVnfTemplates,updateVnfTemplate,updateVnfTemplate"
+       },
+       {
+        "name": "overridediskofferingid",
+        "description": "the ID of the disk offering for the virtual machine to be used for root volume instead of the disk offering mapped in service offering.In case of virtual machine deploying from ISO, then the diskofferingid specified for root volume is ignored and uses this override disk offering id",
+        "type": "uuid",
+        "length": 255,
+        "required": false,
+        "since": "4.17",
+        "related": ""
+       },
+       {
+        "name": "deploymentplanner",
+        "description": "Deployment planner to use for vm allocation. Available to ROOT admin only",
+        "type": "string",
+        "length": 255,
+        "required": false,
+        "since": "4.4"
+       },
+       {
+        "name": "bootmode",
+        "description": "Boot Mode [Legacy] or [Secure] Applicable when Boot Type Selected is UEFI, otherwise Legacy only for BIOS. Not applicable with VMware if the template is marked as deploy-as-is, as we honour what is defined in the template.",
+        "type": "string",
+        "length": 255,
+        "required": false,
+        "since": "4.14.0.0"
+       },
+       {
+        "name": "ip6address",
+        "description": "the ipv6 address for default vm's network",
+        "type": "string",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "domainid",
+        "description": "an optional domainId for the virtual machine. If the account parameter is used, domainId must also be used. If account is NOT provided then virtual machine will be assigned to the caller account and domain.",
+        "type": "uuid",
+        "length": 255,
+        "required": false,
+        "related": "listDomains"
+       },
+       {
+        "name": "rootdisksize",
+        "description": "Optional field to resize root disk on deploy. Value is in GB. Only applies to template-based deployments. Analogous to details[0].rootdisksize, which takes precedence over this parameter if both are provided",
+        "type": "long",
+        "length": 255,
+        "required": false,
+        "since": "4.4"
+       },
+       {
+        "name": "userdatadetails",
+        "description": "used to specify the parameters values for the variables in userdata.",
+        "type": "map",
+        "length": 255,
+        "required": false,
+        "since": "4.18"
+       },
+       {
+        "name": "nicnetworklist",
+        "description": "VMware only: used to specify network mapping of a vApp VMware template registered \"as-is\". Example nicnetworklist[0].ip=Nic-101&nicnetworklist[0].network=uuid",
+        "type": "map",
+        "length": 255,
+        "required": false,
+        "since": "4.15"
+       },
+       {
+        "name": "zoneid",
+        "description": "availability zone for the virtual machine",
+        "type": "uuid",
+        "length": 255,
+        "required": true,
+        "related": "listZones"
+       },
+       {
+        "name": "displayname",
+        "description": "an optional user generated name for the virtual machine",
+        "type": "string",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "securitygroupnames",
+        "description": "comma separated list of security groups names that going to be applied to the virtual machine. Should be passed only when vm is created from a zone with Basic Network support. Mutually exclusive with securitygroupids parameter",
+        "type": "list",
+        "length": 255,
+        "required": false,
+        "related": ""
+       },
+       {
+        "name": "datadisksdetails",
+        "description": "Disk offering details for creating multiple data volumes. Mutually exclusive with diskOfferingId. Example: datadisksdetails[0].diskofferingid=a2a73a84-19db-4852-8930-dfddef053341&datadisksdetails[0].size=10&datadisksdetails[0].miniops=100&datadisksdetails[0].maxiops=200&datadisksdetails[0].kmskeyid=<uuid>",
+        "type": "map",
+        "length": 255,
+        "required": false,
+        "since": "4.21.0"
+       },
+       {
+        "name": "nicpackedvirtqueuesenabled",
+        "description": "Enable packed virtqueues or not.",
+        "type": "boolean",
+        "length": 255,
+        "required": false,
+        "since": "4.18"
+       },
+       {
+        "name": "copyimagetags",
+        "description": "if true the image tags (if any) will be copied to the VM, default value is false",
+        "type": "boolean",
+        "length": 255,
+        "required": false,
+        "since": "4.13"
+       },
+       {
+        "name": "ipaddress",
+        "description": "the ip address for default vm's network",
+        "type": "string",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "iptonetworklist",
+        "description": "ip to network mapping. Can't be specified with networkIds parameter. Example: iptonetworklist[0].ip=10.10.10.11&iptonetworklist[0].ipv6=fc00:1234:5678::abcd&iptonetworklist[0].networkid=uuid&iptonetworklist[0].mac=aa:bb:cc:dd:ee::ff - requests to use ip 10.10.10.11 in network id=uuid",
+        "type": "map",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "customid",
+        "description": "An optional field, in case you want to set a custom id to the resource. Allowed to Root Admins only",
+        "type": "string",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "size",
+        "description": "the arbitrary size for the DATADISK volume. Mutually exclusive with diskOfferingId",
+        "type": "long",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "keyboard",
+        "description": "an optional keyboard device type for the virtual machine. valid value can be one of de,de-ch,es,es-latam,fi,fr,fr-be,fr-ch,is,it,jp,nl-be,no,pt,uk,us",
+        "type": "string",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "rootdiskkmskeyid",
+        "description": "ID of the KMS Key to use for root disk encryption",
+        "type": "uuid",
+        "length": 255,
+        "required": false,
+        "since": "4.23.0",
+        "related": "createKMSKey,updateKMSKey"
+       },
+       {
+        "name": "keypairs",
+        "description": "names of the ssh key pairs used to login to the virtual machine",
+        "type": "list",
+        "length": 255,
+        "required": false,
+        "since": "4.17"
+       },
+       {
+        "name": "name",
+        "description": "host name for the virtual machine",
+        "type": "string",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "networkids",
+        "description": "list of network ids used by virtual machine. Can't be specified with ipToNetworkList parameter",
+        "type": "list",
+        "length": 255,
+        "required": false,
+        "related": "createNetwork,createNetwork,updateNetwork,listNetworks,migrateNetwork"
+       },
+       {
+        "name": "datadiskofferinglist",
+        "description": "datadisk template to disk-offering mapping; an optional parameter used to create additional data disks from datadisk templates; can't be specified with diskOfferingId parameter",
+        "type": "map",
+        "length": 255,
+        "required": false,
+        "since": "4.11"
+       },
+       {
+        "name": "hostid",
+        "description": "destination Host ID to deploy the VM to - parameter available for root admin only",
+        "type": "uuid",
+        "length": 255,
+        "required": false,
+        "related": "declareHostAsDegraded,reconnectHost"
+       },
+       {
+        "name": "dynamicscalingenabled",
+        "description": "true if virtual machine needs to be dynamically scalable",
+        "type": "boolean",
+        "length": 255,
+        "required": false,
+        "since": "4.16"
+       },
+       {
+        "name": "group",
+        "description": "an optional group for the virtual machine",
+        "type": "string",
+        "length": 255,
+        "required": false
+       },
+       {
+        "name": "boottype",
+        "description": "Guest VM Boot option either custom[UEFI] or default boot [BIOS]. Not applicable with VMware if the template is marked as deploy-as-is, as we honour what is defined in the template.",
+        "type": "string",
+        "length": 255,
+        "required": false,
+        "since": "4.14.0.0"
+       },
+       {
+        "name": "leaseexpiryaction",
+        "description": "Lease expiry action, valid values are STOP and DESTROY",
+        "type": "string",
+        "length": 255,
+        "required": false,
+        "since": "4.21.0"
+       },
+       {
+        "name": "affinitygroupnames",
+        "description": "comma separated list of affinity groups names that are going to be applied to the virtual machine.Mutually exclusive with affinitygroupids parameter",
+        "type": "list",
+        "length": 255,
+        "required": false,
+        "related": ""
+       },
+       {
+        "name": "extraconfig",
+        "description": "an optional URL encoded string that can be passed to the virtual machine upon successful deployment",
+        "type": "string",
+        "length": 5120,
+        "required": false,
+        "since": "4.12"
+       },
+       {
+        "name": "volumeid",
+        "description": "",
+        "type": "uuid",
+        "length": 255,
+        "required": false,
+        "since": "4.21",
+        "related": "createVolume,listVolumes,recoverVolume,attachVolume,createVolume,detachVolume,migrateVolume,resizeVolume,updateVolume,uploadVolume,listVolumes,destroyVolume,recoverVolume"
+       },
+       {
+        "name": "diskofferingid",
+        "description": "the ID of the disk offering for the virtual machine. If the template is of ISO format, the diskOfferingId is for the root disk volume. Otherwise this parameter is used to indicate the offering for the data disk volume. If the templateId parameter passed is from a Template object, the diskOfferingId refers to a DATA Disk Volume created. If the templateId parameter passed is from an ISO object, the diskOfferingId refers to a ROOT Disk Volume created.",
+        "type": "uuid",
+        "length": 255,
+        "required": false,
+        "related": ""
+       },
+       {
+        "name": "password",
+        "description": "The password of the virtual machine. If null, a random password will be generated for the VM.",
+        "type": "string",
+        "length": 255,
+        "required": false,
+        "since": "4.19.0.0"
+       },
+       {
+        "name": "details",
+        "description": "used to specify the custom parameters. 'extraconfig' is not allowed to be passed in details",
+        "type": "map",
+        "length": 255,
+        "required": false,
+        "since": "4.3"
+       },
+       {
+        "name": "clusterid",
+        "description": "Destination Cluster ID to deploy the Instance to - parameter available for root admin only",
+        "type": "uuid",
+        "length": 255,
+        "required": false,
+        "since": "4.13",
+        "related": "addCluster"
+       },
+       {
+        "name": "serviceofferingid",
+        "description": "The ID of the Service offering for the Instance",
+        "type": "uuid",
+        "length": 255,
+        "required": true,
+        "related": "updateServiceOffering,listServiceOfferings"
+       }
+      ],
+      "response": [
+       {
+        "name": "jobstatus",
+        "description": "The current status of the latest async job acting on this object",
+        "type": "integer"
+       },
+       {
+        "name": "backupofferingid",
+        "description": "The ID of the backup offering of the Instance",
+        "type": "string"
+       },
+       {
+        "name": "pooltype",
+        "description": "The pool type of the Instance",
+        "type": "string"
+       },
+       {
+        "name": "account",
+        "description": "The Account associated with the Instance",
+        "type": "string"
+       },
+       {
+        "name": "project",
+        "description": "The project name of the Instance",
+        "type": "string"
+       },
+       {
+        "name": "group",
+        "description": "The group name of the Instance",
+        "type": "string"
+       },
+       {
+        "name": "servicestate",
+        "description": "State of the Service from LB rule",
+        "type": "string"
+       },
+       {
+        "name": "ostypeid",
+        "description": "OS type id of the Instance",
+        "type": "string"
+       },
+       {
+        "name": "lastupdated",
+        "description": "The date when this Instance was updated last time",
+        "type": "date"
+       },
+       {
+        "name": "diskkbswrite",
+        "description": "The Instance's disk write in KiB",
+        "type": "long"
+       },
+       {
+        "name": "serviceofferingname",
+        "description": "The name of the service offering of the Instance",
+        "type": "string"
+       },
+       {
+        "name": "templateid",
+        "description": "The ID of the Template for the Instance. A -1 is returned if the Instance was created from an ISO file.",
+        "type": "string"
+       },
+       {
+        "name": "displayname",
+        "description": "User generated name. The name of the Instance is returned if no displayname exists.",
+        "type": "string"
+       },
+       {
+        "name": "deleteprotection",
+        "description": "true if vm has delete protection.",
+        "type": "boolean"
+       },
+       {
+        "name": "icon",
+        "description": "Base64 string representation of the resource icon",
+        "type": "resourceiconresponse"
+       },
+       {
+        "name": "autoscalevmgroupname",
+        "description": "Name of AutoScale Instance group",
+        "type": "string"
+       },
+       {
+        "name": "rootdeviceid",
+        "description": "Device ID of the root volume",
+        "type": "long"
+       },
+       {
+        "name": "jobid",
+        "description": "The UUID of the latest async job acting on this object",
+        "type": "string"
+       },
+       {
+        "name": "forvirtualnetwork",
+        "description": "The virtual Network for the service offering",
+        "type": "boolean"
+       },
+       {
+        "name": "gpucardid",
+        "description": "the ID of the gpu card to which service offering is linked",
+        "type": "string"
+       },
+       {
+        "name": "autoscalevmgroupid",
+        "description": "ID of AutoScale Instance group",
+        "type": "string"
+       },
+       {
+        "name": "vgpu",
+        "description": "The vGPU type used by the Instance",
+        "type": "string"
+       },
+       {
+        "name": "memory",
+        "description": "The memory allocated for the Instance",
+        "type": "integer"
+       },
+       {
+        "name": "id",
+        "description": "The ID of the Instance",
+        "type": "string"
+       },
+       {
+        "name": "templateformat",
+        "description": "The format of the template for the virtual machine",
+        "type": "string"
+       },
+       {
+        "name": "diskkbsread",
+        "description": "The Instance's disk read in KiB",
+        "type": "long"
+       },
+       {
+        "name": "networkkbswrite",
+        "description": "The outgoing Network traffic on the host in KiB",
+        "type": "long"
+       },
+       {
+        "name": "hostid",
+        "description": "The ID of the host for the Instance",
+        "type": "string"
+       },
+       {
+        "name": "templatedisplaytext",
+        "description": "An alternate display text of the Template for the Instance",
+        "type": "string"
+       },
+       {
+        "name": "publicip",
+        "description": "Public IP address id associated with Instance via Static NAT rule",
+        "type": "string"
+       },
+       {
+        "name": "projectid",
+        "description": "The project ID of the Instance",
+        "type": "string"
+       },
+       {
+        "name": "userdataid",
+        "description": "The ID of userdata used for the Instance",
+        "type": "string"
+       },
+       {
+        "name": "vnfdetails",
+        "description": "VNF details",
+        "type": "map"
+       },
+       {},
+       {
+        "name": "name",
+        "description": "The name of the Instance",
+        "type": "string"
+       },
+       {
+        "name": "userdata",
+        "description": "Base64 string containing the user data",
+        "type": "string"
+       },
+       {
+        "name": "isos",
+        "description": "All ISOs attached to the Instance, keyed by cdrom slot. The first entry mirrors isoid/isoname for back-compat.",
+        "type": "list",
+        "response": [
+         {
+          "name": "displaytext",
+          "description": "The display text of the attached ISO",
+          "type": "string"
+         },
+         {
+          "name": "deviceseq",
+          "description": "The cdrom slot that holds this ISO (3=hdc, 4=hdd, ...)",
+          "type": "integer"
+         },
+         {
+          "name": "name",
+          "description": "The name of the attached ISO",
+          "type": "string"
+         },
+         {
+          "name": "id",
+          "description": "The ID of the attached ISO",
+          "type": "string"
+         },
+         {
+          "name": "bootable",
+          "description": "Whether this is the bootable ISO for the VM",
+          "type": "boolean"
+         }
+        ]
+       },
+       {
+        "name": "ipaddress",
+        "description": "the VM's primary IP address",
+        "type": "string"
+       },
+       {
+        "name": "videoram",
+        "description": "the video RAM size in MB",
+        "type": "long"
+       },
+       {
+        "name": "domain",
+        "description": "The name of the domain in which the Instance exists",
+        "type": "string"
+       },
+       {
+        "name": "securitygroup",
+        "description": "List of security groups associated with the Instance",
+        "type": "set",
+        "response": [
+         {
+          "name": "id",
+          "description": "The ID of the security group",
+          "type": "string"
+         },
+         {
+          "name": "virtualmachineids",
+          "description": "The list of Instance IDs associated with this Security Group",
+          "type": "set"
+         },
+         {
+          "name": "domain",
+          "description": "The domain name of the security group",
+          "type": "string"
+         },
+         {
+          "name": "description",
+          "description": "The description of the security group",
+          "type": "string"
+         },
+         {
+          "name": "ingressrule",
+          "description": "The list of ingress rules associated with the security group",
+          "type": "set",
+          "response": [
+           {
+            "name": "ruleid",
+            "description": "The ID of the security group rule",
+            "type": "string"
+           },
+           {
+            "name": "securitygroupname",
+            "description": "Security group name",
+            "type": "string"
+           },
+           {
+            "name": "tags",
+            "description": "The list of resource tags associated with the rule",
+            "type": "set",
+            "response": [
+             {
+              "name": "resourceid",
+              "description": "ID of the resource",
+              "type": "string"
+             },
+             {
+              "name": "domainpath",
+              "description": "Path of the Domain associated with the tag",
+              "type": "string"
+             },
+             {
+              "name": "key",
+              "description": "Tag key name",
+              "type": "string"
+             },
+             {
+              "name": "account",
+              "description": "The Account associated with the tag",
+              "type": "string"
+             },
+             {
+              "name": "resourcetype",
+              "description": "Resource type",
+              "type": "string"
+             },
+             {
+              "name": "projectid",
+              "description": "The project ID the tag belongs to",
+              "type": "string"
+             },
+             {
+              "name": "project",
+              "description": "The project name where tag belongs to",
+              "type": "string"
+             },
+             {
+              "name": "value",
+              "description": "Tag value",
+              "type": "string"
+             },
+             {
+              "name": "customer",
+              "description": "Customer associated with the tag",
+              "type": "string"
+             },
+             {
+              "name": "domainid",
+              "description": "The ID of the domain associated with the tag",
+              "type": "string"
+             },
+             {
+              "name": "domain",
+              "description": "The domain associated with the tag",
+              "type": "string"
+             }
+            ]
+           },
+           {
+            "name": "cidr",
+            "description": "The CIDR notation for the base IP address of the security group rule",
+            "type": "string"
+           },
+           {
+            "name": "protocol",
+            "description": "The protocol of the security group rule",
+            "type": "string"
+           },
+           {
+            "name": "icmpcode",
+            "description": "The code for the ICMP message response",
+            "type": "integer"
+           },
+           {
+            "name": "startport",
+            "description": "The starting IP of the security group rule",
+            "type": "integer"
+           },
+           {
+            "name": "account",
+            "description": "Account owning the security group rule",
+            "type": "string"
+           },
+           {
+            "name": "icmptype",
+            "description": "The type of the ICMP message response",
+            "type": "integer"
+           },
+           {
+            "name": "endport",
+            "description": "The ending IP of the security group rule ",
+            "type": "integer"
+           }
+          ]
+         },
+         {
+          "name": "virtualmachinecount",
+          "description": "The number of Instances associated with this Security Group",
+          "type": "integer"
+         },
+         {
+          "name": "name",
+          "description": "The name of the security group",
+          "type": "string"
+         },
+         {
+          "name": "account",
+          "description": "The Account owning the security group",
+          "type": "string"
+         },
+         {
+          "name": "tags",
+          "description": "The list of resource tags associated with the rule",
+          "type": "set",
+          "response": [
+           {
+            "name": "customer",
+            "description": "Customer associated with the tag",
+            "type": "string"
+           },
+           {
+            "name": "key",
+            "description": "Tag key name",
+            "type": "string"
+           },
+           {
+            "name": "resourcetype",
+            "description": "Resource type",
+            "type": "string"
+           },
+           {
+            "name": "domainid",
+            "description": "The ID of the domain associated with the tag",
+            "type": "string"
+           },
+           {
+            "name": "projectid",
+            "description": "The project ID the tag belongs to",
+            "type": "string"
+           },
+           {
+            "name": "project",
+            "description": "The project name where tag belongs to",
+            "type": "string"
+           },
+           {
+            "name": "resourceid",
+            "description": "ID of the resource",
+            "type": "string"
+           },
+           {
+            "name": "domainpath",
+            "description": "Path of the Domain associated with the tag",
+            "type": "string"
+           },
+           {
+            "name": "value",
+            "description": "Tag value",
+            "type": "string"
+           },
+           {
+            "name": "account",
+            "description": "The Account associated with the tag",
+            "type": "string"
+           },
+           {
+            "name": "domain",
+            "description": "The domain associated with the tag",
+            "type": "string"
+           }
+          ]
+         },
+         {
+          "name": "domainid",
+          "description": "The domain ID of the security group",
+          "type": "string"
+         },
+         {
+          "name": "projectid",
+          "description": "The project id of the group",
+          "type": "string"
+         },
+         {
+          "name": "project",
+          "description": "The project name of the group",
+          "type": "string"
+         },
+         {
+          "name": "egressrule",
+          "description": "The list of egress rules associated with the security group",
+          "type": "set",
+          "response": [
+           {
+            "name": "endport",
+            "description": "The ending IP of the security group rule ",
+            "type": "integer"
+           },
+           {
+            "name": "securitygroupname",
+            "description": "Security group name",
+            "type": "string"
+           },
+           {
+            "name": "account",
+            "description": "Account owning the security group rule",
+            "type": "string"
+           },
+           {
+            "name": "protocol",
+            "description": "The protocol of the security group rule",
+            "type": "string"
+           },
+           {
+            "name": "startport",
+            "description": "The starting IP of the security group rule",
+            "type": "integer"
+           },
+           {
+            "name": "icmpcode",
+            "description": "The code for the ICMP message response",
+            "type": "integer"
+           },
+           {
+            "name": "ruleid",
+            "description": "The ID of the security group rule",
+            "type": "string"
+           },
+           {
+            "name": "tags",
+            "description": "The list of resource tags associated with the rule",
+            "type": "set",
+            "response": [
+             {
+              "name": "resourceid",
+              "description": "ID of the resource",
+              "type": "string"
+             },
+             {
+              "name": "projectid",
+              "description": "The project ID the tag belongs to",
+              "type": "string"
+             },
+             {
+              "name": "key",
+              "description": "Tag key name",
+              "type": "string"
+             },
+             {
+              "name": "customer",
+              "description": "Customer associated with the tag",
+              "type": "string"
+             },
+             {
+              "name": "domainid",
+              "description": "The ID of the domain associated with the tag",
+              "type": "string"
+             },
+             {
+              "name": "account",
+              "description": "The Account associated with the tag",
+              "type": "string"
+             },
+             {
+              "name": "resourcetype",
+              "description": "Resource type",
+              "type": "string"
+             },
+             {
+              "name": "domainpath",
+              "description": "Path of the Domain associated with the tag",
+              "type": "string"
+             },
+             {
+              "name": "value",
+              "description": "Tag value",
+              "type": "string"
+             },
+             {
+              "name": "project",
+              "description": "The project name where tag belongs to",
+              "type": "string"
+             },
+             {
+              "name": "domain",
+              "description": "The domain associated with the tag",
+              "type": "string"
+             }
+            ]
+           },
+           {
+            "name": "icmptype",
+            "description": "The type of the ICMP message response",
+            "type": "integer"
+           },
+           {
+            "name": "cidr",
+            "description": "The CIDR notation for the base IP address of the security group rule",
+            "type": "string"
+           }
+          ]
+         },
+         {
+          "name": "domainpath",
+          "description": "path of the Domain the security group belongs to",
+          "type": "string"
+         }
+        ]
+       },
+       {
+        "name": "zonename",
+        "description": "The name of the availability zone for the Instance",
+        "type": "string"
+       },
+       {
+        "name": "sentbytes",
+        "description": "The total number of Network traffic bytes sent",
+        "type": "long"
+       },
+       {
+        "name": "zoneid",
+        "description": "The ID of the availability zone for the Instance",
+        "type": "string"
+       },
+       {
+        "name": "guestosid",
+        "description": "OS type ID of the Instance",
+        "type": "string"
+       },
+       {
+        "name": "isodisplaytext",
+        "description": "An alternate display text of the ISO attached to the Instance",
+        "type": "string"
+       },
+       {
+        "name": "groupid",
+        "description": "The group ID of the Instance",
+        "type": "string"
+       },
+       {
+        "name": "memorykbs",
+        "description": "The memory used by the Instance in KiB",
+        "type": "long"
+       },
+       {
+        "name": "details",
+        "description": "Instance details in key/value pairs.",
+        "type": "map"
+       },
+       {
+        "name": "templatename",
+        "description": "The name of the Template for the Instance",
+        "type": "string"
+       },
+       {
+        "name": "vmtype",
+        "description": "User VM type",
+        "type": "string"
+       },
+       {
+        "name": "diskofferingid",
+        "description": "The ID of the disk offering of the Instance. This parameter should not be used for retrieving disk offering details of DATA volumes. Use listVolumes API instead",
+        "type": "string"
+       },
+       {
+        "name": "password",
+        "description": "The password (if exists) of the Instance",
+        "type": "string"
+       },
+       {
+        "name": "state",
+        "description": "The state of the Instance",
+        "type": "string"
+       },
+       {
+        "name": "memoryintfreekbs",
+        "description": "The internal memory (KiB) that's free in Instance or zero if it can not be calculated",
+        "type": "long"
+       },
+       {
+        "name": "isoid",
+        "description": "The ID of the ISO attached to the Instance",
+        "type": "string"
+       },
+       {
+        "name": "tags",
+        "description": "The list of resource tags associated",
+        "type": "set",
+        "response": [
+         {
+          "name": "resourcetype",
+          "description": "Resource type",
+          "type": "string"
+         },
+         {
+          "name": "domain",
+          "description": "The domain associated with the tag",
+          "type": "string"
+         },
+         {
+          "name": "account",
+          "description": "The Account associated with the tag",
+          "type": "string"
+         },
+         {
+          "name": "domainid",
+          "description": "The ID of the domain associated with the tag",
+          "type": "string"
+         },
+         {
+          "name": "projectid",
+          "description": "The project ID the tag belongs to",
+          "type": "string"
+         },
+         {
+          "name": "project",
+          "description": "The project name where tag belongs to",
+          "type": "string"
+         },
+         {
+          "name": "resourceid",
+          "description": "ID of the resource",
+          "type": "string"
+         },
+         {
+          "name": "key",
+          "description": "Tag key name",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "description": "Tag value",
+          "type": "string"
+         },
+         {
+          "name": "customer",
+          "description": "Customer associated with the tag",
+          "type": "string"
+         },
+         {
+          "name": "domainpath",
+          "description": "Path of the Domain associated with the tag",
+          "type": "string"
+         }
+        ]
+       },
+       {
+        "name": "boottype",
+        "description": "Guest Instance Boot Type",
+        "type": "string"
+       },
+       {
+        "name": "userdatadetails",
+        "description": "List of variables and values for the variables declared in userdata",
+        "type": "string"
+       },
+       {
+        "name": "cpuspeed",
+        "description": "The speed of each vCPU",
+        "type": "integer"
+       },
+       {
+        "name": "maxresolutionx",
+        "description": "the maximum X resolution",
+        "type": "long"
+       },
+       {
+        "name": "gpucardname",
+        "description": "the name of the gpu card to which service offering is linked",
+        "type": "string"
+       },
+       {
+        "name": "templatetype",
+        "description": "The type of the template for the virtual machine",
+        "type": "string"
+       },
+       {
+        "name": "affinitygroup",
+        "description": "List of Affinity groups associated with the Instance",
+        "type": "set",
+        "response": [
+         {
+          "name": "id",
+          "description": "The ID of the affinity group",
+          "type": "string"
+         },
+         {
+          "name": "description",
+          "description": "The description of the affinity group",
+          "type": "string"
+         },
+         {
+          "name": "dedicatedresources",
+          "description": "dedicated resources associated with this affinity group",
+          "type": "list"
+         },
+         {
+          "name": "domainid",
+          "description": "The domain ID of the affinity group",
+          "type": "string"
+         },
+         {
+          "name": "project",
+          "description": "The project name of the affinity group",
+          "type": "string"
+         },
+         {
+          "name": "name",
+          "description": "The name of the affinity group",
+          "type": "string"
+         },
+         {
+          "name": "projectid",
+          "description": "The project ID of the affinity group",
+          "type": "string"
+         },
+         {
+          "name": "domainpath",
+          "description": "path of the Domain the affinity group belongs to",
+          "type": "string"
+         },
+         {
+          "name": "type",
+          "description": "The type of the affinity group",
+          "type": "string"
+         },
+         {
+          "name": "virtualmachineIds",
+          "description": "Instance IDs associated with this affinity group",
+          "type": "list"
+         },
+         {
+          "name": "account",
+          "description": "The account owning the affinity group",
+          "type": "string"
+         },
+         {
+          "name": "domain",
+          "description": "The domain name of the affinity group",
+          "type": "string"
+         }
+        ]
+       },
+       {
+        "name": "alloweddetails",
+        "description": "List of allowed Vm details as comma separated string if VM instance settings are read from OVA.",
+        "type": "string"
+       },
+       {
+        "name": "instancename",
+        "description": "Instance name of the user Instance; this parameter is returned to the ROOT admin only",
+        "type": "string"
+       },
+       {
+        "name": "userid",
+        "description": "The User's ID who deployed the Instance",
+        "type": "string"
+       },
+       {
+        "name": "haenable",
+        "description": "True if high-availability is enabled, false otherwise",
+        "type": "boolean"
+       },
+       {
+        "name": "nic",
+        "description": "The list of NICs associated with Instance",
+        "type": "set",
+        "response": [
+         {
+          "name": "nicdnsname",
+          "description": "DNS name associated with this NIC's IP address",
+          "type": "string"
+         },
+         {
+          "name": "macaddress",
+          "description": "True if NIC is default, false otherwise",
+          "type": "string"
+         },
+         {
+          "name": "ipaddress",
+          "description": "The IP address of the NIC",
+          "type": "string"
+         },
+         {
+          "name": "publicipid",
+          "description": "Public IP address ID associated with this NIC via Static NAT rule",
+          "type": "string"
+         },
+         {
+          "name": "secondaryip",
+          "description": "The Secondary IPv4 addr of NIC",
+          "type": "list"
+         },
+         {
+          "name": "vpcname",
+          "description": "Name of the VPC to which the NIC belongs",
+          "type": "string"
+         },
+         {
+          "name": "publicip",
+          "description": "Public IP address associated with this NIC via Static NAT rule",
+          "type": "string"
+         },
+         {
+          "name": "ipaddresses",
+          "description": "IP addresses associated with NIC found for unmanaged Instance",
+          "type": "list"
+         },
+         {
+          "name": "isolatedpvlan",
+          "description": "The isolated private VLAN if available",
+          "type": "integer"
+         },
+         {
+          "name": "gateway",
+          "description": "The gateway of the NIC",
+          "type": "string"
+         },
+         {
+          "name": "deviceid",
+          "description": "Device ID for the Network when plugged into the Instance",
+          "type": "string"
+         },
+         {
+          "name": "enabled",
+          "description": "whether the NIC is enabled or not",
+          "type": "boolean"
+         },
+         {
+          "name": "id",
+          "description": "The ID of the NIC",
+          "type": "string"
+         },
+         {
+          "name": "traffictype",
+          "description": "The traffic type of the NIC",
+          "type": "string"
+         },
+         {
+          "name": "isolatedpvlantype",
+          "description": "The isolated private VLAN type if available",
+          "type": "string"
+         },
+         {
+          "name": "networkname",
+          "description": "The name of the corresponding Network",
+          "type": "string"
+         },
+         {
+          "name": "broadcasturi",
+          "description": "The broadcast URI of the NIC",
+          "type": "string"
+         },
+         {
+          "name": "isdefault",
+          "description": "True if NIC is default, false otherwise",
+          "type": "boolean"
+         },
+         {
+          "name": "vpcid",
+          "description": "ID of the VPC to which the NIC belongs",
+          "type": "string"
+         },
+         {
+          "name": "nsxlogicalswitchport",
+          "description": "Id of the NSX Logical Switch Port (if NSX based), null otherwise",
+          "type": "string"
+         },
+         {
+          "name": "ip6address",
+          "description": "The IPv6 address of Network",
+          "type": "string"
+         },
+         {
+          "name": "networkid",
+          "description": "The ID of the corresponding Network",
+          "type": "string"
+         },
+         {
+          "name": "isolationuri",
+          "description": "The isolation URI of the NIC",
+          "type": "string"
+         },
+         {
+          "name": "vlanid",
+          "description": "ID of the VLAN/VNI if available",
+          "type": "integer"
+         },
+         {
+          "name": "mtu",
+          "description": "MTU configured on the NIC",
+          "type": "integer"
+         },
+         {
+          "name": "ip6cidr",
+          "description": "The CIDR of IPv6 Network",
+          "type": "string"
+         },
+         {
+          "name": "nsxlogicalswitch",
+          "description": "Id of the NSX Logical Switch (if NSX based), null otherwise",
+          "type": "string"
+         },
+         {
+          "name": "extradhcpoption",
+          "description": "The extra DHCP options on the NIC",
+          "type": "list"
+         },
+         {
+          "name": "netmask",
+          "description": "The netmask of the NIC",
+          "type": "string"
+         },
+         {
+          "name": "adaptertype",
+          "description": "Type of adapter if available",
+          "type": "string"
+         },
+         {
+          "name": "virtualmachineid",
+          "description": "Id of the Instance to which the NIC belongs",
+          "type": "string"
+         },
+         {
+          "name": "type",
+          "description": "The type of the NIC",
+          "type": "string"
+         },
+         {
+          "name": "ip6gateway",
+          "description": "The gateway of IPv6 Network",
+          "type": "string"
+         }
+        ]
+       },
+       {
+        "name": "networkkbsread",
+        "description": "The incoming Network traffic on the Instance in KiB",
+        "type": "long"
+       },
+       {
+        "name": "memorytargetkbs",
+        "description": "The target memory in Instance (KiB)",
+        "type": "long"
+       },
+       {
+        "name": "domainpath",
+        "description": "Path of the domain in which the virtual machine exists",
+        "type": "string"
+       },
+       {
+        "name": "diskiowrite",
+        "description": "The write (IO) of disk on the Instance",
+        "type": "long"
+       },
+       {
+        "name": "publicipid",
+        "description": "Public IP address id associated with Instance via Static NAT rule",
+        "type": "string"
+       },
+       {
+        "name": "domainid",
+        "description": "The ID of the domain in which the Instance exists",
+        "type": "string"
+       },
+       {},
+       {
+        "name": "receivedbytes",
+        "description": "The total number of Network traffic bytes received",
+        "type": "long"
+       },
+       {
+        "name": "leaseduration",
+        "description": "Instance lease duration in days",
+        "type": "integer"
+       },
+       {
+        "name": "vnfnics",
+        "description": "NICs of the VNF appliance",
+        "type": "list"
+       },
+       {
+        "name": "hostname",
+        "description": "The name of the host for the Instance",
+        "type": "string"
+       },
+       {
+        "name": "isoname",
+        "description": "The name of the ISO attached to the Instance",
+        "type": "string"
+       },
+       {
+        "name": "backupprovider",
+        "description": "The name of the backup provider of the offering attached to the Instance",
+        "type": "string"
+       },
+       {},
+       {
+        "name": "maxheads",
+        "description": "the maximum number of display heads",
+        "type": "long"
+       },
+       {
+        "name": "isdynamicallyscalable",
+        "description": "True if Instance contains XS/VMWare tools in order to support dynamic scaling of Instance CPU/memory.",
+        "type": "boolean"
+       },
+       {
+        "name": "bootmode",
+        "description": "Guest Instance Boot Mode",
+        "type": "string"
+       },
+       {
+        "name": "hasannotations",
+        "description": "True if the entity/resource has annotations",
+        "type": "boolean"
+       },
+       {
+        "name": "vgpuprofileid",
+        "description": "the ID of the vgpu profile to which service offering is linked",
+        "type": "string"
+       },
+       {
+        "name": "maxresolutiony",
+        "description": "the maximum Y resolution",
+        "type": "long"
+       },
+       {
+        "name": "passwordenabled",
+        "description": "True if the password rest feature is enabled, false otherwise",
+        "type": "boolean"
+       },
+       {
+        "name": "username",
+        "description": "The User's name who deployed the Instance",
+        "type": "string"
+       },
+       {
+        "name": "arch",
+        "description": "CPU arch of the VM",
+        "type": "string"
+       },
+       {
+        "name": "osdisplayname",
+        "description": "OS name of the Instance",
+        "type": "string"
+       },
+       {
+        "name": "created",
+        "description": "The date when this Instance was created",
+        "type": "date"
+       },
+       {
+        "name": "userdataname",
+        "description": "The name of userdata used for the Instance",
+        "type": "string"
+       },
+       {
+        "name": "vgpuprofilename",
+        "description": "the name of the vgpu profile to which service offering is linked",
+        "type": "string"
+       },
+       {
+        "name": "hypervisor",
+        "description": "The hypervisor on which the Template runs",
+        "type": "string"
+       },
+       {
+        "name": "leaseexpiryaction",
+        "description": "Instance lease expiry action",
+        "type": "string"
+       },
+       {
+        "name": "gpucount",
+        "description": "the count of GPUs on the virtual machine",
+        "type": "integer"
+       },
+       {
+        "name": "serviceofferingid",
+        "description": "The ID of the service offering of the Instance",
+        "type": "string"
+       },
+       {
+        "name": "hostcontrolstate",
+        "description": "The control state of the host for the Instance",
+        "type": "string"
+       },
+       {
+        "name": "backupofferingname",
+        "description": "The name of the backup offering of the Instance",
+        "type": "string"
+       },
+       {
+        "name": "isomaxcount",
+        "description": "Maximum number of ISOs that may be attached to this Instance, after applying the cluster-scoped vm.iso.max.count and the hypervisor's own cap.",
+        "type": "integer"
+       },
+       {
+        "name": "displayvm",
+        "description": "An optional field whether to the display the Instance to the end user or not.",
+        "type": "boolean"
+       },
+       {
+        "name": "userdatapolicy",
+        "description": "The userdata override policy with the userdata provided while deploying Instance",
+        "type": "string"
+       },
+       {
+        "name": "keypairs",
+        "description": "SSH key-pairs",
+        "type": "string"
+       },
+       {
+        "name": "diskioread",
+        "description": "The read (IO) of disk on the Instance",
+        "type": "long"
+       },
+       {
+        "name": "cpunumber",
+        "description": "The number of vCPUs this Instance is using",
+        "type": "integer"
+       },
+       {
+        "name": "cpuused",
+        "description": "The amount of the Instance's CPU currently used",
+        "type": "string"
+       },
+       {
+        "name": "rootdevicetype",
+        "description": "Device type of the root volume",
+        "type": "string"
+       },
+       {
+        "name": "readonlydetails",
+        "description": "List of read-only Instance details as comma separated string.",
+        "type": "string"
+       },
+       {
+        "name": "leaseexpirydate",
+        "description": "Instance lease expiry date",
+        "type": "date"
+       },
+       {
+        "name": "diskofferingname",
+        "description": "The name of the disk offering of the Instance. This parameter should not be used for retrieving disk offering details of DATA volumes. Use listVolumes API instead",
+        "type": "string"
+       }
+      ],
+      "httprequesttype": "POST"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "label": "apis-unknown",
+  "command": "listApis",
+  "args": {
+   "name": "nope"
+  },
+  "status": 530,
+  "body": {
+   "listapisresponse": {
+    "uuidList": [],
+    "errorcode": 530,
+    "cserrorcode": 9999,
+    "errortext": "Api Discovery plugin was unable to find an api by that name or process any apis"
+   }
+  }
+ },
+ {
+  "label": "zones-name-miss",
+  "command": "listZones",
+  "args": {
+   "name": "nope"
+  },
+  "status": 200,
+  "body": {
+   "listzonesresponse": {}
+  }
+ },
+ {
+  "label": "zones-unknown-id",
+  "command": "listZones",
+  "args": {
+   "id": "nope"
+  },
+  "status": 431,
+  "body": {
+   "listzonesresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 9999,
+    "errortext": "Unable to execute API command listzones due to invalid value. Invalid parameter id value=nope due to incorrect long value format, or entity does not exist or due to incorrect parameter annotation for the field in api cmd class."
+   }
+  }
+ },
+ {
+  "label": "vms-unknown-id",
+  "command": "listVirtualMachines",
+  "args": {
+   "id": "nope"
+  },
+  "status": 431,
+  "body": {
+   "listvirtualmachinesresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 9999,
+    "errortext": "Unable to execute API command listvirtualmachines due to invalid value. Invalid parameter id value=nope due to incorrect long value format, or entity does not exist or due to incorrect parameter annotation for the field in api cmd class."
+   }
+  }
+ },
+ {
+  "label": "volumes-unknown-vm",
+  "command": "listVolumes",
+  "args": {
+   "virtualmachineid": "nope"
+  },
+  "status": 431,
+  "body": {
+   "listvolumesresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 9999,
+    "errortext": "Unable to execute API command listvolumes due to invalid value. Invalid parameter virtualmachineid value=nope due to incorrect long value format, or entity does not exist or due to incorrect parameter annotation for the field in api cmd class."
+   }
+  }
+ },
+ {
+  "label": "offerings-unknown-id",
+  "command": "listServiceOfferings",
+  "args": {
+   "id": "nope"
+  },
+  "status": 431,
+  "body": {
+   "listserviceofferingsresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 9999,
+    "errortext": "Unable to execute API command listserviceofferings due to invalid value. Invalid parameter id value=nope due to incorrect long value format, or entity does not exist or due to incorrect parameter annotation for the field in api cmd class."
+   }
+  }
+ },
+ {
+  "label": "templates-no-filter",
+  "command": "listTemplates",
+  "args": {},
+  "status": 431,
+  "body": {
+   "listtemplatesresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 9999,
+    "errortext": "Unable to execute API command listtemplates due to missing parameter templatefilter"
+   }
+  }
+ },
+ {
+  "label": "templates-bad-filter",
+  "command": "listTemplates",
+  "args": {
+   "templatefilter": "bogus"
+  },
+  "status": 431,
+  "body": {
+   "listtemplatesresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 9999,
+    "errortext": "No enum constant com.cloud.template.VirtualMachineTemplate.TemplateFilter.bogus"
+   }
+  }
+ },
+ {
+  "label": "err-unknown-id",
+  "command": "stopVirtualMachine",
+  "args": {
+   "id": "nope"
+  },
+  "status": 431,
+  "body": {
+   "stopvirtualmachineresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 9999,
+    "errortext": "Unable to execute API command stopvirtualmachine due to invalid value. Invalid parameter id value=nope due to incorrect long value format, or entity does not exist or due to incorrect parameter annotation for the field in api cmd class."
+   }
+  }
+ },
+ {
+  "label": "err-missing-param",
+  "command": "deployVirtualMachine",
+  "args": {},
+  "status": 431,
+  "body": {
+   "deployvirtualmachineresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 9999,
+    "errortext": "Unable to execute API command deployvirtualmachine due to missing parameter serviceofferingid"
+   }
+  }
+ },
+ {
+  "label": "err-bad-zone",
+  "command": "deployVirtualMachine",
+  "args": {
+   "zoneid": "nope",
+   "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+   "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090"
+  },
+  "status": 431,
+  "body": {
+   "deployvirtualmachineresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 9999,
+    "errortext": "Unable to execute API command deployvirtualmachine due to invalid value. Invalid parameter zoneid value=nope due to incorrect long value format, or entity does not exist or due to incorrect parameter annotation for the field in api cmd class."
+   }
+  }
+ },
+ {
+  "label": "deploy-bad-template",
+  "command": "deployVirtualMachine",
+  "args": {
+   "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+   "templateid": "nope",
+   "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090"
+  },
+  "status": 431,
+  "body": {
+   "deployvirtualmachineresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 9999,
+    "errortext": "Unable to execute API command deployvirtualmachine due to invalid value. Invalid parameter templateid value=nope due to incorrect long value format, or entity does not exist or due to incorrect parameter annotation for the field in api cmd class."
+   }
+  }
+ },
+ {
+  "label": "deploy-no-template",
+  "command": "deployVirtualMachine",
+  "args": {
+   "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+   "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090"
+  },
+  "status": 530,
+  "body": {
+   "deployvirtualmachineresponse": {
+    "uuidList": [],
+    "errorcode": 530,
+    "cserrorcode": 4250,
+    "errortext": "Please provide only one of the following parameters - template ID, volume ID or snapshot ID"
+   }
+  }
+ },
+ {
+  "label": "deploy-bad-network",
+  "command": "deployVirtualMachine",
+  "args": {
+   "zoneid": "f4dd3f53-62e6-4159-ac9c-8230a502a269",
+   "templateid": "50f15514-a622-11f1-a89d-ee147cfcbd84",
+   "serviceofferingid": "71ee49d5-474d-4ddb-81bd-c754dbdc7090",
+   "networkids": "nope"
+  },
+  "status": 431,
+  "body": {
+   "deployvirtualmachineresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 9999,
+    "errortext": "Unable to execute API command deployvirtualmachine due to invalid value. Invalid parameter networkids value=nope due to incorrect long value format, or entity does not exist or due to incorrect parameter annotation for the field in api cmd class."
+   }
+  }
+ },
+ {
+  "label": "err-bad-job",
+  "command": "queryAsyncJobResult",
+  "args": {
+   "jobid": "nope"
+  },
+  "status": 431,
+  "body": {
+   "queryasyncjobresultresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 9999,
+    "errortext": "Unable to execute API command queryasyncjobresult due to invalid value. Invalid parameter jobid value=nope due to incorrect long value format, or entity does not exist or due to incorrect parameter annotation for the field in api cmd class."
+   }
+  }
+ },
+ {
+  "label": "err-no-job",
+  "command": "queryAsyncJobResult",
+  "args": {},
+  "status": 431,
+  "body": {
+   "queryasyncjobresultresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 4350,
+    "errortext": "Expected parameter job id or parameters resource type and resource id"
+   }
+  }
+ },
+ {
+  "label": "start-no-id",
+  "command": "startVirtualMachine",
+  "args": {},
+  "status": 431,
+  "body": {
+   "startvirtualmachineresponse": {
+    "uuidList": [],
+    "errorcode": 431,
+    "cserrorcode": 9999,
+    "errortext": "Unable to execute API command startvirtualmachine due to missing parameter id"
+   }
+  }
+ },
+ {
+  "label": "err-unknown-command",
+  "command": "createUniverse",
+  "args": {},
+  "status": 432,
+  "body": {
+   "errorresponse": {
+    "uuidList": [],
+    "errorcode": 432,
+    "cserrorcode": 9999,
+    "errortext": "Unknown API command: createUniverse"
+   }
+  }
+ },
+ {
+  "label": "no-command",
+  "command": "",
+  "args": {},
+  "status": 200,
+  "body": {
+   "_unparsed": ""
+  }
+ },
+ {
+  "label": "no-auth",
+  "command": "listZones",
+  "args": {},
+  "status": 401,
+  "body": {
+   "listzonesresponse": {
+    "uuidList": [],
+    "errorcode": 401,
+    "errortext": "unable to verify user credentials"
+   }
+  }
+ }
+]

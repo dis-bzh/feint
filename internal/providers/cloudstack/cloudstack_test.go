@@ -59,7 +59,7 @@ func (c *client) call(method string, v url.Values) (int, map[string]any) {
 	if err != nil {
 		c.t.Fatalf("%s %s: %v", method, v.Get("command"), err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	raw, _ := io.ReadAll(resp.Body)
 	var envelope map[string]map[string]any
 	if err := json.Unmarshal(raw, &envelope); err != nil {
@@ -199,7 +199,7 @@ func TestAnUnservedCommandIsMarkedAsNotEmulated(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	if resp.Header.Get(emulator.NotEmulatedHeader) != cloudstack.Name {
 		t.Fatalf("refusal not marked: %v", resp.Header)
 	}
@@ -280,7 +280,7 @@ func (c *client) callWhole(method string, v map[string][]string) (int, map[strin
 	if err != nil {
 		c.t.Fatal(err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	raw, _ := io.ReadAll(resp.Body)
 	var body map[string]any
 	if err := json.Unmarshal(raw, &body); err != nil {

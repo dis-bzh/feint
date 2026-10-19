@@ -129,6 +129,24 @@ settle("deploy-3-job", ack3)
 settle("expunge-running-job", call("expunge-running", "destroyVirtualMachine", id=vm3, expunge="true"))
 
 # Refusals and the shapes of lists that match nothing.
+# Pagination: page and pagesize go together, count is the total and not the size of the
+# page, and a page past the end keeps the count and loses its items.
+for label, kw in [
+    ("page-1", dict(pagesize=1, page=1)), ("page-2", dict(pagesize=1, page=2)), ("page-3", dict(pagesize=1, page=3)),
+    ("page-all", dict(pagesize=5, page=1)), ("page-keyword", dict(pagesize=1, page=1, keyword="Medium")),
+    ("page-zero", dict(pagesize=1, page=0)), ("pagesize-all", dict(pagesize=-1)),
+    ("pagesize-zero", dict(pagesize=0, page=1)),
+    ("pagesize-only", dict(pagesize=1)), ("page-only", dict(page=1)), ("pagesize-zero-alone", dict(pagesize=0)),
+    ("pagesize-all-page", dict(pagesize=-1, page=1)), ("pagesize-too-big", dict(pagesize=1000, page=1)),
+    ("page-text", dict(pagesize=1, page="abc")), ("pagesize-text", dict(pagesize="abc", page=1)),
+]:
+    call(label, "listServiceOfferings", **kw)
+call("zones-page-past", "listZones", pagesize=1, page=2)
+
+# What the server says of its own commands, which is what cmk builds its command set from.
+call("apis-zones", "listApis", name="listZones")
+call("apis-deploy", "listApis", name="deployVirtualMachine")
+call("apis-unknown", "listApis", name="nope")
 call("zones-name-miss", "listZones", name="nope")
 call("zones-unknown-id", "listZones", id="nope")
 call("vms-unknown-id", "listVirtualMachines", id="nope")

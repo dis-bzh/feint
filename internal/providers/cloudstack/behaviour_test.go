@@ -205,7 +205,7 @@ func TestARequestWithNoCommandIsAnsweredEmpty(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	body, _ := io.ReadAll(resp.Body)
 	if resp.StatusCode != http.StatusOK || len(body) != 0 {
 		t.Errorf("%d %q", resp.StatusCode, body)
@@ -273,5 +273,70 @@ func TestTheRootVolumeFollowsItsMachine(t *testing.T) {
 	if status, body := c.call("GET", signed("listVolumes", "virtualmachineid", "nope")); status != 431 ||
 		!strings.Contains(body["errortext"].(string), "Invalid parameter virtualmachineid value=nope") {
 		t.Errorf("unknown machine: %d %v", status, body)
+	}
+}
+
+// page and pagesize, with the rules the server applies (oracle.py, the page-* steps):
+// count is the total the filters matched and not the size of the page, a page past
+// the end keeps the count and loses its items, and the two parameters go together.
+func TestPagesCountTheTotalAndPageTheItems(t *testing.T) {
+	c := newClient(t)
+	names := func(v url.Values) (int, []string) {
+		body := c.ok("GET", v)
+		var got []string
+		for _, o := range body["serviceoffering"].([]any) {
+			got = append(got, o.(map[string]any)["name"].(string))
+		}
+		return int(body["count"].(float64)), got
+	}
+	cases := []struct {
+		name  string
+		extra []string
+		count int
+		items []string
+	}{
+		{"first page", []string{"pagesize", "1", "page", "1"}, 2, []string{"feint.small"}},
+		{"second page", []string{"pagesize", "1", "page", "2"}, 2, []string{"feint.medium"}},
+		{"everything on one page", []string{"pagesize", "5", "page", "1"}, 2, []string{"feint.small", "feint.medium"}},
+		{"a page below the first is the first", []string{"pagesize", "1", "page", "0"}, 2, []string{"feint.small"}},
+		{"-1 asks for everything", []string{"pagesize", "-1"}, 2, []string{"feint.small", "feint.medium"}},
+		{"the count is the matches, not the page", []string{"pagesize", "1", "page", "1", "keyword", "medium"}, 1, []string{"feint.medium"}},
+	}
+	for _, tc := range cases {
+		count, items := names(signed("listServiceOfferings", tc.extra...))
+		if count != tc.count || strings.Join(items, ",") != strings.Join(tc.items, ",") {
+			t.Errorf("%s: count %d items %v, want %d %v", tc.name, count, items, tc.count, tc.items)
+		}
+	}
+
+	// Past the end: the count survives and the items key is gone.
+	past := c.ok("GET", signed("listServiceOfferings", "pagesize", "1", "page", "3"))
+	if _, has := past["serviceoffering"]; has || past["count"] != float64(2) {
+		t.Errorf("a page past the end must keep its count and lose its items: %v", past)
+	}
+
+	refused := []struct {
+		name   string
+		extra  []string
+		cs     float64
+		errtxt string
+	}{
+		{"pagesize without page", []string{"pagesize", "1"}, 9999, `"page" parameter is required when "pagesize" is specified`},
+		{"page without pagesize", []string{"page", "1"}, 9999, `"pagesize" parameter is required when "page" is specified`},
+		{"-1 takes no page", []string{"pagesize", "-1", "page", "1"}, 4350, "Can't specify page parameter when pagesize is -1 (Unlimited)"},
+		{"more than the server's bound", []string{"pagesize", "1000", "page", "1"}, 4350, "Page size can't exceed max allowed page size value: 500"},
+		{"a page that is not a number", []string{"pagesize", "1", "page", "abc"}, 9999, "due to invalid value abc for parameter page"},
+		{"a page size that is not a number", []string{"pagesize", "abc", "page", "1"}, 9999, "due to invalid value abc for parameter pagesize"},
+	}
+	for _, tc := range refused {
+		status, body := c.call("GET", signed("listServiceOfferings", tc.extra...))
+		if status != 431 || body["cserrorcode"] != tc.cs || !strings.Contains(body["errortext"].(string), tc.errtxt) {
+			t.Errorf("%s: %d %v", tc.name, status, body)
+		}
+	}
+	// page is read before pagesize, so a request wrong in both is refused for the page.
+	_, both := c.call("GET", signed("listServiceOfferings", "page", "abc", "pagesize", "abc"))
+	if !strings.Contains(both["errortext"].(string), "for parameter page") {
+		t.Errorf("both wrong: %v", both)
 	}
 }

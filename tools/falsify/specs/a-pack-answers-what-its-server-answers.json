@@ -1,0 +1,55 @@
+{
+  "package": "./internal/providers/cloudstack/",
+  "mutations": [
+    {
+      "label": "a zone carries a field the server never answers (an invented format)",
+      "file": "internal/providers/cloudstack/catalog.go",
+      "find": "\t\t\"isnsxenabled\": false, \"ismultiarch\": false, \"asnrange\": \"\", \"routedmodeenabled\": true,",
+      "replace": "\t\t\"isnsxenabled\": false, \"ismultiarch\": false, \"asnrange\": \"\", \"routedmodeenabled\": true, \"invented\": 1,",
+      "test": "TestEveryObjectCarriesExactlyTheFieldsTheSimulatorAnswers"
+    },
+    {
+      "label": "the same invention, caught by the contract the observer validates every answer against",
+      "file": "internal/providers/cloudstack/catalog.go",
+      "find": "\t\t\"isnsxenabled\": false, \"ismultiarch\": false, \"asnrange\": \"\", \"routedmodeenabled\": true,",
+      "replace": "\t\t\"isnsxenabled\": false, \"ismultiarch\": false, \"asnrange\": \"\", \"routedmodeenabled\": true, \"invented\": 1,",
+      "test": "TestThePackViolatesNoContractWhilePlayingEveryHistory"
+    },
+    {
+      "label": "a zone omits a field the server always answers",
+      "file": "internal/providers/cloudstack/catalog.go",
+      "find": "\t\t\"isnsxenabled\": false, \"ismultiarch\": false, \"asnrange\": \"\", \"routedmodeenabled\": true,",
+      "replace": "\t\t\"isnsxenabled\": false, \"ismultiarch\": false, \"routedmodeenabled\": true,",
+      "test": "TestEveryObjectCarriesExactlyTheFieldsTheSimulatorAnswers"
+    },
+    {
+      "label": "count is the size of the page and not the total the filters matched",
+      "file": "internal/providers/cloudstack/catalog.go",
+      "find": "\tbody := map[string]any{\"count\": len(items)}",
+      "replace": "\tbody := map[string]any{\"count\": len(items)*0 + page.end - page.start}",
+      "test": "TestPagesCountTheTotalAndPageTheItems"
+    },
+    {
+      "label": "pagesize=-1 alone is refused instead of meaning everything",
+      "file": "internal/providers/cloudstack/catalog.go",
+      "find": "\tcase size == -1 && rawPage == \"\":",
+      "replace": "\tcase size == -1 && rawPage == \"\" && false:",
+      "test": "TestPagesCountTheTotalAndPageTheItems"
+    },
+    {
+      "label": "a list by an id the cloud never held is empty instead of a 431",
+      "file": "internal/providers/cloudstack/catalog.go",
+      "find": "\treturn unknownEntity(\"id\", id)",
+      "replace": "\t_ = unknownEntity(\"id\", id)\n\treturn nil",
+      "test": "TestAnExpungedMachineLeavesARowAndNothingElse"
+    },
+    {
+      "label": "starting a running machine succeeds, where the server accepts the command and fails the job",
+      "file": "internal/providers/cloudstack/vms.go",
+      "find": "\t\tcase stateRunning:",
+      "replace": "\t\tcase stateRunning + \"x\":",
+      "test": "TestAStateErrorTravelsInTheJobNotInTheStatus"
+    }
+  ],
+  "note": "Every mutation here is a way the first version of the pack disagreed with the real CloudStack 4.23.0.0 server (internal/providers/cloudstack/testdata/simulator-4.23.0.0-recording.json holds what the server said), or a way the contract it is held to could be satisfied emptily. The first two carry the same invention to two different guards: the shape test compares field sets with the recording in both directions, and the contract test makes the observer validate every answer as it is produced; either alone leaves a hole the other covers. The fourth and fifth are paging, which the contract itself polices through PageBound, so a pack that mishandles it is wrong in a way the conformance run reports. The last is the failure that cost the most to find: the server answers HTTP 200 and a jobid, and the refusal travels in the job."
+}
