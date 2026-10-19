@@ -1,0 +1,27 @@
+{
+  "package": "./internal/cli/",
+  "mutations": [
+    {
+      "label": "an experimental pack is mounted whether or not it was asked for",
+      "file": "internal/cli/cli.go",
+      "find": "\treturn withExperimental(env, packs, os.Getenv(\"FEINT_EXPERIMENTAL_PACKS\"))",
+      "replace": "\treturn withExperimental(env, packs, \"cloudstack\"+os.Getenv(\"FEINT_EXPERIMENTAL_PACKS\"))",
+      "test": "TestAnExperimentalPackIsMountedOnlyWhenAsked"
+    },
+    {
+      "label": "the product's coverage tables count an experimental pack",
+      "file": "internal/cli/docs.go",
+      "find": "\t\tif _, experimental := experimentalPacks[provider]; experimental {",
+      "replace": "\t\tif _, experimental := experimentalPacks[provider]; experimental && false {",
+      "test": "TestTheTablesLeaveAnExperimentalPackOut"
+    },
+    {
+      "label": "a name nobody publishes is skipped instead of refused, and the operator serves without the pack they asked for",
+      "file": "internal/cli/cli.go",
+      "find": "\t\t\treturn nil, fmt.Errorf(\"FEINT_EXPERIMENTAL_PACKS: no experimental pack %q (there is %s)\", name, strings.Join(known, \", \"))",
+      "replace": "\t\t\t_, _ = fmt.Errorf(\"skipped %q\", name), strings.Join(known, \", \")\n\t\t\tcontinue",
+      "test": "TestAnExperimentalPackIsMountedOnlyWhenAsked"
+    }
+  ],
+  "note": "The README, `feint status` and the page count what is mounted by default. An experimental pack is mounted only on request, so letting its coverage artefact reach those tables would make `feint docs --check` pass or fail with the shell it ran in, which is the property TestTheGatesVerdictDoesNotDependOnTheEnvironment exists to hold. The first mutation is the opposite failure: the pack leaks into the default mount and every default run answers a CloudStack nobody asked for."
+}

@@ -89,6 +89,14 @@ case "$MODE" in
     "$FEINT" coverage --provider exoscale --contract contracts/exoscale.json \
       --baseline coverage/exoscale-baseline.json \
       --artefact coverage/exoscale-coverage.json || status=$?
+    # CloudStack is experimental and not mounted unless asked for, so the gate asks.
+    # It reads the committed contract and nothing else: the answer the contract was
+    # extracted from is a running server, which no runner has, so what this watches
+    # is the pack against the artefact. Refreshing the artefact is tools/contract/
+    # update.sh, from a simulator.
+    FEINT_EXPERIMENTAL_PACKS=cloudstack "$FEINT" coverage --provider cloudstack --contract contracts/cloudstack.json \
+      --baseline coverage/cloudstack-baseline.json \
+      --artefact coverage/cloudstack-coverage.json || status=$?
     exit $status
     ;;
   update)
@@ -107,6 +115,10 @@ case "$MODE" in
       --baseline coverage/exoscale-baseline.json --write-baseline
     "$FEINT" coverage --provider exoscale --contract contracts/exoscale.json \
       --format json > coverage/exoscale-coverage.json
+    FEINT_EXPERIMENTAL_PACKS=cloudstack "$FEINT" coverage --provider cloudstack --contract contracts/cloudstack.json \
+      --baseline coverage/cloudstack-baseline.json --write-baseline
+    FEINT_EXPERIMENTAL_PACKS=cloudstack "$FEINT" coverage --provider cloudstack --contract contracts/cloudstack.json \
+      --format json > coverage/cloudstack-coverage.json
     # The README's coverage tables are generated from the artefacts just written,
     # so they cannot be stale by the time the pull request is opened.
     "$FEINT" docs
