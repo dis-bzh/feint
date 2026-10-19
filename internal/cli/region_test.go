@@ -3,6 +3,8 @@ package cli
 import (
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -88,5 +90,30 @@ func TestAnExperimentalPackIsMountedOnlyWhenAsked(t *testing.T) {
 	t.Setenv("FEINT_EXPERIMENTAL_PACKS", "atlantis")
 	if _, err := packsFor(emulator.DefaultEnv()); err == nil || !strings.Contains(err.Error(), "cloudstack") {
 		t.Errorf("an unknown experimental pack must refuse and name the known ones, got %v", err)
+	}
+}
+
+// An experimental pack's coverage artefact is committed beside the others and
+// read by none of the product's tables. Without the skip in loadCoverage the README
+// generator would count a pack that is mounted only when somebody asks for it, and
+// `feint docs --check` would pass or fail with the shell it ran in.
+func TestTheTablesLeaveAnExperimentalPackOut(t *testing.T) {
+	dir := filepath.Join("..", "..", "coverage")
+	for name := range experimentalPacks {
+		if _, err := os.Stat(filepath.Join(dir, name+"-coverage.json")); err != nil {
+			t.Fatalf("the artefact of %s is not committed, so this would compare nothing: %v", name, err)
+		}
+	}
+	reports, err := loadCoverage(dir)
+	if err != nil {
+		t.Fatalf("load the coverage artefacts: %v", err)
+	}
+	if len(reports) == 0 {
+		t.Fatal("no coverage artefact was loaded, so the skip is not what was measured")
+	}
+	for _, rep := range reports {
+		if _, experimental := experimentalPacks[rep.Provider]; experimental {
+			t.Errorf("the tables count %s, an experimental pack", rep.Provider)
+		}
 	}
 }
