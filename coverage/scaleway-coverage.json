@@ -1,9 +1,9 @@
 {
   "provider": "scaleway",
-  "total": 544,
+  "total": 546,
   "implemented": 202,
   "declined": 342,
-  "unknown": 0,
+  "unknown": 2,
   "orphans": null,
   "products": [
     {
@@ -24,17 +24,17 @@
     },
     {
       "product": "baremetal",
-      "total": 37,
+      "total": 39,
       "implemented": 2,
       "declined": 35,
-      "unknown": 0,
+      "unknown": 2,
       "versions": [
         {
           "version": "v1",
-          "total": 33,
+          "total": 35,
           "implemented": 2,
           "declined": 31,
-          "unknown": 0
+          "unknown": 2
         },
         {
           "version": "v3",
@@ -219,10 +219,10 @@
     },
     {
       "group": "baremetal",
-      "total": 37,
+      "total": 39,
       "implemented": 2,
       "declined": 35,
-      "unknown": 0
+      "unknown": 2
     },
     {
       "group": "block",
@@ -556,11 +556,23 @@
       "status": "declined"
     },
     {
+      "operation": "baremetal/v1/API.UpdateServerCommitment",
+      "product": "baremetal",
+      "version": "v1",
+      "status": "unknown"
+    },
+    {
       "operation": "baremetal/v1/API.UpdateSetting",
       "product": "baremetal",
       "reason": "the product's settings are per-project switches on the real account, one type in the SDK today (smtp: whether a project's servers may send mail), and nothing here sends anything",
       "version": "v1",
       "status": "declined"
+    },
+    {
+      "operation": "baremetal/v1/API.UpgradeServerCommitment",
+      "product": "baremetal",
+      "version": "v1",
+      "status": "unknown"
     },
     {
       "operation": "baremetal/v1/API.ValidatePartitioningSchema",
