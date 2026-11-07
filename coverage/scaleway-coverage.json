@@ -1,9 +1,9 @@
 {
   "provider": "scaleway",
-  "total": 544,
+  "total": 548,
   "implemented": 202,
   "declined": 342,
-  "unknown": 0,
+  "unknown": 4,
   "orphans": null,
   "products": [
     {
@@ -24,17 +24,17 @@
     },
     {
       "product": "baremetal",
-      "total": 37,
+      "total": 39,
       "implemented": 2,
       "declined": 35,
-      "unknown": 0,
+      "unknown": 2,
       "versions": [
         {
           "version": "v1",
-          "total": 33,
+          "total": 35,
           "implemented": 2,
           "declined": 31,
-          "unknown": 0
+          "unknown": 2
         },
         {
           "version": "v3",
@@ -132,17 +132,17 @@
     },
     {
       "product": "lb",
-      "total": 107,
+      "total": 109,
       "implemented": 43,
       "declined": 64,
-      "unknown": 0,
+      "unknown": 2,
       "versions": [
         {
           "version": "v1",
-          "total": 107,
+          "total": 109,
           "implemented": 43,
           "declined": 64,
-          "unknown": 0
+          "unknown": 2
         }
       ]
     },
@@ -219,10 +219,10 @@
     },
     {
       "group": "baremetal",
-      "total": 37,
+      "total": 39,
       "implemented": 2,
       "declined": 35,
-      "unknown": 0
+      "unknown": 2
     },
     {
       "group": "block",
@@ -254,10 +254,10 @@
     },
     {
       "group": "lb",
-      "total": 107,
+      "total": 109,
       "implemented": 43,
       "declined": 64,
-      "unknown": 0
+      "unknown": 2
     },
     {
       "group": "marketplace",
@@ -556,11 +556,23 @@
       "status": "declined"
     },
     {
+      "operation": "baremetal/v1/API.UpdateServerCommitment",
+      "product": "baremetal",
+      "version": "v1",
+      "status": "unknown"
+    },
+    {
       "operation": "baremetal/v1/API.UpdateSetting",
       "product": "baremetal",
       "reason": "the product's settings are per-project switches on the real account, one type in the SDK today (smtp: whether a project's servers may send mail), and nothing here sends anything",
       "version": "v1",
       "status": "declined"
+    },
+    {
+      "operation": "baremetal/v1/API.UpgradeServerCommitment",
+      "product": "baremetal",
+      "version": "v1",
+      "status": "unknown"
     },
     {
       "operation": "baremetal/v1/API.ValidatePartitioningSchema",
@@ -2833,6 +2845,12 @@
       "status": "implemented"
     },
     {
+      "operation": "lb/v1/ZonedAPI.AttachIpamIP",
+      "product": "lb",
+      "version": "v1",
+      "status": "unknown"
+    },
+    {
       "operation": "lb/v1/ZonedAPI.AttachPrivateNetwork",
       "product": "lb",
       "version": "v1",
@@ -3097,6 +3115,12 @@
       "reason": "subscribers are an alerting channel, and an emulator whose balancer never degrades has no event to deliver: a subscription recorded here would be a promise nothing can keep; the list is served since #666, and it is empty, for the same reason",
       "version": "v1",
       "status": "declined"
+    },
+    {
+      "operation": "lb/v1/ZonedAPI.TransferToIpam",
+      "product": "lb",
+      "version": "v1",
+      "status": "unknown"
     },
     {
       "operation": "lb/v1/ZonedAPI.UnsubscribeFromLB",

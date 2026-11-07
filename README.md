@@ -862,21 +862,21 @@ what this emulator serves, declines on purpose, or has not triaged yet.
 
 #### Scaleway
 
-202 routes mounted. Of the 544 operations upstream declares: 37% served,
+202 routes mounted. Of the 548 operations upstream declares: 36% served,
 62% declined on purpose, 0% untriaged.
 
 | Group | Served | Declined | Untriaged | Upstream |
 |---|--:|--:|--:|--:|
 | `instance` | 73 | 84 | 0 | 157 |
-| `lb` | 43 | 64 | 0 | 107 |
+| `lb` | 43 | 64 | 2 | 109 |
 | `iam` | 12 | 72 | 0 | 84 |
 | `vpcgw` | 15 | 49 | 0 | 64 |
-| `baremetal` | 2 | 35 | 0 | 37 |
+| `baremetal` | 2 | 35 | 2 | 39 |
 | `vpc` | 19 | 18 | 0 | 37 |
 | `block` | 22 | 5 | 0 | 27 |
 | `account` | 5 | 7 | 0 | 12 |
 | *… 3 smaller groups* | 11 | 8 | 0 | 19 |
-| **Total** | **202** | **342** | **0** | **544** |
+| **Total** | **202** | **342** | **4** | **548** |
 
 #### Exoscale
 
