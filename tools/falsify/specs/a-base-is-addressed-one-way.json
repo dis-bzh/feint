@@ -1,0 +1,27 @@
+{
+  "package": "./internal/core/emulator/",
+  "mutations": [
+    {
+      "label": "a plain route is accepted beside a selected one, declared selected-first",
+      "file": "internal/core/emulator/table.go",
+      "find": "\t\t\t} else if g.selector != \"\" {",
+      "replace": "\t\t\t} else if g.selector != \"\" && false {",
+      "test": "TestASelectorRouteCannotShareABaseWithAPlainOne"
+    },
+    {
+      "label": "a selected route is accepted beside a plain one, declared plain-first",
+      "file": "internal/core/emulator/table.go",
+      "find": "\t\t\t\tif _, plain := g.routes[\"\"]; plain {",
+      "replace": "\t\t\t\tif _, plain := g.routes[\"\"]; plain && false {",
+      "test": "TestASelectorRouteCannotShareABaseWithAPlainOne"
+    },
+    {
+      "label": "the table reads the form body to select and does not give it back, so the handler meets an empty form",
+      "file": "internal/core/emulator/table.go",
+      "find": "\tr.Body = io.NopCloser(io.MultiReader(bytes.NewReader(body), r.Body))",
+      "replace": "\tr.Body = io.NopCloser(io.MultiReader(bytes.NewReader(body[:0]), r.Body))",
+      "test": "TestSelectorRoutesAreNamedAndServed"
+    }
+  ],
+  "note": "A route selected by a parameter (CloudStack's /client/api?command=...) is a second way of addressing a base pattern, and the table refuses to mix it with the first, in either order, because a request with no command would be answered by whichever the mux preferred. The third mutation is the one that bites only on a POST: the selector lives in the form body, the table must read it to choose a route, and the handler must still find the form after. Without the restore the table is right and every POST is answered as if it carried no parameter at all."
+}

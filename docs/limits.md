@@ -3661,6 +3661,7 @@ proof.
 
 | Provider | API description | Schemas | Unknown fields |
 |---|---|--:|---|
+| Cloudstack | `4.23.0.0` | 53 | *assumed* by this emulator |
 | Exoscale | `2.0.0` | 473 | *assumed* by this emulator |
 | Outscale | `1.43.2` | 656 | **declared** by the provider |
 | Scaleway | `instance/v1, instance/v2alpha1, vpc/v2, ipam/v1, iam/v1alpha1, marketplace/v2, block/v1, block/v1alpha1, lb/v1, vpcgw/v2, account/v3, baremetal/v1` | 719 | **declared** by the provider |

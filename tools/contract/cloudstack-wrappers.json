@@ -1,0 +1,57 @@
+{
+ "source": "apache/cloudstack-simulator, CloudStack 4.23.0.0, zone deployed by setup/dev/basic.cfg",
+ "image": "sha256:59db60234cd0ae7be289d79862de5818fbec4ac618d74b3af448efadbed77c95",
+ "recorded": "2026-10-18",
+ "how": "tools/conformance/cloudstack/oracle.py real, then record_wrappers.py",
+ "commands": {
+  "deployVirtualMachine": {
+   "kind": "async",
+   "ack": [
+    "id"
+   ]
+  },
+  "destroyVirtualMachine": {
+   "kind": "async",
+   "ack": []
+  },
+  "listApis": {
+   "kind": "list",
+   "key": "api"
+  },
+  "listNetworks": {
+   "kind": "list",
+   "key": "network"
+  },
+  "listServiceOfferings": {
+   "kind": "list",
+   "key": "serviceoffering"
+  },
+  "listTemplates": {
+   "kind": "list",
+   "key": "template"
+  },
+  "listVirtualMachines": {
+   "kind": "list",
+   "key": "virtualmachine"
+  },
+  "listVolumes": {
+   "kind": "list",
+   "key": "volume"
+  },
+  "listZones": {
+   "kind": "list",
+   "key": "zone"
+  },
+  "queryAsyncJobResult": {
+   "kind": "object"
+  },
+  "startVirtualMachine": {
+   "kind": "async",
+   "ack": []
+  },
+  "stopVirtualMachine": {
+   "kind": "async",
+   "ack": []
+  }
+ }
+}
